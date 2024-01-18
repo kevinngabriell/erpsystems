@@ -1,3 +1,4 @@
+import 'package:erpsystems/services/loginservices.dart';
 import 'package:erpsystems/web-settings/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -107,7 +108,7 @@ class _MainAppState extends State<MainApp> {
                           Center(
                             child: ElevatedButton(
                               onPressed: (){
-                                
+                                loginService(txtUsername.text, txtPassword.text, context);
                               }, 
                               style: ElevatedButton.styleFrom(
                                 elevation: 0,
@@ -214,7 +215,9 @@ class _MainAppState extends State<MainApp> {
                       //Login Button
                       Center(
                         child: ElevatedButton(
-                          onPressed: (){}, 
+                          onPressed: (){
+                            loginService(txtUsername.text, txtPassword.text, context);
+                          }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             alignment: Alignment.center,
