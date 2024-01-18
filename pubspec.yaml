@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_screenutil: ^5.9.0
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +19,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets: 
+    - Assets/login.png
+    - Assets/Icon/Message.png
+    - Assets/Icon/Lock.png
