@@ -1,3 +1,4 @@
+import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
@@ -249,7 +250,7 @@ class _IndexLargeState extends State<IndexLarge> {
                       //Setting Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SettingTemplateLarge());
+                          Get.to(const SettingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

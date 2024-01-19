@@ -49,3 +49,11 @@ flutter:
     - Assets/Icon/Absent.png
     - Assets/Icon/Late.png
     - Assets/Icon/Leave.png
+    - Assets/Icon/Customer.png
+    - Assets/Icon/Shipping.png
+    - Assets/Icon/Payment.png
+    - Assets/Icon/Term.png
+    - Assets/Icon/Product.png
+    - Assets/Icon/Packaging.png
+    - Assets/Icon/Flag.png
+    - Assets/Icon/Settings.png
