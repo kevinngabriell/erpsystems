@@ -6,6 +6,7 @@ import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/salestemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -574,9 +575,44 @@ class _IndexLargeState extends State<IndexLarge> {
                                             ],
                                           ),
                                         ),
+                                        SizedBox(height: 15.h,),
                                         Padding(
                                           padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                          child: Text('Graph 1'),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context).size.width / 3,
+                                            height: MediaQuery.of(context).size.height / 4,
+                                            child: PieChart(
+                                              PieChartData(
+                                                sections: [
+                                                  PieChartSectionData(
+                                                    color: Colors.blue,
+                                                    value: 30,
+                                                    title: '30%',
+                                                    radius: 50,
+                                                  ),
+                                                  PieChartSectionData(
+                                                    color: Colors.green,
+                                                    value: 20,
+                                                    title: '20%',
+                                                    radius: 50,
+                                                  ),
+                                                  PieChartSectionData(
+                                                    color: Colors.blue,
+                                                    value: 30,
+                                                    title: '30%',
+                                                    radius: 50,
+                                                  ),
+                                                  PieChartSectionData(
+                                                    color: Colors.green,
+                                                    value: 20,
+                                                    title: '20%',
+                                                    radius: 50,
+                                                  ),
+                                                ]
+                                              ),
+                                            
+                                            ),
+                                          )
                                         ),
                                       ],
                                     )
@@ -627,7 +663,46 @@ class _IndexLargeState extends State<IndexLarge> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                          child: Text('Graph 1'),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context).size.width / 3,
+                                            height: MediaQuery.of(context).size.height / 3.7,
+                                            child: BarChart(
+                                              BarChartData(
+                                                barGroups: [
+                                                  BarChartGroupData(
+                                                    x: 1,
+                                                    barsSpace: 4,
+                                                    barRods: [
+                                                      BarChartRodData(
+                                                        color: Colors.blue, toY: 5,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  BarChartGroupData(
+                                                    x: 2,
+                                                    barsSpace: 4,
+                                                    barRods: [
+                                                      BarChartRodData(
+                                                        color: Colors.green, toY: 8,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  BarChartGroupData(
+                                                    x: 3,
+                                                    barsSpace: 4,
+                                                    barRods: [
+                                                      BarChartRodData(
+                                                        color: Colors.orange, toY: 6,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                                borderData: FlBorderData(show: false),
+                                                gridData: FlGridData(show: false),
+                                                backgroundColor: Colors.transparent
+                                              ),
+                                            )
+                                          ),
                                         ),
                                       ],
                                     )
