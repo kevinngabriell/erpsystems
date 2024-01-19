@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.2.3 <4.0.0'
 
 dependencies:
+  fl_chart: ^0.66.0
   flutter:
     sdk: flutter
   flutter_screenutil: ^5.9.0
@@ -42,3 +43,9 @@ flutter:
     - Assets/Icon/SettingActive.png
     - Assets/Icon/SettingInactive.png
     - Assets/Icon/Logout.png
+    - Assets/Icon/Search.png
+    - Assets/Icon/Profile.png
+    - Assets/Icon/Attandance.png
+    - Assets/Icon/Absent.png
+    - Assets/Icon/Late.png
+    - Assets/Icon/Leave.png
