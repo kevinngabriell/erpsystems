@@ -320,7 +320,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                 prefixIcon: Image.asset('Icon/Search.png'),
                                 hintText: 'Search',
                                 filled: true,
-                                fillColor: Color(0xFFF4F4F4),
+                                fillColor: const Color(0xFFF4F4F4),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(10.0),
@@ -340,14 +340,14 @@ class _IndexLargeState extends State<IndexLarge> {
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width / 8,
                               child: ListTile(
-                                contentPadding: EdgeInsets.only(left: 0, right: 0),
+                                contentPadding: const EdgeInsets.only(left: 0, right: 0),
                                 dense: true,
                                 horizontalTitleGap: 0.0,
                                 leading: Container(
                                   margin: const EdgeInsets.only(right: 12.0),
                                   child: Image.asset('Icon/Profile.png')
                                 ),
-                                title: Text('$profileName', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w300),),
+                                title: Text(profileName, style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w300),),
                               ),
                             ),
                           )
@@ -358,7 +358,7 @@ class _IndexLargeState extends State<IndexLarge> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xFFF4F4F4)
                       ),
                       child: Padding(
@@ -422,7 +422,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 400) / 4,
                                           child: Card(
-                                            color: Color.fromARGB(255, 220, 240, 229),
+                                            color: const Color.fromARGB(255, 220, 240, 229),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -438,7 +438,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                  child: Text('$jumlahAttandance', style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  child: Text(jumlahAttandance, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
                                                 ),
                                               ],
                                             )
@@ -448,7 +448,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 400) / 4,
                                           child: Card(
-                                            color: Color.fromARGB(255, 237, 198, 198),
+                                            color: const Color.fromARGB(255, 237, 198, 198),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -464,7 +464,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                  child: Text('$jumlahLate', style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  child: Text(jumlahLate, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
                                                 ),
                                               ],
                                             )
@@ -474,7 +474,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 400) / 4,
                                           child: Card(
-                                            color: Color.fromARGB(255, 240, 226, 191),
+                                            color: const Color.fromARGB(255, 240, 226, 191),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -490,7 +490,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                  child: Text('$jumlahAbsence', style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  child: Text(jumlahAbsence, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
                                                 ),
                                               ],
                                             )
@@ -500,7 +500,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 400) / 4,
                                           child: Card(
-                                            color: Color.fromARGB(255, 194, 202, 242),
+                                            color: const Color.fromARGB(255, 194, 202, 242),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -516,7 +516,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                  child: Text('$jumlahLeaveReaming', style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  child: Text(jumlahLeaveReaming, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
                                                 ),
                                               ],
                                             )
@@ -698,7 +698,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                                   ),
                                                 ],
                                                 borderData: FlBorderData(show: false),
-                                                gridData: FlGridData(show: false),
+                                                gridData: const FlGridData(show: false),
                                                 backgroundColor: Colors.transparent
                                               ),
                                             )

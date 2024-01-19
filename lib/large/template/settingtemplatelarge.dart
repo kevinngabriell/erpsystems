@@ -1,9 +1,10 @@
-import 'package:erpsystems/large/template/indextemplatelarge.dart';
+
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../index.dart';
 import 'analyticstemplatelarge.dart';
 import 'documenttemplatelarge.dart';
 import 'financetemplatelarge.dart';
@@ -40,7 +41,7 @@ class _SettingTemplateLargeState extends State<SettingTemplateLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexTemplateLarge());
+                          Get.to(const IndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

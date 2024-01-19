@@ -1,8 +1,8 @@
+import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
-import 'package:erpsystems/large/template/indextemplatelarge.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
@@ -39,7 +39,7 @@ class _SalesTemplateLargeState extends State<SalesTemplateLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexTemplateLarge());
+                          Get.to(const IndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

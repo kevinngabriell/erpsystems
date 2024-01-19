@@ -1,12 +1,12 @@
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
-import 'package:erpsystems/large/template/indextemplatelarge.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../index.dart';
 import 'financetemplatelarge.dart';
 import 'salestemplatelarge.dart';
 import 'warehousetemplatelarge.dart';
@@ -40,7 +40,7 @@ class _HRTemplateLargeState extends State<HRTemplateLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexTemplateLarge());
+                          Get.to(const IndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

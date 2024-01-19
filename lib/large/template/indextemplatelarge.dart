@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../index.dart';
+
 class IndexTemplateLarge extends StatefulWidget {
   const IndexTemplateLarge({super.key});
 
@@ -39,7 +41,7 @@ class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexTemplateLarge());
+                          Get.to(const IndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
