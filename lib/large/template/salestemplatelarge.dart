@@ -2,8 +2,8 @@ import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
+import 'package:erpsystems/large/template/indextemplatelarge.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
-import 'package:erpsystems/large/template/salestemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:erpsystems/main.dart';
@@ -11,14 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class IndexTemplateLarge extends StatefulWidget {
-  const IndexTemplateLarge({super.key});
+class SalesTemplateLarge extends StatefulWidget {
+  const SalesTemplateLarge({super.key});
 
   @override
-  State<IndexTemplateLarge> createState() => _IndexTemplateLargeState();
+  State<SalesTemplateLarge> createState() => _SalesTemplateLargeState();
 }
 
-class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
+class _SalesTemplateLargeState extends State<SalesTemplateLarge> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,8 +46,7 @@ class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
                           elevation: 0,
                           alignment: Alignment.centerLeft,
                           minimumSize: Size(60.w, 55.h),
-                          foregroundColor: const Color(0xFF2A85FF),
-                          backgroundColor: const Color(0xfFF4F4F4),
+                          foregroundColor: const Color(0xFF6F767E),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         child: Row(
@@ -55,7 +54,7 @@ class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
                           children: [
                             Container(
                               alignment: Alignment.centerLeft,
-                              child: Image.asset('Icon/DashboardActive.png'),
+                              child: Image.asset('Icon/DashboardInactive.png'),
                             ),
                             SizedBox(width: 3.w),
                             Text('Dashboard', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400),)
@@ -72,7 +71,8 @@ class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
                           elevation: 0,
                           alignment: Alignment.centerLeft,
                           minimumSize: Size(60.w, 55.h),
-                          foregroundColor: const Color(0xFF6F767E),
+                          foregroundColor: const Color(0xFF2A85FF),
+                          backgroundColor: const Color(0xfFF4F4F4),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         child: Row(
@@ -80,7 +80,7 @@ class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
                           children: [
                             Container(
                               alignment: Alignment.centerLeft,
-                              child: Image.asset('Icon/SalesInactive.png'),
+                              child: Image.asset('Icon/SalesActive.png'),
                             ),
                             SizedBox(width: 3.w),
                             Text('Sales Module', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400),)
@@ -267,7 +267,7 @@ class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
                       //Logout Button
                       ElevatedButton(
                         onPressed: (){
-                          // MainApp();
+                          // Get.to(MainApp());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

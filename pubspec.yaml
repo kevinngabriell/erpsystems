@@ -23,3 +23,22 @@ flutter:
     - Assets/login.png
     - Assets/Icon/Message.png
     - Assets/Icon/Lock.png
+    - Assets/Icon/DashboardActive.png
+    - Assets/Icon/DashboardInactive.png
+    - Assets/Icon/SalesActive.png
+    - Assets/Icon/SalesInactive.png
+    - Assets/Icon/PurchasingActive.png
+    - Assets/Icon/PurchasingInactive.png
+    - Assets/Icon/FinanceActive.png
+    - Assets/Icon/FinanceInactive.png
+    - Assets/Icon/WarehouseActive.png
+    - Assets/Icon/WarehouseInactive.png
+    - Assets/Icon/HRActive.png
+    - Assets/Icon/HRInactive.png
+    - Assets/Icon/AnalyticsActive.png
+    - Assets/Icon/AnalyticsInactive.png
+    - Assets/Icon/DocumentActive.png
+    - Assets/Icon/DocumentInactive.png
+    - Assets/Icon/SettingActive.png
+    - Assets/Icon/SettingInactive.png
+    - Assets/Icon/Logout.png
