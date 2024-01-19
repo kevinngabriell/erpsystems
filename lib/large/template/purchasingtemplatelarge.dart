@@ -4,7 +4,6 @@ import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/indextemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
-import 'package:erpsystems/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -41,7 +40,7 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(IndexTemplateLarge());
+                          Get.to(const IndexTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -66,7 +65,7 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                       //Sales Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(SalesTemplateLarge());
+                          Get.to(const SalesTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -91,7 +90,7 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(PurchasingTemplateLarge());
+                          Get.to(const PurchasingTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -117,7 +116,7 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                       //Finance Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(FinanceTemplateLarge());
+                          Get.to(const FinanceTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -142,7 +141,7 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                       //Warehouse Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(WarehouseTemplateLarge());
+                          Get.to(const WarehouseTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -167,7 +166,7 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                       //HR Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(HRTemplateLarge());
+                          Get.to(const HRTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -192,7 +191,7 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                       //Analytics Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(AnalyticsTemplateLarge());
+                          Get.to(const AnalyticsTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -217,7 +216,7 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                       //Document Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(DocumentTemplateLarge());
+                          Get.to(const DocumentTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -239,11 +238,11 @@ class _PurchasingTemplateLargeState extends State<PurchasingTemplateLarge> {
                         )
                       ),
                       SizedBox(height: 35.h,),
-                      Divider(),
+                      const Divider(),
                       //Setting Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(SettingTemplateLarge());
+                          Get.to(const SettingTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

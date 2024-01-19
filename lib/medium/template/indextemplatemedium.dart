@@ -10,7 +10,7 @@ class IndexTemplateMedium extends StatefulWidget {
 class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Text('Ipad'),
     );
   }

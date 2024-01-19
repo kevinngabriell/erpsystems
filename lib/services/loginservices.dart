@@ -10,10 +10,10 @@ Future <void> loginService(String username, String password, BuildContext contex
   Get.snackbar('Title', '$username, $password');
   
   if(ResponsiveWidget.isLargeScreen(context)){
-    Get.to(IndexTemplateLarge());
+    Get.to(const IndexTemplateLarge());
   } else if (ResponsiveWidget.isMediumScreen(context)){
-    Get.to(IndexTemplateMedium());
+    Get.to(const IndexTemplateMedium());
   } else if (ResponsiveWidget.isSmallScreen(context)){
-    Get.to(IndexTemplateSmall());
+    Get.to(const IndexTemplateSmall());
   }
 }
