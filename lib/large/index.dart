@@ -5,7 +5,6 @@ import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/salestemplatelarge.dart';
-import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -421,7 +420,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                       children: [
                                         //Attandance Card
                                         SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 400) / 4,
+                                          width: (MediaQuery.of(context).size.width - 100.w) / 4,
                                           child: Card(
                                             color: const Color.fromARGB(255, 220, 240, 229),
                                             child: Column(
@@ -447,7 +446,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         ),
                                         //Late Card
                                         SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 400) / 4,
+                                          width: (MediaQuery.of(context).size.width - 100.w) / 4,
                                           child: Card(
                                             color: const Color.fromARGB(255, 237, 198, 198),
                                             child: Column(
@@ -473,7 +472,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         ),
                                         //Absent Card
                                         SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 400) / 4,
+                                          width: (MediaQuery.of(context).size.width - 100.w) / 4,
                                           child: Card(
                                             color: const Color.fromARGB(255, 240, 226, 191),
                                             child: Column(
@@ -499,7 +498,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         ),
                                         //Leave Card
                                         SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 400) / 4,
+                                          width: (MediaQuery.of(context).size.width - 100.w) / 4,
                                           child: Card(
                                             color: const Color.fromARGB(255, 194, 202, 242),
                                             child: Column(

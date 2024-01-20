@@ -1,6 +1,7 @@
 
-import 'package:erpsystems/large/setting%20module/customersettings.dart';
-import 'package:erpsystems/large/setting%20module/internalsettings.dart';
+import 'package:erpsystems/large/setting%20module/addcustomersettings.dart';
+import 'package:erpsystems/large/setting%20module/detailcustomerinformation.dart';
+import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,20 +15,37 @@ import '../template/salestemplatelarge.dart';
 import '../template/warehousetemplatelarge.dart';
 
 
-class SettingIndexLarge extends StatefulWidget {
-  const SettingIndexLarge({super.key});
+class CustomerSettingLarge extends StatefulWidget {
+  const CustomerSettingLarge({super.key});
 
   @override
-  State<SettingIndexLarge> createState() => _SettingIndexLargeState();
+  State<CustomerSettingLarge> createState() => _CustomerSettingLargeState();
 }
 
-class _SettingIndexLargeState extends State<SettingIndexLarge> {
+class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
+  String companyName = 'PT. Demo Company';
+  String companyPhoneNumber = '021 2590 9871';
+  TextEditingController txtPhoneNumber = TextEditingController();
+  TextEditingController txtWebsite = TextEditingController();
+  TextEditingController txtEmail = TextEditingController();
+  TextEditingController txtAddress = TextEditingController();
+  TextEditingController txtIndustry = TextEditingController();
+
+  TextEditingController txtTarget2024 = TextEditingController();
+  TextEditingController txtTarget2025 = TextEditingController();
+  TextEditingController txtTarget2026 = TextEditingController();
+  TextEditingController txtTarget2027 = TextEditingController();
+  TextEditingController txtTarget2028 = TextEditingController();
+  TextEditingController txtTarget2029 = TextEditingController();
+  TextEditingController txtTarget2030 = TextEditingController();
+  TextEditingController txtTarget2031 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Customer Configuration',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -356,7 +374,9 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                     //Content
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height, // Set the minimal height
+                      ),
                       decoration: const BoxDecoration(
                         color: Color(0xFFF4F4F4)
                       ),
@@ -366,194 +386,93 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Setting', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                            GestureDetector(
+                              onTap: (){
+                                Get.back();
+                              },
+                              child: Text('Customer settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
+                            ),
                             SizedBox(height: 10.h,),
-                            Card(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(12))
-                              ),
-                              color: Colors.white,
-                              child: Column(
-                                children: [
-                                  //4 Cards
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        //Customer Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(CustomerSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Customer.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Customer', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Card(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Customer', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                          ElevatedButton(
+                                            onPressed: (){
+                                              Get.to(AddCustomerSettingLarge());
+                                            }, 
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 0,
+                                              alignment: Alignment.centerLeft,
+                                              minimumSize: Size(30.w, 55.h),
+                                              foregroundColor: Colors.white,
+                                              backgroundColor: const Color(0xFF2A85FF),
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                             ),
-                                          ),
-                                        ),
-                                        //Shipping Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            print('object');
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Shipping.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Shipping', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Payment Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            print('object');
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Payment.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Payment', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Term Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            print('object');
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Term.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Term', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                                            child: Text('Add Customer +', style: TextStyle(fontSize: 4.sp),)
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  //4 Cards
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        //Customer Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            print('object');
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Product.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Product', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
+                                    SizedBox(height: 10.h,),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
+                                      child: SizedBox(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: DataTable(
+                                          showCheckboxColumn: false,
+                                          columns: const <DataColumn> [
+                                            DataColumn(label: Text('No')),
+                                            DataColumn(label: Text('Name')),
+                                            DataColumn(label: Text('Address')),
+                                            DataColumn(label: Text('Phone number')),
+                                          ], 
+                                          rows: <DataRow>[
+                                            DataRow(
+                                              cells: <DataCell> [
+                                                DataCell(Text('1')),
+                                                DataCell(Text('PT. AXXX XXXX XXXX')),
+                                                DataCell(Text('1')),
+                                                DataCell(Text('PT. AXXX XXXX XXXX')),
+                                              ],
+                                              onSelectChanged: (selected) {
+                                                if (selected!) {
+                                                  Get.to(DetailCustomerSettingLarge());
+                                                }
+                                              },
                                             ),
-                                          ),
+                                            DataRow(
+                                              cells: <DataCell> [
+                                                DataCell(Text('1')),
+                                                DataCell(Text('PT. AXXX XXXX XXXX')),
+                                                DataCell(Text('1')),
+                                                DataCell(Text('PT. AXXX XXXX XXXX')),
+                                              ]
+                                            ),
+                                            DataRow(
+                                              cells: <DataCell> [
+                                                DataCell(Text('1')),
+                                                DataCell(Text('PT. AXXX XXXX XXXX')),
+                                                DataCell(Text('1')),
+                                                DataCell(Text('PT. AXXX XXXX XXXX')),
+                                              ]
+                                            )
+                                          ],
+                                          
                                         ),
-                                        //Shipping Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            print('object');
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Packaging.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Packaging', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Payment Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            print('object');
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Flag.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Origin', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Internal Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(InternalSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Settings.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Internal', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             )
                           ],
