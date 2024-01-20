@@ -27,6 +27,7 @@ class _MainAppState extends State<MainApp> {
       splitScreenMode: true,
       builder: (_, child) {
         return GetMaterialApp(
+          title: 'Venken ERP Systems',
           home: Scaffold(
             body: Row(
               children: [

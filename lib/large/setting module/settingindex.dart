@@ -1,6 +1,8 @@
 
 import 'package:erpsystems/large/setting%20module/customersettings.dart';
 import 'package:erpsystems/large/setting%20module/internalsettings.dart';
+import 'package:erpsystems/large/setting%20module/paymentsetting.dart';
+import 'package:erpsystems/large/setting%20module/shippingsettingslarge.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +30,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Settings',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -404,7 +407,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Shipping Card
                                         GestureDetector(
                                           onTap: () {
-                                            print('object');
+                                            Get.to(ShippingSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -424,7 +427,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Payment Card
                                         GestureDetector(
                                           onTap: () {
-                                            print('object');
+                                            Get.to(PaymentSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,

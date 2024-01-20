@@ -1,6 +1,5 @@
-
-import 'package:erpsystems/large/setting%20module/addcustomersettings.dart';
-import 'package:erpsystems/large/setting%20module/detailcustomerinformation.dart';
+import 'package:erpsystems/large/setting%20module/addnewshippinglarge.dart';
+import 'package:erpsystems/large/setting%20module/detailshipping.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
@@ -15,37 +14,21 @@ import '../template/salestemplatelarge.dart';
 import '../template/warehousetemplatelarge.dart';
 
 
-class CustomerSettingLarge extends StatefulWidget {
-  const CustomerSettingLarge({super.key});
+class ShippingSettingLarge extends StatefulWidget {
+  const ShippingSettingLarge({super.key});
 
   @override
-  State<CustomerSettingLarge> createState() => _CustomerSettingLargeState();
+  State<ShippingSettingLarge> createState() => _ShippingSettingLargeState();
 }
 
-class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
+class _ShippingSettingLargeState extends State<ShippingSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
-  String companyName = 'PT. Demo Company';
-  String companyPhoneNumber = '021 2590 9871';
-  TextEditingController txtPhoneNumber = TextEditingController();
-  TextEditingController txtWebsite = TextEditingController();
-  TextEditingController txtEmail = TextEditingController();
-  TextEditingController txtAddress = TextEditingController();
-  TextEditingController txtIndustry = TextEditingController();
-
-  TextEditingController txtTarget2024 = TextEditingController();
-  TextEditingController txtTarget2025 = TextEditingController();
-  TextEditingController txtTarget2026 = TextEditingController();
-  TextEditingController txtTarget2027 = TextEditingController();
-  TextEditingController txtTarget2028 = TextEditingController();
-  TextEditingController txtTarget2029 = TextEditingController();
-  TextEditingController txtTarget2030 = TextEditingController();
-  TextEditingController txtTarget2031 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Customer Configuration',
+      title: 'Shipping Configuration',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -390,7 +373,7 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                               onTap: (){
                                 Get.back();
                               },
-                              child: Text('Customer settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
+                              child: Text('Shipping settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
                             ),
                             SizedBox(height: 10.h,),
                             SizedBox(
@@ -405,10 +388,10 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Customer', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                          Text('Shipping', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddCustomerSettingLarge());
+                                              Get.to(AddShippingSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
@@ -418,7 +401,7 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                               backgroundColor: const Color(0xFF2A85FF),
                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                             ),
-                                            child: Text('Add Customer', style: TextStyle(fontSize: 4.sp),)
+                                            child: Text('Add New Shipping', style: TextStyle(fontSize: 4.sp),)
                                           )
                                         ],
                                       ),
@@ -432,9 +415,8 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                           showCheckboxColumn: false,
                                           columns: const <DataColumn> [
                                             DataColumn(label: Text('No')),
-                                            DataColumn(label: Text('Name')),
-                                            DataColumn(label: Text('Address')),
-                                            DataColumn(label: Text('Phone number')),
+                                            DataColumn(label: Text('Shipping Name')),
+                                            DataColumn(label: Text('Shipping Method')),
                                           ], 
                                           rows: <DataRow>[
                                             DataRow(
@@ -442,11 +424,10 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                                 DataCell(Text('1')),
                                                 DataCell(Text('PT. AXXX XXXX XXXX')),
                                                 DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
                                               ],
                                               onSelectChanged: (selected) {
                                                 if (selected!) {
-                                                  Get.to(DetailCustomerSettingLarge());
+                                                  Get.to(DetailShippingSettingLarge());
                                                 }
                                               },
                                             ),
@@ -455,7 +436,6 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                                 DataCell(Text('1')),
                                                 DataCell(Text('PT. AXXX XXXX XXXX')),
                                                 DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
                                               ]
                                             ),
                                             DataRow(
@@ -463,7 +443,6 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                                 DataCell(Text('1')),
                                                 DataCell(Text('PT. AXXX XXXX XXXX')),
                                                 DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
                                               ]
                                             )
                                           ],

@@ -1,6 +1,4 @@
 
-import 'package:erpsystems/large/setting%20module/addcustomersettings.dart';
-import 'package:erpsystems/large/setting%20module/detailcustomerinformation.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
@@ -15,37 +13,21 @@ import '../template/salestemplatelarge.dart';
 import '../template/warehousetemplatelarge.dart';
 
 
-class CustomerSettingLarge extends StatefulWidget {
-  const CustomerSettingLarge({super.key});
+class AddShippingSettingLarge extends StatefulWidget {
+  const AddShippingSettingLarge({super.key});
 
   @override
-  State<CustomerSettingLarge> createState() => _CustomerSettingLargeState();
+  State<AddShippingSettingLarge> createState() => _AddShippingSettingLargeState();
 }
 
-class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
+class _AddShippingSettingLargeState extends State<AddShippingSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
-  String companyName = 'PT. Demo Company';
-  String companyPhoneNumber = '021 2590 9871';
-  TextEditingController txtPhoneNumber = TextEditingController();
-  TextEditingController txtWebsite = TextEditingController();
-  TextEditingController txtEmail = TextEditingController();
-  TextEditingController txtAddress = TextEditingController();
-  TextEditingController txtIndustry = TextEditingController();
-
-  TextEditingController txtTarget2024 = TextEditingController();
-  TextEditingController txtTarget2025 = TextEditingController();
-  TextEditingController txtTarget2026 = TextEditingController();
-  TextEditingController txtTarget2027 = TextEditingController();
-  TextEditingController txtTarget2028 = TextEditingController();
-  TextEditingController txtTarget2029 = TextEditingController();
-  TextEditingController txtTarget2030 = TextEditingController();
-  TextEditingController txtTarget2031 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Customer Configuration',
+      title: 'Shipping Configuration',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -390,7 +372,7 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                               onTap: (){
                                 Get.back();
                               },
-                              child: Text('Customer settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
+                              child: Text('Shipping settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
                             ),
                             SizedBox(height: 10.h,),
                             SizedBox(
@@ -400,75 +382,176 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    //Add New Shipping Information Title
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Customer', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
-                                          ElevatedButton(
-                                            onPressed: (){
-                                              Get.to(AddCustomerSettingLarge());
-                                            }, 
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              alignment: Alignment.centerLeft,
-                                              minimumSize: Size(30.w, 35.h),
-                                              foregroundColor: Colors.white,
-                                              backgroundColor: const Color(0xFF2A85FF),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                            ),
-                                            child: Text('Add Customer', style: TextStyle(fontSize: 4.sp),)
-                                          )
-                                        ],
-                                      ),
+                                      child: Text('Add New Shipping', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                     ),
                                     SizedBox(height: 10.h,),
+                                    //Text Form New Shipping
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
-                                        child: DataTable(
-                                          showCheckboxColumn: false,
-                                          columns: const <DataColumn> [
-                                            DataColumn(label: Text('No')),
-                                            DataColumn(label: Text('Name')),
-                                            DataColumn(label: Text('Address')),
-                                            DataColumn(label: Text('Phone number')),
-                                          ], 
-                                          rows: <DataRow>[
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('Shipping Name'),
+                                                      SizedBox(height: 5.h,),
+                                                      TextFormField(
+                                                        // controller: txtTarget2031,
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: 'PT. AXX XXXX'
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ),
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('Shipping Method'),
+                                                      SizedBox(height: 5.h,),
+                                                      DropdownButtonFormField(
+                                                        value: '001',
+                                                        items: const [
+                                                          DropdownMenuItem(
+                                                            value: '001',
+                                                            child: Text('Air', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                          ),
+                                                          DropdownMenuItem(
+                                                            value: '002',
+                                                            child: Text('Sea', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                          )
+                                                        ], 
+                                                        onChanged: (value){
+                                                        
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: 'PT. AXX XXXX'
+                                                        ),
+                                                      )
+                                                      // TextFormField(
+                                                      //   // controller: txtTarget2031,
+                                                      //   decoration: InputDecoration(
+                                                      //     enabledBorder: OutlineInputBorder(
+                                                      //       borderSide: const BorderSide(width: 0.0),
+                                                      //       borderRadius: BorderRadius.circular(10.0),
+                                                      //     ),
+                                                      //     focusedBorder: OutlineInputBorder(
+                                                      //       borderSide: const BorderSide(width: 0.0),
+                                                      //       borderRadius: BorderRadius.circular(10.0),
+                                                      //     ),
+                                                      //     hintText: 'PT. AXX XXXX'
+                                                      //   ),
+                                                      // ),
+                                                    ],
+                                                  )
+                                                ),
                                               ],
-                                              onSelectChanged: (selected) {
-                                                if (selected!) {
-                                                  Get.to(DetailCustomerSettingLarge());
-                                                }
-                                              },
                                             ),
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                              ]
-                                            ),
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                              ]
+                                            // SizedBox(height: 20.h,),
+                                            // Row(
+                                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            //   children: [
+                                            //     SizedBox(
+                                            //       width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                            //       child: Column(
+                                            //         crossAxisAlignment: CrossAxisAlignment.start,
+                                            //         children: [
+                                            //           Text('Customer Phone Number'),
+                                            //           SizedBox(height: 5.h,),
+                                            //           TextFormField(
+                                            //             // controller: txtTarget2031,
+                                            //             decoration: InputDecoration(
+                                            //               enabledBorder: OutlineInputBorder(
+                                            //                 borderSide: const BorderSide(width: 0.0),
+                                            //                 borderRadius: BorderRadius.circular(10.0),
+                                            //               ),
+                                            //               focusedBorder: OutlineInputBorder(
+                                            //                 borderSide: const BorderSide(width: 0.0),
+                                            //                 borderRadius: BorderRadius.circular(10.0),
+                                            //               ),
+                                            //               hintText: 'PT. AXX XXXX'
+                                            //             ),
+                                            //           ),
+                                            //         ],
+                                            //       )
+                                            //     ),
+                                            //     SizedBox(
+                                            //       width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                            //       child: Column(
+                                            //         crossAxisAlignment: CrossAxisAlignment.start,
+                                            //         children: [
+                                            //           Text('Customer Phone Number'),
+                                            //           SizedBox(height: 5.h,),
+                                            //           TextFormField(
+                                            //             // controller: txtTarget2031,
+                                            //             decoration: InputDecoration(
+                                            //               enabledBorder: OutlineInputBorder(
+                                            //                 borderSide: const BorderSide(width: 0.0),
+                                            //                 borderRadius: BorderRadius.circular(10.0),
+                                            //               ),
+                                            //               focusedBorder: OutlineInputBorder(
+                                            //                 borderSide: const BorderSide(width: 0.0),
+                                            //                 borderRadius: BorderRadius.circular(10.0),
+                                            //               ),
+                                            //               hintText: 'PT. AXX XXXX'
+                                            //             ),
+                                            //           ),
+                                            //         ],
+                                            //       )
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                            SizedBox(height: 50.h,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: (){
+                                                    // Get.to(AddCustomerSettingLarge());
+                                                  }, 
+                                                  style: ElevatedButton.styleFrom(
+                                                    elevation: 0,
+                                                    alignment: Alignment.centerLeft,
+                                                    minimumSize: Size(20.w, 35.h),
+                                                    foregroundColor: Colors.white,
+                                                    backgroundColor: const Color(0xFF2A85FF),
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                  ),
+                                                  child: Text('Submit', style: TextStyle(fontSize: 4.sp),)
+                                                )
+                                              ],
                                             )
                                           ],
-                                          
-                                        ),
+                                        )
+                                        
                                       ),
                                     )
                                   ],

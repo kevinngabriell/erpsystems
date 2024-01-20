@@ -29,6 +29,7 @@ class _IndexLargeState extends State<IndexLarge> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Venken ERP Systems',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
