@@ -1,35 +1,33 @@
-import 'package:erpsystems/large/sales%20module/salesindex.dart';
-import 'package:erpsystems/large/setting%20module/settingindex.dart';
+import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class IndexLarge extends StatefulWidget {
-  const IndexLarge({super.key});
+class SalesIndexLarge extends StatefulWidget {
+  const SalesIndexLarge({super.key});
 
   @override
-  State<IndexLarge> createState() => _IndexLargeState();
+  State<SalesIndexLarge> createState() => _SalesIndexLargeState();
 }
 
-class _IndexLargeState extends State<IndexLarge> {
+class _SalesIndexLargeState extends State<SalesIndexLarge> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
-  String jumlahAttandance = '3';
-  String jumlahLate = '3';
-  String jumlahAbsence = '3';
-  String jumlahLeaveReaming = '3';
+  String jumlahSales = '2';
+  String KPITarget = '4';
+  String InTransit = '5';
+  String TopItem = 'xxxx Product';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Venken ERP Systems',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -54,8 +52,7 @@ class _IndexLargeState extends State<IndexLarge> {
                           elevation: 0,
                           alignment: Alignment.centerLeft,
                           minimumSize: Size(60.w, 55.h),
-                          foregroundColor: const Color(0xFF2A85FF),
-                          backgroundColor: const Color(0xfFF4F4F4),
+                          foregroundColor: const Color(0xFF6F767E),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         child: Row(
@@ -63,7 +60,7 @@ class _IndexLargeState extends State<IndexLarge> {
                           children: [
                             Container(
                               alignment: Alignment.centerLeft,
-                              child: Image.asset('Icon/DashboardActive.png'),
+                              child: Image.asset('Icon/DashboardInactive.png'),
                             ),
                             SizedBox(width: 3.w),
                             Text('Dashboard', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400),)
@@ -80,7 +77,8 @@ class _IndexLargeState extends State<IndexLarge> {
                           elevation: 0,
                           alignment: Alignment.centerLeft,
                           minimumSize: Size(60.w, 55.h),
-                          foregroundColor: const Color(0xFF6F767E),
+                          foregroundColor: const Color(0xFF2A85FF),
+                          backgroundColor: const Color(0xfFF4F4F4),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         child: Row(
@@ -88,7 +86,7 @@ class _IndexLargeState extends State<IndexLarge> {
                           children: [
                             Container(
                               alignment: Alignment.centerLeft,
-                              child: Image.asset('Icon/SalesInactive.png'),
+                              child: Image.asset('Icon/SalesActive.png'),
                             ),
                             SizedBox(width: 3.w),
                             Text('Sales Module', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400),)
@@ -250,7 +248,7 @@ class _IndexLargeState extends State<IndexLarge> {
                       //Setting Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SettingIndexLarge());
+                          Get.to(const SettingTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -275,7 +273,7 @@ class _IndexLargeState extends State<IndexLarge> {
                       //Logout Button
                       ElevatedButton(
                         onPressed: (){
-                          // MainApp();
+                          // Get.to(MainApp());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -358,7 +356,9 @@ class _IndexLargeState extends State<IndexLarge> {
                     //Content
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height, // Set the minimal height
+                      ),
                       decoration: const BoxDecoration(
                         color: Color(0xFFF4F4F4)
                       ),
@@ -368,7 +368,54 @@ class _IndexLargeState extends State<IndexLarge> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Dashboard', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Sales Module', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 8,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF2A85FF),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: DropdownButtonFormField(
+                                    dropdownColor: Colors.white,
+                                    value: 'NEW-SO-001',
+                                    items: const [
+                                      DropdownMenuItem(
+                                        value: 'NEW-SO-001',
+                                        child: Text('Create New', style: TextStyle(color: Colors.white),)
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'NEW-SO-002',
+                                        child: Text('New Sales Order', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'NEW-SO-003',
+                                        child: Text('New SPPB', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'NEW-SO-004',
+                                        child: Text('New Profit', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                      )
+                                    ], 
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(width: 0.0),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(width: 0.0),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      )
+                                    ),
+                                    onChanged: (value){
+                                          
+                                    }
+                                  ),
+                                )
+                              ],
+                            ),
                             SizedBox(height: 10.h,),
                             //Card Overview
                             Card(
@@ -433,13 +480,13 @@ class _IndexLargeState extends State<IndexLarge> {
                                                     children: [
                                                       Image.asset('Icon/Attandance.png'),
                                                       SizedBox(width: 2.w,),
-                                                      Text('Attandance', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                      Text('Current Sales', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
                                                     ],
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                  child: Text(jumlahAttandance, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp, top: 3.sp),
+                                                  child: Text(jumlahSales, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
                                                 ),
                                               ],
                                             )
@@ -449,7 +496,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 100.w) / 4,
                                           child: Card(
-                                            color: const Color.fromARGB(255, 237, 198, 198),
+                                            color: const Color.fromARGB(255, 220, 240, 229),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -459,13 +506,13 @@ class _IndexLargeState extends State<IndexLarge> {
                                                     children: [
                                                       Image.asset('Icon/Late.png'),
                                                       SizedBox(width: 2.w,),
-                                                      Text('Late', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                      Text('KPI Target', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
                                                     ],
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                  child: Text(jumlahLate, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp, top: 3.sp),
+                                                  child: Text(KPITarget, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
                                                 ),
                                               ],
                                             )
@@ -475,7 +522,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 100.w) / 4,
                                           child: Card(
-                                            color: const Color.fromARGB(255, 240, 226, 191),
+                                            color: const Color.fromARGB(255, 220, 240, 229),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -485,13 +532,13 @@ class _IndexLargeState extends State<IndexLarge> {
                                                     children: [
                                                       Image.asset('Icon/Absent.png'),
                                                       SizedBox(width: 2.w,),
-                                                      Text('Absent', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                      Text('In Transit', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
                                                     ],
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                  child: Text(jumlahAbsence, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp, top: 3.sp),
+                                                  child: Text(InTransit, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
                                                 ),
                                               ],
                                             )
@@ -501,7 +548,7 @@ class _IndexLargeState extends State<IndexLarge> {
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 100.w) / 4,
                                           child: Card(
-                                            color: const Color.fromARGB(255, 194, 202, 242),
+                                            color: const Color.fromARGB(255, 220, 240, 229),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -511,13 +558,13 @@ class _IndexLargeState extends State<IndexLarge> {
                                                     children: [
                                                       Image.asset('Icon/Leave.png'),
                                                       SizedBox(width: 2.w,),
-                                                      Text('Remaining Leave', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                      Text('Top Item', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
                                                     ],
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                  child: Text(jumlahLeaveReaming, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp, top: 3.sp),
+                                                  child: Text(TopItem, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
                                                 ),
                                               ],
                                             )
@@ -530,187 +577,229 @@ class _IndexLargeState extends State<IndexLarge> {
                               ),
                             ),
                             SizedBox(height: 15.h,),
+                            //2 Card
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  width: (MediaQuery.of(context).size.width - 400)/ 2,
+                                  width: (MediaQuery.of(context).size.width - 90.w)/ 2,
                                   child: Card(
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(12))
                                     ),
                                     color: Colors.white,
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 7.sp, right: 5.sp),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text('Top Product By Sales', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
-                                              SizedBox(
-                                                width: MediaQuery.of(context).size.width / 9,
-                                                child: DropdownButtonFormField(
-                                                  value: '001',
-                                                  items: const [
-                                                    DropdownMenuItem(
-                                                      value: '001',
-                                                      child: Text('This week', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    )
-                                                  ], 
-                                                  decoration: InputDecoration(
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    )
-                                                  ),
-                                                  onChanged: (value){
-                                                
-                                                  }
-                                                ),
-                                              )
-                                            ],
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 5.sp),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text('Repeat Order Reminder', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                                Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 15.h,),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                          child: SizedBox(
-                                            width: MediaQuery.of(context).size.width / 3,
-                                            height: MediaQuery.of(context).size.height / 4,
-                                            child: PieChart(
-                                              PieChartData(
-                                                sections: [
-                                                  PieChartSectionData(
-                                                    color: Colors.blue,
-                                                    value: 30,
-                                                    title: '30%',
-                                                    radius: 50,
-                                                  ),
-                                                  PieChartSectionData(
-                                                    color: Colors.green,
-                                                    value: 20,
-                                                    title: '20%',
-                                                    radius: 50,
-                                                  ),
-                                                  PieChartSectionData(
-                                                    color: Colors.blue,
-                                                    value: 30,
-                                                    title: '30%',
-                                                    radius: 50,
-                                                  ),
-                                                  PieChartSectionData(
-                                                    color: Colors.green,
-                                                    value: 20,
-                                                    title: '20%',
-                                                    radius: 50,
-                                                  ),
-                                                ]
-                                              ),
+                                          SizedBox(height: 15.h,),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width,
+                                            height: (MediaQuery.of(context).size.height - 433.h),
+                                            child: ListView.builder(
+                                              itemCount: 4,
+                                              itemBuilder: (BuildContext context, int index) {
+                                                Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
                                             
+                                                return Container(
+                                                  width: MediaQuery.of(context).size.width,
+                                                  color: backgroundColor,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                            SizedBox(height: 3.h,),
+                                                            Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                          ],
+                                                        ),
+                                                        ElevatedButton(
+                                                          onPressed: (){
+                                                            // Get.to(AddCustomerSettingLarge());
+                                                          }, 
+                                                          style: ElevatedButton.styleFrom(
+                                                            elevation: 0,
+                                                            alignment: Alignment.centerLeft,
+                                                            minimumSize: Size(20.w, 40.h),
+                                                            foregroundColor: Colors.white,
+                                                            backgroundColor: const Color(0xFF2A85FF),
+                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                          ),
+                                                          child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )
+                                                );
+                                              }
                                             ),
                                           )
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     )
                                   ),
                                 ),
                                 SizedBox(
-                                  width: (MediaQuery.of(context).size.width - 400)/ 2,
+                                  width: (MediaQuery.of(context).size.width - 90.w)/ 2,
                                   child: Card(
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(Radius.circular(12))
                                     ),
                                     color: Colors.white,
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 7.sp, right: 5.sp),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text('Top Product By Sales', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
-                                              SizedBox(
-                                                width: MediaQuery.of(context).size.width / 9,
-                                                child: DropdownButtonFormField(
-                                                  value: '001',
-                                                  items: const [
-                                                    DropdownMenuItem(
-                                                      value: '001',
-                                                      child: Text('This week', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    )
-                                                  ], 
-                                                  decoration: InputDecoration(
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 5.sp),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text('Under Negotiation List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                                Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 15.h,),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width,
+                                            height: (MediaQuery.of(context).size.height - 433.h),
+                                            child: ListView.builder(
+                                              itemCount: 4,
+                                              itemBuilder: (BuildContext context, int index) {
+                                                Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                            
+                                                return Container(
+                                                  width: MediaQuery.of(context).size.width,
+                                                  color: backgroundColor,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                            SizedBox(height: 3.h,),
+                                                            Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                          ],
+                                                        ),
+                                                        ElevatedButton(
+                                                          onPressed: (){
+                                                            // Get.to(AddCustomerSettingLarge());
+                                                          }, 
+                                                          style: ElevatedButton.styleFrom(
+                                                            elevation: 0,
+                                                            alignment: Alignment.centerLeft,
+                                                            minimumSize: Size(20.w, 40.h),
+                                                            foregroundColor: Colors.white,
+                                                            backgroundColor: const Color(0xFF2A85FF),
+                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                          ),
+                                                          child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                                        )
+                                                      ],
                                                     ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    )
-                                                  ),
-                                                  onChanged: (value){
-                                                
-                                                  }
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                          child: SizedBox(
-                                            width: MediaQuery.of(context).size.width / 3,
-                                            height: MediaQuery.of(context).size.height / 3.7,
-                                            child: BarChart(
-                                              BarChartData(
-                                                barGroups: [
-                                                  BarChartGroupData(
-                                                    x: 1,
-                                                    barsSpace: 4,
-                                                    barRods: [
-                                                      BarChartRodData(
-                                                        color: Colors.blue, toY: 5,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  BarChartGroupData(
-                                                    x: 2,
-                                                    barsSpace: 4,
-                                                    barRods: [
-                                                      BarChartRodData(
-                                                        color: Colors.green, toY: 8,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  BarChartGroupData(
-                                                    x: 3,
-                                                    barsSpace: 4,
-                                                    barRods: [
-                                                      BarChartRodData(
-                                                        color: Colors.orange, toY: 6,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                                borderData: FlBorderData(show: false),
-                                                gridData: const FlGridData(show: false),
-                                                backgroundColor: Colors.transparent
-                                              ),
-                                            )
-                                          ),
-                                        ),
-                                      ],
+                                                  )
+                                                );
+                                              }
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     )
                                   ),
                                 ),
                               ],
-                            )
+                            ),
+                            SizedBox(height: 15.h,),
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12))
+                              ),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 5.sp),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Sales Order List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                          Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 15.h,),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: (MediaQuery.of(context).size.height - 433.h),
+                                      child: ListView.builder(
+                                        itemCount: 4,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                      
+                                          return Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            color: backgroundColor,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                      SizedBox(height: 3.h,),
+                                                      Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                    ],
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: (){
+                                                      // Get.to(AddCustomerSettingLarge());
+                                                    }, 
+                                                    style: ElevatedButton.styleFrom(
+                                                      elevation: 0,
+                                                      alignment: Alignment.centerLeft,
+                                                      minimumSize: Size(20.w, 40.h),
+                                                      foregroundColor: Colors.white,
+                                                      backgroundColor: const Color(0xFF2A85FF),
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                    ),
+                                                    child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          );
+                                        }
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ),
                           ],
                         ),
                       ),

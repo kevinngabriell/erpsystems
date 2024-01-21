@@ -1,3 +1,4 @@
+import 'package:erpsystems/large/createaccount.dart';
 import 'package:erpsystems/services/loginservices.dart';
 import 'package:erpsystems/web-settings/responsive.dart';
 import 'package:flutter/material.dart';
@@ -114,9 +115,9 @@ class _MainAppState extends State<MainApp> {
                               style: ElevatedButton.styleFrom(
                                 elevation: 0,
                                 alignment: Alignment.center,
-                                minimumSize: const Size(60, 50),
-                                foregroundColor: const Color.fromRGBO(252, 252, 252, 0.75),
-                                backgroundColor: const Color.fromRGBO(110, 46, 253, 0.5),
+                                minimumSize: Size(60.w, 50.h),
+                                foregroundColor: Colors.white,
+                                backgroundColor: const Color.fromRGBO(110, 46, 253, 0.8),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                               ),
                               child: Text('Login', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w700,),)
@@ -125,19 +126,30 @@ class _MainAppState extends State<MainApp> {
                           SizedBox(height: 15.h,),
                           //Create Account
                           Center(
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "Don't have an account?",
-                                    style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(111, 118, 126, 1))
-                                  ),
-                                  TextSpan(
-                                    text: "Create Account",
-                                    style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(110, 46, 253, 1))
-                                  ),
-                                ]
-                              )
+                            child: GestureDetector(
+                              onTap: () {
+                                if(ResponsiveWidget.isLargeScreen(context)){
+                                  Get.to(CreateAccountLarge());
+                                } else if (ResponsiveWidget.isMediumScreen(context)){
+
+                                } else if (ResponsiveWidget.isSmallScreen(context)){
+
+                                }
+                              },
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Don't have an account?",
+                                      style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(111, 118, 126, 1))
+                                    ),
+                                    TextSpan(
+                                      text: "Create Account",
+                                      style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(110, 46, 253, 1))
+                                    ),
+                                  ]
+                                )
+                              ),
                             ),
                           )
                         ],
@@ -233,19 +245,24 @@ class _MainAppState extends State<MainApp> {
                       SizedBox(height: 15.h,),
                       //Create Account
                       Center(
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Don't have an account? ",
-                                style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(111, 118, 126, 1))
-                              ),
-                              TextSpan(
-                                text: "Create Account",
-                                style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(110, 46, 253, 1))
-                              )
-                            ]
-                          )
+                        child: GestureDetector(
+                          onTap: () {
+                            
+                          },
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Don't have an account? ",
+                                  style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(111, 118, 126, 1))
+                                ),
+                                TextSpan(
+                                  text: "Create Account",
+                                  style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(110, 46, 253, 1))
+                                )
+                              ]
+                            )
+                          ),
                         ),
                       )
                     ],
