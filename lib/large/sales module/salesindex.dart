@@ -1,4 +1,5 @@
 import 'package:erpsystems/large/index.dart';
+import 'package:erpsystems/large/sales%20module/newsalesorder.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
@@ -410,7 +411,9 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                       )
                                     ),
                                     onChanged: (value){
-                                          
+                                      if(value == 'NEW-SO-002'){
+                                        Get.to(NewSalesIndexLarge());
+                                      }
                                     }
                                   ),
                                 )
