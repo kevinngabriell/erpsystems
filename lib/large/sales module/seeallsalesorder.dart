@@ -387,6 +387,7 @@ class _SeeAllSalesOrderState extends State<SeeAllSalesOrder> {
                               children: [
                                 SizedBox(
                                   child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -464,7 +465,7 @@ class _SeeAllSalesOrderState extends State<SeeAllSalesOrder> {
                                           Text('Year'),
                                           SizedBox(height: 10.h,),
                                           SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 250.w) / 3,
+                                            width: (MediaQuery.of(context).size.width - 250.w) / 2,
                                             child: TextFormField(
                                               controller: txtSearchText,
                                               decoration: InputDecoration(

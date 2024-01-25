@@ -1,4 +1,3 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
@@ -10,6 +9,7 @@ import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 
 import 'salesindex.dart';
@@ -25,18 +25,19 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
   String jumlahSales = '2';
-  String KPITarget = '4';
-  String InTransit = '5';
-  String TopItem = 'xxxx Product';
-  TextEditingController _textEditingController = TextEditingController();
-  AutoCompleteTextField<Item>? _autocompleteTextField;
-  GlobalKey<AutoCompleteTextFieldState<Item>> _autocompleteKey = GlobalKey();
-
+  String selectedItem = '';
+  TextEditingController hargaController = TextEditingController();
+  TextEditingController txtDataTableTotal = TextEditingController();
+  TextEditingController txtDataTablePPN = TextEditingController();
+  int? harga;
+  int? quantity;
+  int? total;
+  int? ppn;
 
   List<Item> items = [
-    Item(name: 'Item 1', quantity: 10),
-    Item(name: 'Item 2', quantity: 20),
-    Item(name: 'Item 3', quantity: 15),
+    Item(name: 'Item 1', quantity: 10, harga: 10000),
+    Item(name: 'Item 2', quantity: 20, harga: 10000),
+    Item(name: 'Item 3', quantity: 15, harga: 10000),
     // Add more items as needed
   ];
 
@@ -46,26 +47,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _textEditingController = TextEditingController();
-    _autocompleteTextField = AutoCompleteTextField<Item>(
-      key: _autocompleteKey,
-      clearOnSubmit: true,
-      suggestions: items,
-      decoration: InputDecoration(labelText: 'Type to add product'),
-      itemFilter: (item, query) =>
-          item.name.toLowerCase().startsWith(query.toLowerCase()),
-      itemSorter: (a, b) => a.name.compareTo(b.name),
-      itemSubmitted: (item) {
-        setState(() {
-          _textEditingController.text = item.name;
-          selectedItems.add(item);
-          print(item.name);
-        });
-      },
-      itemBuilder: (context, item) => ListTile(
-        title: Text(item.name),
-      ),
-    );
+    
   }
 
   @override
@@ -619,7 +601,37 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                       children: [
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 100.w) ,
-                                          child: _autocompleteTextField!,
+                                          child: TypeAheadField<Item>(
+                                            suggestionsCallback: (String search) async {
+                                              // Use a Future to simulate an asynchronous call for suggestions
+                                              await Future.delayed(Duration(milliseconds: 300)); // Simulating a delay for demo purposes
+
+                                              // Replace the next line with your actual logic to fetch suggestions
+                                              return items.where((item) => item.name.toLowerCase().contains(search.toLowerCase())).toList();
+                                            },
+
+                                            builder: (context, controller, focusNode) {
+                                              return TextField(
+                                                controller: controller,
+                                                focusNode: focusNode,
+                                                autofocus: true,
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  labelText: 'Browse Product',
+                                                )
+                                              );
+                                            },
+                                            itemBuilder: (context, Item) {
+                                              return ListTile(
+                                                title: Text(Item.name),
+                                              );
+                                            },
+                                            onSelected: (Item selectedItem) {
+                                              setState(() {
+                                                selectedItems.add(selectedItem);
+                                              });
+                                            },
+                                          )
                                         ),
                                         
                                       ],
@@ -628,7 +640,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                   Padding(
                                     padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                     child: SizedBox(
-                                      width: (MediaQuery.of(context).size.width) ,
+                                      width: (MediaQuery.of(context).size.width),
                                       child: DataTable(
                                         columns: [
                                           DataColumn(label: Text('No')),
@@ -642,20 +654,84 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                           DataColumn(label: Text('DPP')),
                                           DataColumn(label: Text('PPN')),
                                         ],
-                                        rows: selectedItems.map((item) {
-                                          return DataRow(cells: [
-                                            DataCell(Text('item.name')),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                          ]);
-                                        }).toList(),
+                                        rows: [
+                                          ...selectedItems.asMap().entries.map((entry) {
+                                            int index = entry.key;
+                                            Item item = entry.value;
+                                            TextEditingController hargaController = TextEditingController(text: item.harga.toString());
+                                            int? harga = int.tryParse(hargaController.text);
+                                            int quantity = item.quantity;
+                                            int? total = (harga != null) ? (harga * quantity) : null;
+                                            double ppn = (total! * 0.01);
+                                            TextEditingController txtDataTablePPN = TextEditingController(text: ppn.toString());
+                                            TextEditingController txtDataTableTotal = TextEditingController(text: total.toString());
+
+                                            return DataRow(cells: [
+                                              DataCell(Text((index + 1).toString())),
+                                              DataCell(Text(item.name)),
+                                              DataCell(
+                                                TextField(
+                                                  controller: TextEditingController(text: item.quantity.toString()),
+                                                  readOnly: true,
+                                                ),
+                                              ),
+                                              DataCell(Text('')), // Placeholder for 'SAT'
+                                              DataCell(Text('')), // Placeholder for 'Curr'
+                                              DataCell(
+                                                TextField(
+                                                  controller: hargaController,
+                                                  onChanged: (value) {
+                                                    int? harga = int.tryParse(value);
+                                                    int quantity = selectedItems[index].quantity;
+                                                    int total = (harga != null) ? (harga * quantity) : 0;
+                                                    double ppn = (total * 0.01);
+                                                    txtDataTableTotal.text = total.toString();
+                                                    txtDataTablePPN.text = ppn.toString();
+                                                    selectedItems[index].harga = harga ?? 0;
+                                                  },
+                                                ),
+                                              ),
+                                              DataCell(
+                                                TextField(
+                                                  controller: txtDataTableTotal,
+                                                  readOnly: true,
+                                                  onChanged: (value) {},
+                                                ),
+                                              ),
+                                              DataCell(Text('')), // Placeholder for 'Kurs'
+                                              DataCell(Text('')), // Placeholder for 'DPP'
+                                              DataCell(
+                                                TextField(
+                                                  controller: txtDataTablePPN,
+                                                  readOnly: true,
+                                                  onChanged: (value) {},
+                                                ),
+                                              ),
+                                            ]);
+                                          }).toList(),
+
+                                          // Add an extra row for totals
+                                          DataRow(cells: [
+                                            DataCell(Text('Total:')),
+                                            DataCell(Text('')),
+                                            DataCell(
+                                              Text(selectedItems.fold<int>(0, (sum, item) => sum + item.quantity).toString()),
+                                            ),
+                                            DataCell(Text('')), // Placeholder for 'SAT'
+                                            DataCell(Text('')), // Placeholder for 'Curr'
+                                            DataCell(
+                                              Text(selectedItems.fold<int>(0, (sum, item) => sum + (item.harga * item.quantity)).toString()),
+                                            ),
+                                            DataCell(
+                                              Text(selectedItems.fold<int>(0, (sum, item) => sum + (item.harga * item.quantity)).toString()),
+                                            ),
+                                            DataCell(Text('')), // Placeholder for 'Kurs'
+                                            DataCell(Text('')), // Placeholder for 'DPP'
+                                            DataCell(
+                                              Text(selectedItems.fold<double>(0.0, (sum, item) => sum + (item.harga * item.quantity * 0.01)).toString()),
+                                            ),
+                                          ]),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -855,8 +931,9 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
 }
 
 class Item {
-  final String name;
-  final int quantity;
+  String name;
+  int quantity;
+  int harga;
 
-  Item({required this.name, required this.quantity});
+  Item({required this.name, required this.quantity, required this.harga});
 }
