@@ -1,71 +1,42 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:date_time_picker/date_time_picker.dart';
-import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
-import 'package:erpsystems/large/setting%20module/settingindex.dart';
+import 'package:flutter/material.dart';
+import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class NewSPPBLarge extends StatefulWidget {
-  const NewSPPBLarge({super.key});
+
+class SeeAllSalesOrder extends StatefulWidget {
+  const SeeAllSalesOrder({super.key});
 
   @override
-  State<NewSPPBLarge> createState() => _NewSPPBLargeState();
+  State<SeeAllSalesOrder> createState() => _SeeAllSalesOrderState();
 }
 
-class _NewSPPBLargeState extends State<NewSPPBLarge> {
+class _SeeAllSalesOrderState extends State<SeeAllSalesOrder> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
-  String jumlahSales = '2';
-  String KPITarget = '4';
-  String InTransit = '5';
-  String TopItem = 'xxxx Product';
-  TextEditingController _textEditingController = TextEditingController();
-  AutoCompleteTextField<Item>? _autocompleteTextField;
-  GlobalKey<AutoCompleteTextFieldState<Item>> _autocompleteKey = GlobalKey();
 
-
-  List<Item> items = [
-    Item(name: 'Item 1', quantity: 10),
-    Item(name: 'Item 2', quantity: 20),
-    Item(name: 'Item 3', quantity: 15),
-    // Add more items as needed
+  List<String> months = [
+    'January', 'February', 'March', 'April',
+    'May', 'June', 'July', 'August',
+    'September', 'October', 'November', 'December'
   ];
 
-  List<Item> selectedItems = [];
-  
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _textEditingController = TextEditingController();
-    _autocompleteTextField = AutoCompleteTextField<Item>(
-      key: _autocompleteKey,
-      clearOnSubmit: true,
-      suggestions: items,
-      decoration: InputDecoration(labelText: 'Type sales order number'),
-      itemFilter: (item, query) =>
-          item.name.toLowerCase().startsWith(query.toLowerCase()),
-      itemSorter: (a, b) => a.name.compareTo(b.name),
-      itemSubmitted: (item) {
-        setState(() {
-          _textEditingController.text = item.name;
-          selectedItems.add(item);
-          print(item.name);
-        });
-      },
-      itemBuilder: (context, item) => ListTile(
-        title: Text(item.name),
-      ),
-    );
-  }
+  List<String> years = [
+    '2024', '2025', '2026', '2027',
+    '2028', '2029', '2030', '2031',
+    '2032', '2033', '2034', '2035'
+  ];
+
+  String selectedMonth = 'January';
+  String selectedYear = '2024';
 
   @override
   Widget build(BuildContext context) {
@@ -290,7 +261,7 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                       //Setting Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SettingIndexLarge());
+                          Get.to(const SettingTemplateLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -341,7 +312,6 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                   ),
                 )
               ),
-              //Content
               Expanded(
                 flex: 8,
                 child: Column(
@@ -410,236 +380,161 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Sales Module', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                            Text('Sales Order List', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
                             SizedBox(height: 10.h,),
-                            //Card Overview
-                            Card(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(12))
-                              ),
-                              color: Colors.white,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //Text and Filter Area
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Text('New SPPB', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('Nomor SPPB', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
-                                              SizedBox(height: 5.h,),
-                                              Text('#24122178', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w600,),),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('Date', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
-                                              SizedBox(height: 5.h,),
-                                              DateTimePicker(
-                                                dateHintText: 'Input SPPB date',
-                                                firstDate: DateTime(2023),
-                                                lastDate: DateTime(2100),
-                                                initialDate: DateTime.now(),
-                                                dateMask: 'd MMM yyyy',
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
-                                                    //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
-                                                  });
-                                                },
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('Customer', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
-                                              SizedBox(height: 5.h,),
-                                              DropdownButtonFormField(
-                                                value: 'CUST-001',
-                                                items: const [
-                                                  DropdownMenuItem(
-                                                    value: 'CUST-001',
-                                                    child: Text('PT. ABC', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  ),
-                                                  DropdownMenuItem(
-                                                    value: 'CUST-002',
-                                                    child: Text('PT. DEF', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  ),
-                                                  DropdownMenuItem(
-                                                    value: 'CUST-003',
-                                                    child: Text('PT. GHI', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  ),
-                                                ], 
-                                                decoration: InputDecoration(
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: const BorderSide(width: 0.0),
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: const BorderSide(width: 0.0),
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                  )
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Month'),
+                                          SizedBox(height: 10.h,),
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 250.w) / 3,
+                                            child: DropdownButtonFormField<String>(
+                                              value: selectedMonth,
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  selectedMonth = newValue!;
+                                                });
+                                              },
+                                              decoration: InputDecoration(
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
                                                 ),
-                                                onChanged: (value){
-
-                                                }
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                )
                                               ),
-                                            ],
+                                              items: months.map<DropdownMenuItem<String>>((String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(width: 5.w,),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Year'),
+                                          SizedBox(height: 10.h,),
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 250.w) / 3,
+                                            child: DropdownButtonFormField<String>(
+                                              value: selectedYear,
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  selectedYear = newValue!;
+                                                });
+                                              },
+                                              decoration: InputDecoration(
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                )
+                                              ),
+                                              items: years.map<DropdownMenuItem<String>>((String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(width: 5.w,),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Year'),
+                                          SizedBox(height: 10.h,),
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 250.w) / 3,
+                                            child: TextFormField(
+                                              controller: txtSearchText,
+                                              decoration: InputDecoration(
+                                                hintText: 'Insert Sales Order Number',
+                                                filled: false,
+                                                fillColor: const Color(0xFFF4F4F4),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide.none,
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide.none,
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                )
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(width: 15.w,),
+                                      ElevatedButton(
+                                        onPressed: (){
+                                        
+                                        }, 
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          alignment: Alignment.centerLeft,
+                                          minimumSize: Size(20.w, 55.h),
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: Color(0xFF2A85FF),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8)
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 100.w) ,
-                                          child: _autocompleteTextField!,
-                                        ),
-                                        
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: SizedBox(
-                                      width: (MediaQuery.of(context).size.width) ,
-                                      child: DataTable(
-                                        columns: [
-                                          DataColumn(label: Text('No')),
-                                          DataColumn(label: Text('PO Customer')),
-                                          DataColumn(label: Text('Dikirim Ke')),
-                                          DataColumn(label: Text('Tanggal Kirim')),
-                                          DataColumn(label: Text('Nama Barang')),
-                                          DataColumn(label: Text('QTY')),
-                                          DataColumn(label: Text('SAT')),
-                                          DataColumn(label: Text('Keterangan')),
-                                        ],
-                                        rows: selectedItems.map((item) {
-                                          return DataRow(cells: [
-                                            DataCell(Text('item.name')),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                          ]);
-                                        }).toList(),
+                                        child: Text('Search', style: TextStyle(fontSize: 4.sp))
+                                      )
+                                    ],
+                                  )
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 9,
+                                  child: ElevatedButton(
+                                    onPressed: (){
+                                    
+                                    }, 
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      alignment: Alignment.centerLeft,
+                                      minimumSize: Size(20.w, 55.h),
+                                      foregroundColor: Color(0xFF1F9F61),
+                                      backgroundColor: Colors.transparent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8)
+                                      ),
+                                      side: BorderSide(
+                                        color: Color(0xFF1F9F61), // Choose your desired border color
+                                        width: 1.0, // Choose the border width
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 4,
-                                          child: ElevatedButton(
-                                              onPressed: (){
-                                                // Get.to(AddCustomerSettingLarge());
-                                              }, 
-                                              style: ElevatedButton.styleFrom(
-                                                elevation: 0,
-                                                alignment: Alignment.centerLeft,
-                                                minimumSize: Size(20.w, 50.h),
-                                                foregroundColor: Colors.white,
-                                                backgroundColor: const Color(0xFF2A85FF),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                              ),
-                                              child: Center(child: Text('Export as PDF', style: TextStyle(fontSize: 4.sp),))
-                                            ),
-                                        ),
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 4,
-                                          child: ElevatedButton(
-                                              onPressed: (){
-                                                // Get.to(AddCustomerSettingLarge());
-                                              }, 
-                                              style: ElevatedButton.styleFrom(
-                                                elevation: 0,
-                                                alignment: Alignment.centerLeft,
-                                                minimumSize: Size(20.w, 50.h),
-                                                foregroundColor: Colors.white,
-                                                backgroundColor: const Color(0xFF2A85FF),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                              ),
-                                              child: Center(child: Text('Approve', style: TextStyle(fontSize: 4.sp),))
-                                            ),
-                                        ),
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 4,
-                                          child: ElevatedButton(
-                                              onPressed: (){
-                                                // Get.to(AddCustomerSettingLarge());
-                                              }, 
-                                              style: ElevatedButton.styleFrom(
-                                                elevation: 0,
-                                                alignment: Alignment.centerLeft,
-                                                minimumSize: Size(20.w, 50.h),
-                                                foregroundColor: Colors.white,
-                                                backgroundColor: const Color(0xFF2A85FF),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                              ),
-                                              child: Center(child: Text('Reject', style: TextStyle(fontSize: 4.sp),))
-                                            ),
-                                        ),
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 4,
-                                          child: ElevatedButton(
-                                              onPressed: (){
-                                                // Get.to(AddCustomerSettingLarge());
-                                              }, 
-                                              style: ElevatedButton.styleFrom(
-                                                elevation: 0,
-                                                alignment: Alignment.centerLeft,
-                                                minimumSize: Size(20.w, 50.h),
-                                                foregroundColor: Colors.white,
-                                                backgroundColor: const Color(0xFF2A85FF),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                              ),
-                                              child: Center(child: Text('Submit', style: TextStyle(fontSize: 4.sp),))
-                                            ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            
+                                    child: Text('Export to Excel', style: TextStyle(fontSize: 4.sp))
+                                  )
+                                )
+                              ],
+                            )
                           ],
                         ),
-                      ),
+                      )
                     )
                   ],
-                )
+                ),
               )
             ],
           ),
@@ -647,11 +542,4 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
       ),
     );
   }
-}
-
-class Item {
-  final String name;
-  final int quantity;
-
-  Item({required this.name, required this.quantity});
 }

@@ -1,6 +1,8 @@
 import 'package:erpsystems/large/index.dart';
+import 'package:erpsystems/large/sales%20module/newprofit.dart';
 import 'package:erpsystems/large/sales%20module/newsalesorder.dart';
 import 'package:erpsystems/large/sales%20module/newsppb.dart';
+import 'package:erpsystems/large/sales%20module/seeallsalesorder.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
@@ -396,6 +398,10 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                       DropdownMenuItem(
                                         value: 'NEW-SO-004',
                                         child: Text('New Profit', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'NEW-SO-005',
+                                        child: Text('Calculator CIF', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                       )
                                     ], 
                                     decoration: InputDecoration(
@@ -408,6 +414,8 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                         Get.to(NewSalesIndexLarge());
                                       } else if (value == 'NEW-SO-003'){
                                         Get.to(NewSPPBLarge());
+                                      } else if (value == 'NEW-SO-004'){
+                                        Get.to(NewProfitLarge());
                                       }
                                     }
                                   ),
@@ -744,7 +752,12 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text('Sales Order List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
-                                          Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(SeeAllSalesOrder());
+                                            },
+                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                          ),
                                         ],
                                       ),
                                     ),

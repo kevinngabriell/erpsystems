@@ -1,5 +1,3 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
@@ -13,58 +11,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class NewSPPBLarge extends StatefulWidget {
-  const NewSPPBLarge({super.key});
+class NewProfitLarge extends StatefulWidget {
+  const NewProfitLarge({super.key});
 
   @override
-  State<NewSPPBLarge> createState() => _NewSPPBLargeState();
+  State<NewProfitLarge> createState() => _NewProfitLargeState();
 }
 
-class _NewSPPBLargeState extends State<NewSPPBLarge> {
+class _NewProfitLargeState extends State<NewProfitLarge> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
   String jumlahSales = '2';
-  String KPITarget = '4';
-  String InTransit = '5';
-  String TopItem = 'xxxx Product';
-  TextEditingController _textEditingController = TextEditingController();
-  AutoCompleteTextField<Item>? _autocompleteTextField;
-  GlobalKey<AutoCompleteTextFieldState<Item>> _autocompleteKey = GlobalKey();
+  String SONumberSelected = '';
 
-
-  List<Item> items = [
-    Item(name: 'Item 1', quantity: 10),
-    Item(name: 'Item 2', quantity: 20),
-    Item(name: 'Item 3', quantity: 15),
-    // Add more items as needed
+  List<Map<String, String>> tableData = [
+    {'SalesOrderNumber': 'SLS-01', 'ProductName': 'Product A', 'Qty': '10', 'UnitPrice': '20.0', 'LandedCost': '150.0', 'Profit': '50.0'},
+    {'SalesOrderNumber': 'SLS-02', 'ProductName': 'Product B', 'Qty': '8', 'UnitPrice': '25.0', 'LandedCost': '120.0', 'Profit': '80.0'},
   ];
 
-  List<Item> selectedItems = [];
-  
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _textEditingController = TextEditingController();
-    _autocompleteTextField = AutoCompleteTextField<Item>(
-      key: _autocompleteKey,
-      clearOnSubmit: true,
-      suggestions: items,
-      decoration: InputDecoration(labelText: 'Type sales order number'),
-      itemFilter: (item, query) =>
-          item.name.toLowerCase().startsWith(query.toLowerCase()),
-      itemSorter: (a, b) => a.name.compareTo(b.name),
-      itemSubmitted: (item) {
-        setState(() {
-          _textEditingController.text = item.name;
-          selectedItems.add(item);
-          print(item.name);
-        });
-      },
-      itemBuilder: (context, item) => ListTile(
-        title: Text(item.name),
-      ),
-    );
   }
 
   @override
@@ -424,7 +392,7 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                                   //Text and Filter Area
                                   Padding(
                                     padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Text('New SPPB', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                    child: Text('New Profit', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
@@ -432,42 +400,50 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                        //Sales Order Number 
                                         SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 2,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text('Nomor SPPB', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                              Text('Sales Order Number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                               SizedBox(height: 5.h,),
-                                              Text('#24122178', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w600,),),
+                                              DropdownButtonFormField(
+                                                value: 'SLS-01',
+                                                items: const [
+                                                  DropdownMenuItem(
+                                                    value: 'SLS-01',
+                                                    child: Text('SLS/IND/001/001/001', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                  ),
+                                                  DropdownMenuItem(
+                                                    value: 'SLS-02',
+                                                    child: Text('SLS/IND/001/001/002', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                  ),
+                                                  DropdownMenuItem(
+                                                    value: 'SLS-03',
+                                                    child: Text('SLS/IND/001/001/003', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                  ),
+                                                ], 
+                                                decoration: InputDecoration(
+                                                  enabledBorder: OutlineInputBorder(
+                                                    borderSide: const BorderSide(width: 0.0),
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                  ),
+                                                  focusedBorder: OutlineInputBorder(
+                                                    borderSide: const BorderSide(width: 0.0),
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                  )
+                                                ),
+                                                onChanged: (value){
+                                                  SONumberSelected = value.toString();
+                                                  print(SONumberSelected);
+                                                }
+                                              ),
                                             ],
                                           ),
                                         ),
                                         SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('Date', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
-                                              SizedBox(height: 5.h,),
-                                              DateTimePicker(
-                                                dateHintText: 'Input SPPB date',
-                                                firstDate: DateTime(2023),
-                                                lastDate: DateTime(2100),
-                                                initialDate: DateTime.now(),
-                                                dateMask: 'd MMM yyyy',
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
-                                                    //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
-                                                  });
-                                                },
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 2,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
@@ -511,44 +487,34 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: (MediaQuery.of(context).size.width - 100.w) ,
-                                          child: _autocompleteTextField!,
-                                        ),
-                                        
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                     child: SizedBox(
                                       width: (MediaQuery.of(context).size.width) ,
                                       child: DataTable(
                                         columns: [
                                           DataColumn(label: Text('No')),
-                                          DataColumn(label: Text('PO Customer')),
-                                          DataColumn(label: Text('Dikirim Ke')),
-                                          DataColumn(label: Text('Tanggal Kirim')),
                                           DataColumn(label: Text('Nama Barang')),
                                           DataColumn(label: Text('QTY')),
-                                          DataColumn(label: Text('SAT')),
-                                          DataColumn(label: Text('Keterangan')),
+                                          DataColumn(label: Text('Harga Jual Satuan')),
+                                          DataColumn(label: Text('Landed Cost')),
+                                          DataColumn(label: Text('Profit')),
+                                          DataColumn(label: Text('Profit %')),
                                         ],
-                                        rows: selectedItems.map((item) {
-                                          return DataRow(cells: [
-                                            DataCell(Text('item.name')),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                          ]);
+                                        rows: tableData
+                                            .where((row) =>
+                                                SONumberSelected.isNotEmpty ||
+                                                row['SalesOrderNumber']?.toLowerCase() == SONumberSelected.toLowerCase())
+                                            .map((row) {
+                                          return DataRow(
+                                            cells: [
+                                              DataCell(Text(row['SalesOrderNumber']!)),
+                                              DataCell(Text(row['ProductName']!)),
+                                              DataCell(Text(row['Qty']!)),
+                                              DataCell(Text(row['UnitPrice']!)),
+                                              DataCell(Text(row['LandedCost']!)),
+                                              DataCell(Text(row['Profit']!)),
+                                              DataCell(Text(row['Profit']!)),
+                                            ],
+                                          );
                                         }).toList(),
                                       ),
                                     ),
