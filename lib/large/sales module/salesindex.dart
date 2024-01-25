@@ -1,5 +1,6 @@
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/sales%20module/newsalesorder.dart';
+import 'package:erpsystems/large/sales%20module/newsppb.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
@@ -381,12 +382,9 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                   ),
                                   child: DropdownButtonFormField(
                                     dropdownColor: Colors.white,
-                                    value: 'NEW-SO-001',
+                                    value: null,
+                                    hint: Text('Create New', style: TextStyle(color: Colors.white),),
                                     items: const [
-                                      DropdownMenuItem(
-                                        value: 'NEW-SO-001',
-                                        child: Text('Create New', style: TextStyle(color: Colors.white),)
-                                      ),
                                       DropdownMenuItem(
                                         value: 'NEW-SO-002',
                                         child: Text('New Sales Order', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
@@ -401,18 +399,15 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                       )
                                     ], 
                                     decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 0.0),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 0.0),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      )
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.all(3.sp)
                                     ),
+                                    icon: Icon(Icons.arrow_drop_down, color: Colors.white),
                                     onChanged: (value){
                                       if(value == 'NEW-SO-002'){
                                         Get.to(NewSalesIndexLarge());
+                                      } else if (value == 'NEW-SO-003'){
+                                        Get.to(NewSPPBLarge());
                                       }
                                     }
                                   ),
@@ -803,6 +798,149 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                 ),
                               )
                             ),
+                            SizedBox(height: 15.h,),
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12))
+                              ),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 5.sp),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('SPPB List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                          Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 15.h,),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: (MediaQuery.of(context).size.height - 433.h),
+                                      child: ListView.builder(
+                                        itemCount: 4,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                      
+                                          return Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            color: backgroundColor,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                      SizedBox(height: 3.h,),
+                                                      Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                    ],
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: (){
+                                                      // Get.to(AddCustomerSettingLarge());
+                                                    }, 
+                                                    style: ElevatedButton.styleFrom(
+                                                      elevation: 0,
+                                                      alignment: Alignment.centerLeft,
+                                                      minimumSize: Size(20.w, 40.h),
+                                                      foregroundColor: Colors.white,
+                                                      backgroundColor: const Color(0xFF2A85FF),
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                    ),
+                                                    child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          );
+                                        }
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 15.h,),
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12))
+                              ),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 5.sp),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Profit List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                          Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 15.h,),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: (MediaQuery.of(context).size.height - 433.h),
+                                      child: ListView.builder(
+                                        itemCount: 4,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                      
+                                          return Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            color: backgroundColor,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                      SizedBox(height: 3.h,),
+                                                      Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                    ],
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: (){
+                                                      // Get.to(AddCustomerSettingLarge());
+                                                    }, 
+                                                    style: ElevatedButton.styleFrom(
+                                                      elevation: 0,
+                                                      alignment: Alignment.centerLeft,
+                                                      minimumSize: Size(20.w, 40.h),
+                                                      foregroundColor: Colors.white,
+                                                      backgroundColor: const Color(0xFF2A85FF),
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                    ),
+                                                    child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          );
+                                        }
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 5.h,),
                           ],
                         ),
                       ),

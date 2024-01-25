@@ -1,4 +1,5 @@
 
+import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/addcustomersettings.dart';
 import 'package:erpsystems/large/setting%20module/detailcustomerinformation.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
@@ -11,7 +12,6 @@ import '../template/analyticstemplatelarge.dart';
 import '../template/documenttemplatelarge.dart';
 import '../template/financetemplatelarge.dart';
 import '../template/hrtemplatelarge.dart';
-import '../template/salestemplatelarge.dart';
 import '../template/warehousetemplatelarge.dart';
 
 
@@ -89,7 +89,7 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                       //Sales Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SalesTemplateLarge());
+                          Get.to(const SalesIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

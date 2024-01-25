@@ -1,10 +1,12 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:erpsystems/large/index.dart';
+import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
-import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +28,45 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
   String KPITarget = '4';
   String InTransit = '5';
   String TopItem = 'xxxx Product';
+  TextEditingController _textEditingController = TextEditingController();
+  AutoCompleteTextField<Item>? _autocompleteTextField;
+  GlobalKey<AutoCompleteTextFieldState<Item>> _autocompleteKey = GlobalKey();
+
+
+  List<Item> items = [
+    Item(name: 'Item 1', quantity: 10),
+    Item(name: 'Item 2', quantity: 20),
+    Item(name: 'Item 3', quantity: 15),
+    // Add more items as needed
+  ];
+
+  List<Item> selectedItems = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _textEditingController = TextEditingController();
+    _autocompleteTextField = AutoCompleteTextField<Item>(
+      key: _autocompleteKey,
+      clearOnSubmit: true,
+      suggestions: items,
+      decoration: InputDecoration(labelText: 'Type to add product'),
+      itemFilter: (item, query) =>
+          item.name.toLowerCase().startsWith(query.toLowerCase()),
+      itemSorter: (a, b) => a.name.compareTo(b.name),
+      itemSubmitted: (item) {
+        setState(() {
+          _textEditingController.text = item.name;
+          selectedItems.add(item);
+          print(item.name);
+        });
+      },
+      itemBuilder: (context, item) => ListTile(
+        title: Text(item.name),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +291,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                       //Setting Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SettingTemplateLarge());
+                          Get.to(const SettingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -410,10 +451,18 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                             children: [
                                               Text('Date', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                               SizedBox(height: 5.h,),
-                                              InputDatePickerFormField(
-                                                firstDate: DateTime(2000), 
-                                                lastDate: DateTime(2040), 
+                                              DateTimePicker(
+                                                dateHintText: 'Input sales date',
+                                                firstDate: DateTime(2023),
+                                                lastDate: DateTime(2100),
                                                 initialDate: DateTime.now(),
+                                                dateMask: 'd MMM yyyy',
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
+                                                    //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
+                                                  });
+                                                },
                                               )
                                             ],
                                           ),
@@ -426,24 +475,16 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                               Text('PPN / No. PPN', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                               SizedBox(height: 5.h,),
                                               DropdownButtonFormField(
-                                                value: 'NEW-SO-001',
+                                                value: 'PPN01',
                                                 items: const [
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-001',
-                                                    child: Text('Create New', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'PPN01',
+                                                    child: Text('NPWP', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   ),
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-002',
-                                                    child: Text('New Sales Order', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'PPN02',
+                                                    child: Text('Non-NPWP', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   ),
-                                                  DropdownMenuItem(
-                                                    value: 'NEW-SO-003',
-                                                    child: Text('New SPPB', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  ),
-                                                  DropdownMenuItem(
-                                                    value: 'NEW-SO-004',
-                                                    child: Text('New Profit', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  )
                                                 ], 
                                                 decoration: InputDecoration(
                                                   enabledBorder: OutlineInputBorder(
@@ -456,9 +497,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                                   )
                                                 ),
                                                 onChanged: (value){
-                                                  if(value == 'NEW-SO-002'){
-                                                    Get.to(NewSalesIndexLarge());
-                                                  }
+                                                  
                                                 }
                                               ),
                                             ],
@@ -467,7 +506,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                       ],
                                     ),
                                   ),
-                                   Padding(
+                                  Padding(
                                     padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -481,24 +520,20 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                               Text('Customer', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                               SizedBox(height: 5.h,),
                                               DropdownButtonFormField(
-                                                value: 'NEW-SO-001',
+                                                value: 'CUST-001',
                                                 items: const [
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-001',
-                                                    child: Text('Create New', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'CUST-001',
+                                                    child: Text('PT. ABC', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   ),
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-002',
-                                                    child: Text('New Sales Order', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'CUST-002',
+                                                    child: Text('PT. DEF', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   ),
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-003',
-                                                    child: Text('New SPPB', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'CUST-003',
+                                                    child: Text('PT. GHI', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   ),
-                                                  DropdownMenuItem(
-                                                    value: 'NEW-SO-004',
-                                                    child: Text('New Profit', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  )
                                                 ], 
                                                 decoration: InputDecoration(
                                                   enabledBorder: OutlineInputBorder(
@@ -511,9 +546,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                                   )
                                                 ),
                                                 onChanged: (value){
-                                                  if(value == 'NEW-SO-002'){
-                                                    Get.to(NewSalesIndexLarge());
-                                                  }
+
                                                 }
                                               ),
                                             ],
@@ -526,21 +559,8 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                             children: [
                                               Text('Address', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                               SizedBox(height: 5.h,),
-                                              TextFormField(
-                                                // controller: txtTarget2031,
-                                                maxLines: 3,
-                                                initialValue: 'Jln. M. H. Thamrin No. A1, Jakarta Pusat, DKI Jakarta',
-                                                decoration: InputDecoration(
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: const BorderSide(width: 0.0),
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: const BorderSide(width: 0.0),
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                  ),
-                                                ),
-                                              ),
+                                              Text('Jln. M. H. Thamrin No. A1, Jakarta Pusat, DKI Jakarta', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 4.sp, fontWeight: FontWeight.w500,),)
+                                              
                                             ],
                                           ),
                                         ),
@@ -552,23 +572,23 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                               Text('PO Number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                               SizedBox(height: 5.h,),
                                               DropdownButtonFormField(
-                                                value: 'NEW-SO-001',
+                                                value: 'PO-LIST-001',
                                                 items: const [
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-001',
-                                                    child: Text('Create New', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'PO-LIST-001',
+                                                    child: Text('PO/11/2023/0001', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   ),
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-002',
-                                                    child: Text('New Sales Order', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'PO-LIST-002',
+                                                    child: Text('PO/11/2023/0002', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   ),
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-003',
-                                                    child: Text('New SPPB', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'PO-LIST-003',
+                                                    child: Text('PO/11/2023/0003', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   ),
                                                   DropdownMenuItem(
-                                                    value: 'NEW-SO-004',
-                                                    child: Text('New Profit', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                    value: 'PO-LIST-004',
+                                                    child: Text('PO/11/2023/0004', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                   )
                                                 ], 
                                                 decoration: InputDecoration(
@@ -582,13 +602,235 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                                   )
                                                 ),
                                                 onChanged: (value){
-                                                  if(value == 'NEW-SO-002'){
-                                                    Get.to(NewSalesIndexLarge());
-                                                  }
+                                                  
                                                 }
                                               ),
                                             ],
                                           ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: (MediaQuery.of(context).size.width - 100.w) ,
+                                          child: _autocompleteTextField!,
+                                        ),
+                                        
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
+                                    child: SizedBox(
+                                      width: (MediaQuery.of(context).size.width) ,
+                                      child: DataTable(
+                                        columns: [
+                                          DataColumn(label: Text('No')),
+                                          DataColumn(label: Text('Product Name')),
+                                          DataColumn(label: Text('QTY')),
+                                          DataColumn(label: Text('SAT')),
+                                          DataColumn(label: Text('Curr')),
+                                          DataColumn(label: Text('Harga@')),
+                                          DataColumn(label: Text('Total')),
+                                          DataColumn(label: Text('Kurs')),
+                                          DataColumn(label: Text('DPP')),
+                                          DataColumn(label: Text('PPN')),
+                                        ],
+                                        rows: selectedItems.map((item) {
+                                          return DataRow(cells: [
+                                            DataCell(Text('item.name')),
+                                            DataCell(Text(item.quantity.toString())),
+                                            DataCell(Text(item.name)),
+                                            DataCell(Text(item.quantity.toString())),
+                                            DataCell(Text(item.name)),
+                                            DataCell(Text(item.quantity.toString())),
+                                            DataCell(Text(item.name)),
+                                            DataCell(Text(item.quantity.toString())),
+                                            DataCell(Text(item.name)),
+                                            DataCell(Text(item.quantity.toString())),
+                                          ]);
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('Dikirim Tanggal', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                              SizedBox(height: 5.h,),
+                                              DateTimePicker(
+                                                dateHintText: 'Input tanggal kirim',
+                                                firstDate: DateTime(2023),
+                                                lastDate: DateTime(2100),
+                                                initialDate: DateTime.now(),
+                                                dateMask: 'd MMM yyyy',
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
+                                                    //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
+                                                  });
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('Dikirim Ke', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                              SizedBox(height: 5.h,),
+                                              DateTimePicker(
+                                                dateHintText: 'Input dikirim ke',
+                                                firstDate: DateTime(2023),
+                                                lastDate: DateTime(2100),
+                                                initialDate: DateTime.now(),
+                                                dateMask: 'd MMM yyyy',
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
+                                                    //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
+                                                  });
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              // Text('PO Number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                              // SizedBox(height: 5.h,),
+                                              // DropdownButtonFormField(
+                                              //   value: 'PO-LIST-001',
+                                              //   items: const [
+                                              //     DropdownMenuItem(
+                                              //       value: 'PO-LIST-001',
+                                              //       child: Text('PO/11/2023/0001', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                              //     ),
+                                              //     DropdownMenuItem(
+                                              //       value: 'PO-LIST-002',
+                                              //       child: Text('PO/11/2023/0002', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                              //     ),
+                                              //     DropdownMenuItem(
+                                              //       value: 'PO-LIST-003',
+                                              //       child: Text('PO/11/2023/0003', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                              //     ),
+                                              //     DropdownMenuItem(
+                                              //       value: 'PO-LIST-004',
+                                              //       child: Text('PO/11/2023/0004', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                              //     )
+                                              //   ], 
+                                              //   decoration: InputDecoration(
+                                              //     enabledBorder: OutlineInputBorder(
+                                              //       borderSide: const BorderSide(width: 0.0),
+                                              //       borderRadius: BorderRadius.circular(10.0),
+                                              //     ),
+                                              //     focusedBorder: OutlineInputBorder(
+                                              //       borderSide: const BorderSide(width: 0.0),
+                                              //       borderRadius: BorderRadius.circular(10.0),
+                                              //     )
+                                              //   ),
+                                              //   onChanged: (value){
+                                                  
+                                              //   }
+                                              // ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 4,
+                                          child: ElevatedButton(
+                                              onPressed: (){
+                                                // Get.to(AddCustomerSettingLarge());
+                                              }, 
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                alignment: Alignment.centerLeft,
+                                                minimumSize: Size(20.w, 50.h),
+                                                foregroundColor: Colors.white,
+                                                backgroundColor: const Color(0xFF2A85FF),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                              ),
+                                              child: Center(child: Text('Export as PDF', style: TextStyle(fontSize: 4.sp),))
+                                            ),
+                                        ),
+                                        SizedBox(
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 4,
+                                          child: ElevatedButton(
+                                              onPressed: (){
+                                                // Get.to(AddCustomerSettingLarge());
+                                              }, 
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                alignment: Alignment.centerLeft,
+                                                minimumSize: Size(20.w, 50.h),
+                                                foregroundColor: Colors.white,
+                                                backgroundColor: const Color(0xFF2A85FF),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                              ),
+                                              child: Center(child: Text('Approve', style: TextStyle(fontSize: 4.sp),))
+                                            ),
+                                        ),
+                                        SizedBox(
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 4,
+                                          child: ElevatedButton(
+                                              onPressed: (){
+                                                // Get.to(AddCustomerSettingLarge());
+                                              }, 
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                alignment: Alignment.centerLeft,
+                                                minimumSize: Size(20.w, 50.h),
+                                                foregroundColor: Colors.white,
+                                                backgroundColor: const Color(0xFF2A85FF),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                              ),
+                                              child: Center(child: Text('Reject', style: TextStyle(fontSize: 4.sp),))
+                                            ),
+                                        ),
+                                        SizedBox(
+                                          width: (MediaQuery.of(context).size.width - 150.w) / 4,
+                                          child: ElevatedButton(
+                                              onPressed: (){
+                                                // Get.to(AddCustomerSettingLarge());
+                                              }, 
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                alignment: Alignment.centerLeft,
+                                                minimumSize: Size(20.w, 50.h),
+                                                foregroundColor: Colors.white,
+                                                backgroundColor: const Color(0xFF2A85FF),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                              ),
+                                              child: Center(child: Text('Submit', style: TextStyle(fontSize: 4.sp),))
+                                            ),
                                         ),
                                       ],
                                     ),
@@ -610,4 +852,11 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
       ),
     );
   }
+}
+
+class Item {
+  final String name;
+  final int quantity;
+
+  Item({required this.name, required this.quantity});
 }
