@@ -19,6 +19,9 @@ class HRTemplateLarge extends StatefulWidget {
 }
 
 class _HRTemplateLargeState extends State<HRTemplateLarge> {
+  String profileName = 'Kevin';
+  TextEditingController txtSearchText = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -298,37 +301,57 @@ class _HRTemplateLargeState extends State<HRTemplateLarge> {
                 flex: 8,
                 child: Column(
                   children: [
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
-                    Text('Content', style: TextStyle(fontSize: 10.sp),),
+                     //Search Bar and Profile
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 5.sp, right: 7.sp),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          //Search Box
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: TextFormField(
+                              controller: txtSearchText,
+                              decoration: InputDecoration(
+                                prefixIcon: Image.asset('Icon/Search.png'),
+                                hintText: 'Search',
+                                filled: true,
+                                fillColor: const Color(0xFFF4F4F4),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                )
+                              ),
+                            ),
+                          ),
+                          //Profile Name
+                          GestureDetector(
+                            onTap: () {
+                              
+                            },
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width / 8,
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.only(left: 0, right: 0),
+                                dense: true,
+                                horizontalTitleGap: 0.0,
+                                leading: Container(
+                                  margin: const EdgeInsets.only(right: 12.0),
+                                  child: Image.asset('Icon/Profile.png')
+                                ),
+                                title: Text(profileName, style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w300),),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    //Content
+                    
                   ],
                 )
               )

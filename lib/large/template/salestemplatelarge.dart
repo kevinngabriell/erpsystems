@@ -18,6 +18,8 @@ class SalesTemplateLarge extends StatefulWidget {
 }
 
 class _SalesTemplateLargeState extends State<SalesTemplateLarge> {
+  String profileName = 'Kevin';
+  TextEditingController txtSearchText = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
