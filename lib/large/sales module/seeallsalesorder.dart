@@ -11,7 +11,6 @@ import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-
 class SeeAllSalesOrder extends StatefulWidget {
   const SeeAllSalesOrder({super.key});
 
@@ -462,22 +461,21 @@ class _SeeAllSalesOrderState extends State<SeeAllSalesOrder> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('Year'),
+                                          Text('Sales Order Number'),
                                           SizedBox(height: 10.h,),
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 250.w) / 2,
                                             child: TextFormField(
                                               controller: txtSearchText,
                                               decoration: InputDecoration(
-                                                hintText: 'Insert Sales Order Number',
+                                                hintText: 'Sales Order Number',
                                                 filled: false,
-                                                fillColor: const Color(0xFFF4F4F4),
                                                 enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide.none,
+                                                  // borderSide: BorderSide.none,
                                                   borderRadius: BorderRadius.circular(10.0),
                                                 ),
                                                 focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide.none,
+                                                  // borderSide: BorderSide.none,
                                                   borderRadius: BorderRadius.circular(10.0),
                                                 )
                                               ),
@@ -529,6 +527,50 @@ class _SeeAllSalesOrderState extends State<SeeAllSalesOrder> {
                                   )
                                 )
                               ],
+                            ),
+                            SizedBox(height: 45.h,),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: (MediaQuery.of(context).size.height),
+                              child: ListView.builder(
+                                itemCount: 14,
+                                itemBuilder: (BuildContext context, int index) {
+                                Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    color: backgroundColor,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                              SizedBox(height: 3.h,),
+                                              Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                            ],
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: (){
+                                            }, 
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 0,
+                                              alignment: Alignment.centerLeft,
+                                              minimumSize: Size(20.w, 40.h),
+                                              foregroundColor: Colors.white,
+                                              backgroundColor: const Color(0xFF2A85FF),
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                            ),
+                                            child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  );
+                                }
+                              ),
                             )
                           ],
                         ),

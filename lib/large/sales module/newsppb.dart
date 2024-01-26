@@ -1,4 +1,3 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
@@ -11,6 +10,7 @@ import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 
 class NewSPPBLarge extends StatefulWidget {
@@ -24,18 +24,14 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
   String jumlahSales = '2';
-  String KPITarget = '4';
-  String InTransit = '5';
-  String TopItem = 'xxxx Product';
-  TextEditingController _textEditingController = TextEditingController();
-  AutoCompleteTextField<Item>? _autocompleteTextField;
-  GlobalKey<AutoCompleteTextFieldState<Item>> _autocompleteKey = GlobalKey();
-
+  bool showSuggestions = false;
+  late DateTime today;
+  late DateTime tomorrow;
 
   List<Item> items = [
-    Item(name: 'Item 1', quantity: 10),
-    Item(name: 'Item 2', quantity: 20),
-    Item(name: 'Item 3', quantity: 15),
+    Item(salesOrderNumber: 'SO/123/12/123/12', poCustomer: 'PO/123/12/123/12', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(Duration(days: 1)), namaBarang: 'A', Qty: 1, SAT: 'KG', Keterangan: ''),
+    Item(salesOrderNumber: 'SO/123/12/123/13', poCustomer: 'PO/123/12/123/13', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(Duration(days: 1)), namaBarang: 'B', Qty: 2, SAT: 'KG', Keterangan: ''),
+    Item(salesOrderNumber: 'SO/123/12/123/14', poCustomer: 'PO/123/12/123/14', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(Duration(days: 1)), namaBarang: 'C', Qty: 3, SAT: 'KG', Keterangan: ''),
     // Add more items as needed
   ];
 
@@ -45,26 +41,9 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _textEditingController = TextEditingController();
-    _autocompleteTextField = AutoCompleteTextField<Item>(
-      key: _autocompleteKey,
-      clearOnSubmit: true,
-      suggestions: items,
-      decoration: InputDecoration(labelText: 'Type sales order number'),
-      itemFilter: (item, query) =>
-          item.name.toLowerCase().startsWith(query.toLowerCase()),
-      itemSorter: (a, b) => a.name.compareTo(b.name),
-      itemSubmitted: (item) {
-        setState(() {
-          _textEditingController.text = item.name;
-          selectedItems.add(item);
-          print(item.name);
-        });
-      },
-      itemBuilder: (context, item) => ListTile(
-        title: Text(item.name),
-      ),
-    );
+      
+    today = DateTime.now();
+    tomorrow = today.add(Duration(days: 1));
   }
 
   @override
@@ -517,7 +496,45 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                                       children: [
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 100.w) ,
-                                          child: _autocompleteTextField!,
+                                          child: TypeAheadField<Item>(
+                                            builder: (context, controller, focusNode) {
+                                              return TextField(
+                                                controller: controller,
+                                                focusNode: focusNode,
+                                                autofocus: true,
+                                                onTap: () {
+                                                  setState(() {
+                                                    showSuggestions = true; // Open suggestions when the TextField is tapped
+                                                  });
+                                                },
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  labelText: 'Browse Product',
+                                                )
+                                              );
+                                            },
+                                            suggestionsCallback: (String search) async {
+                                              if (showSuggestions) {
+                                                await Future.delayed(Duration(milliseconds: 300));
+                                                return items
+                                                    .where((item) =>
+                                                        item.salesOrderNumber.toLowerCase().contains(search.toLowerCase()))
+                                                    .toList();
+                                              } else {
+                                                return [];
+                                              }
+                                            },
+                                            itemBuilder: (context, Item) {
+                                              return ListTile(
+                                                title: Text(Item.salesOrderNumber),
+                                              );
+                                            },
+                                            onSelected: (Item selectedItem) {
+                                              setState(() {
+                                                selectedItems.add(selectedItem);
+                                              });
+                                            },
+                                          )
                                         ),
                                         
                                       ],
@@ -538,18 +555,52 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                                           DataColumn(label: Text('SAT')),
                                           DataColumn(label: Text('Keterangan')),
                                         ],
-                                        rows: selectedItems.map((item) {
-                                          return DataRow(cells: [
-                                            DataCell(Text('item.name')),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                            DataCell(Text(item.name)),
-                                            DataCell(Text(item.quantity.toString())),
-                                          ]);
-                                        }).toList(),
+                                        rows: [
+                                          ...selectedItems.asMap().entries.map((entry) {
+                                            int index = entry.key;
+                                            Item item = entry.value;
+                                            // TextEditingController hargaController = TextEditingController(text: item.harga.toString());
+                                            // int? harga = int.tryParse(hargaController.text);
+                                            // int quantity = item.quantity;
+                                            // int? total = (harga != null) ? (harga * quantity) : null;
+                                            // double ppn = (total! * 0.01);
+                                            // TextEditingController txtDataTablePPN = TextEditingController(text: ppn.toString());
+                                            // TextEditingController txtDataTableTotal = TextEditingController(text: total.toString());
+
+                                            return DataRow(cells: [
+                                              DataCell(Text((index + 1).toString())),
+                                              DataCell(Text(item.poCustomer)),
+                                              DataCell(Text(item.dikirimKe.toString())),
+                                              DataCell(Text(item.tanggalKirim.toString())),
+                                              DataCell(Text(item.namaBarang)),
+                                              DataCell(Text(item.Qty.toString())),
+                                              DataCell(Text(item.SAT)),
+                                              DataCell(Text(item.Keterangan)),
+                                            ]);
+                                          }).toList(),
+
+                                          // Add an extra row for totals
+                                          // DataRow(cells: [
+                                          //   DataCell(Text('Total:')),
+                                          //   DataCell(Text('')),
+                                          //   DataCell(
+                                          //     Text(selectedItems.fold<int>(0, (sum, item) => sum + item.quantity).toString()),
+                                          //   ),
+                                          //   DataCell(Text('')), // Placeholder for 'SAT'
+                                          //   DataCell(Text('')), // Placeholder for 'Curr'
+                                          //   DataCell(
+                                          //     Text(selectedItems.fold<int>(0, (sum, item) => sum + (item.harga * item.quantity)).toString()),
+                                          //   ),
+                                          //   DataCell(
+                                          //     Text(selectedItems.fold<int>(0, (sum, item) => sum + (item.harga * item.quantity)).toString()),
+                                          //   ),
+                                          //   DataCell(Text('')), // Placeholder for 'Kurs'
+                                          //   DataCell(Text('')), // Placeholder for 'DPP'
+                                          //   DataCell(
+                                          //     Text(selectedItems.fold<double>(0.0, (sum, item) => sum + (item.harga * item.quantity * 0.01)).toString()),
+                                          //   ),
+                                          // ]),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -650,8 +701,19 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
 }
 
 class Item {
-  final String name;
-  final int quantity;
+  final String salesOrderNumber;
+  final String poCustomer;
+  final DateTime dikirimKe;
+  final DateTime tanggalKirim;
+  final String namaBarang;
+  final int Qty;
+  final String SAT;
+  final String Keterangan;
 
-  Item({required this.name, required this.quantity});
+   Item({
+    required this.salesOrderNumber, required this.poCustomer,
+    required this.dikirimKe, required this.tanggalKirim,
+    required this.namaBarang, required this.Qty,
+    required this.SAT, required this.Keterangan,
+  });
 }

@@ -2,7 +2,11 @@ import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/sales%20module/newprofit.dart';
 import 'package:erpsystems/large/sales%20module/newsalesorder.dart';
 import 'package:erpsystems/large/sales%20module/newsppb.dart';
+import 'package:erpsystems/large/sales%20module/seeallprofitlist.dart';
+import 'package:erpsystems/large/sales%20module/seeallrepeatorder.dart';
 import 'package:erpsystems/large/sales%20module/seeallsalesorder.dart';
+import 'package:erpsystems/large/sales%20module/seeallsppb.dart';
+import 'package:erpsystems/large/sales%20module/seeallundernego.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
@@ -605,7 +609,12 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text('Repeat Order Reminder', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
-                                                Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(SeeAllRepeatOrderLarge());
+                                                  },
+                                                  child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -678,7 +687,12 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text('Under Negotiation List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
-                                                Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(SeeAllUnderNego());
+                                                  },
+                                                  child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -828,7 +842,12 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text('SPPB List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
-                                          Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(SeeAllSPPBLarge());
+                                            },
+                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -899,7 +918,12 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text('Profit List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
-                                          Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF))),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(SeeAllProfitLarge());
+                                            },
+                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                          ),
                                         ],
                                       ),
                                     ),

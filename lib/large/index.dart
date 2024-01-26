@@ -1,10 +1,11 @@
+import 'package:erpsystems/large/login.dart';
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,7 @@ class _IndexLargeState extends State<IndexLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -276,7 +277,7 @@ class _IndexLargeState extends State<IndexLarge> {
                       //Logout Button
                       ElevatedButton(
                         onPressed: (){
-                          // MainApp();
+                          Get.off(LoginLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

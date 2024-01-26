@@ -11,15 +11,15 @@ import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class SeeAllRepeatOrderLarge extends StatefulWidget {
-  const SeeAllRepeatOrderLarge({super.key});
+class SeeAllProfitLarge extends StatefulWidget {
+  const SeeAllProfitLarge({super.key});
 
   @override
-  State<SeeAllRepeatOrderLarge> createState() => _SeeAllRepeatOrderLargeState();
+  State<SeeAllProfitLarge> createState() => _SeeAllProfitLargeState();
 }
 
-class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
-  TextEditingController txtSearchText = TextEditingController();
+class _SeeAllProfitLargeState extends State<SeeAllProfitLarge> {
+ TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
 
   List<String> months = [
@@ -379,7 +379,7 @@ class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Repeat Order List', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                            Text('Profit List', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
                             SizedBox(height: 10.h,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

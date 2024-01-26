@@ -1,42 +1,28 @@
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
-import 'package:flutter/material.dart';
-import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class SeeAllRepeatOrderLarge extends StatefulWidget {
-  const SeeAllRepeatOrderLarge({super.key});
+import '../index.dart';
+
+
+class PurchasingIndexLarge extends StatefulWidget {
+  const PurchasingIndexLarge({super.key});
 
   @override
-  State<SeeAllRepeatOrderLarge> createState() => _SeeAllRepeatOrderLargeState();
+  State<PurchasingIndexLarge> createState() => _PurchasingIndexLargeState();
 }
 
-class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
-  TextEditingController txtSearchText = TextEditingController();
+class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
   String profileName = 'Kevin';
-
-  List<String> months = [
-    'January', 'February', 'March', 'April',
-    'May', 'June', 'July', 'August',
-    'September', 'October', 'November', 'December'
-  ];
-
-  List<String> years = [
-    '2024', '2025', '2026', '2027',
-    '2028', '2029', '2030', '2031',
-    '2032', '2033', '2034', '2035'
-  ];
-
-  String selectedMonth = 'January';
-  String selectedYear = '2024';
-
+  TextEditingController txtSearchText = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -83,7 +69,32 @@ class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
                       //Sales Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SalesIndexLarge());
+                          Get.to(SalesIndexLarge());
+                        }, 
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          alignment: Alignment.centerLeft,
+                          minimumSize: Size(60.w, 55.h),
+                          foregroundColor: const Color(0xFF6F767E),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Image.asset('Icon/SalesInactive.png'),
+                            ),
+                            SizedBox(width: 3.w),
+                            Text('Sales Module', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400),)
+                          ],
+                        )
+                      ),
+                      SizedBox(height: 10.h,),
+                      //Purchasing Module Button
+                      ElevatedButton(
+                        onPressed: (){
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -98,32 +109,7 @@ class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
                           children: [
                             Container(
                               alignment: Alignment.centerLeft,
-                              child: Image.asset('Icon/SalesActive.png'),
-                            ),
-                            SizedBox(width: 3.w),
-                            Text('Sales Module', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400),)
-                          ],
-                        )
-                      ),
-                      SizedBox(height: 10.h,),
-                      //Purchasing Module Button
-                      ElevatedButton(
-                        onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
-                        }, 
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          alignment: Alignment.centerLeft,
-                          minimumSize: Size(60.w, 55.h),
-                          foregroundColor: const Color(0xFF6F767E),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset('Icon/PurchasingInactive.png'),
+                              child: Image.asset('Icon/PurchasingActive.png'),
                             ),
                             SizedBox(width: 3.w),
                             Text('Purchasing Module', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400),)
@@ -311,11 +297,12 @@ class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
                   ),
                 )
               ),
+              //Content
               Expanded(
                 flex: 8,
                 child: Column(
                   children: [
-                    //Search Bar and Profile
+                     //Search Bar and Profile
                     Padding(
                       padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 5.sp, right: 7.sp),
                       child: Row(
@@ -365,219 +352,9 @@ class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
                       ),
                     ),
                     //Content
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height, // Set the minimal height
-                      ),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFF4F4F4)
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 5.sp, top: 7.sp, bottom: 5.sp, right: 7.sp),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Repeat Order List', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
-                            SizedBox(height: 10.h,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Month'),
-                                          SizedBox(height: 10.h,),
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 250.w) / 3,
-                                            child: DropdownButtonFormField<String>(
-                                              value: selectedMonth,
-                                              onChanged: (String? newValue) {
-                                                setState(() {
-                                                  selectedMonth = newValue!;
-                                                });
-                                              },
-                                              decoration: InputDecoration(
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: const BorderSide(width: 0.0),
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: const BorderSide(width: 0.0),
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                )
-                                              ),
-                                              items: months.map<DropdownMenuItem<String>>((String value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 5.w,),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Year'),
-                                          SizedBox(height: 10.h,),
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 250.w) / 3,
-                                            child: DropdownButtonFormField<String>(
-                                              value: selectedYear,
-                                              onChanged: (String? newValue) {
-                                                setState(() {
-                                                  selectedYear = newValue!;
-                                                });
-                                              },
-                                              decoration: InputDecoration(
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: const BorderSide(width: 0.0),
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: const BorderSide(width: 0.0),
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                )
-                                              ),
-                                              items: years.map<DropdownMenuItem<String>>((String value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 5.w,),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Sales Order Number'),
-                                          SizedBox(height: 10.h,),
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 250.w) / 2,
-                                            child: TextFormField(
-                                              controller: txtSearchText,
-                                              decoration: InputDecoration(
-                                                hintText: 'Sales Order Number',
-                                                filled: false,
-                                                enabledBorder: OutlineInputBorder(
-                                                  // borderSide: BorderSide.none,
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  // borderSide: BorderSide.none,
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                )
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 15.w,),
-                                      ElevatedButton(
-                                        onPressed: (){
-                                        
-                                        }, 
-                                        style: ElevatedButton.styleFrom(
-                                          elevation: 0,
-                                          alignment: Alignment.centerLeft,
-                                          minimumSize: Size(20.w, 55.h),
-                                          foregroundColor: Colors.white,
-                                          backgroundColor: Color(0xFF2A85FF),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8)
-                                          ),
-                                        ),
-                                        child: Text('Search', style: TextStyle(fontSize: 4.sp))
-                                      )
-                                    ],
-                                  )
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 9,
-                                  child: ElevatedButton(
-                                    onPressed: (){
-                                    
-                                    }, 
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      alignment: Alignment.centerLeft,
-                                      minimumSize: Size(20.w, 55.h),
-                                      foregroundColor: Color(0xFF1F9F61),
-                                      backgroundColor: Colors.transparent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8)
-                                      ),
-                                      side: BorderSide(
-                                        color: Color(0xFF1F9F61), // Choose your desired border color
-                                        width: 1.0, // Choose the border width
-                                      ),
-                                    ),
-                                    child: Text('Export to Excel', style: TextStyle(fontSize: 4.sp))
-                                  )
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 45.h,),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: (MediaQuery.of(context).size.height),
-                              child: ListView.builder(
-                                itemCount: 14,
-                                itemBuilder: (BuildContext context, int index) {
-                                Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    color: backgroundColor,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
-                                              SizedBox(height: 3.h,),
-                                              Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
-                                            ],
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: (){
-                                            }, 
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              alignment: Alignment.centerLeft,
-                                              minimumSize: Size(20.w, 40.h),
-                                              foregroundColor: Colors.white,
-                                              backgroundColor: const Color(0xFF2A85FF),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                            ),
-                                            child: Text('Detail', style: TextStyle(fontSize: 4.sp))
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  );
-                                }
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    )
+                    
                   ],
-                ),
+                )
               )
             ],
           ),

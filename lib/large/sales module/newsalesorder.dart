@@ -33,6 +33,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
   int? quantity;
   int? total;
   int? ppn;
+  bool showSuggestions = false;
 
   List<Item> items = [
     Item(name: 'Item 1', quantity: 10, harga: 10000),
@@ -602,24 +603,32 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 100.w) ,
                                           child: TypeAheadField<Item>(
-                                            suggestionsCallback: (String search) async {
-                                              // Use a Future to simulate an asynchronous call for suggestions
-                                              await Future.delayed(Duration(milliseconds: 300)); // Simulating a delay for demo purposes
-
-                                              // Replace the next line with your actual logic to fetch suggestions
-                                              return items.where((item) => item.name.toLowerCase().contains(search.toLowerCase())).toList();
-                                            },
-
                                             builder: (context, controller, focusNode) {
                                               return TextField(
                                                 controller: controller,
                                                 focusNode: focusNode,
                                                 autofocus: true,
+                                                onTap: () {
+                                                  setState(() {
+                                                    showSuggestions = true; // Open suggestions when the TextField is tapped
+                                                  });
+                                                },
                                                 decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
                                                   labelText: 'Browse Product',
                                                 )
                                               );
+                                            },
+                                            suggestionsCallback: (String search) async {
+                                              if (showSuggestions) {
+                                                await Future.delayed(Duration(milliseconds: 300));
+                                                return items
+                                                    .where((item) =>
+                                                        item.name.toLowerCase().contains(search.toLowerCase()))
+                                                    .toList();
+                                              } else {
+                                                return [];
+                                              }
                                             },
                                             itemBuilder: (context, Item) {
                                               return ListTile(

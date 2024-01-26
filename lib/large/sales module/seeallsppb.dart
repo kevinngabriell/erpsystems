@@ -11,14 +11,14 @@ import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class SeeAllRepeatOrderLarge extends StatefulWidget {
-  const SeeAllRepeatOrderLarge({super.key});
+class SeeAllSPPBLarge extends StatefulWidget {
+  const SeeAllSPPBLarge({super.key});
 
   @override
-  State<SeeAllRepeatOrderLarge> createState() => _SeeAllRepeatOrderLargeState();
+  State<SeeAllSPPBLarge> createState() => _SeeAllSPPBLargeState();
 }
 
-class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
+class _SeeAllSPPBLargeState extends State<SeeAllSPPBLarge> {
   TextEditingController txtSearchText = TextEditingController();
   String profileName = 'Kevin';
 
@@ -379,7 +379,7 @@ class _SeeAllRepeatOrderLargeState extends State<SeeAllRepeatOrderLarge> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Repeat Order List', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                            Text('SPPB List', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
                             SizedBox(height: 10.h,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
