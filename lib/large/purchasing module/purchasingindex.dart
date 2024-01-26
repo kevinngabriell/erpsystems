@@ -29,6 +29,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
   
   @override
   Widget build(BuildContext context) {
+    print(txtSearchText.text);
     return MaterialApp(
       title: 'Purchasing',
       home: Scaffold(
@@ -318,6 +319,10 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                             width: MediaQuery.of(context).size.width / 3,
                             child: TextFormField(
                               controller: txtSearchText,
+                              onChanged: (value){
+                                setState(() {
+                                });
+                              },
                               decoration: InputDecoration(
                                 prefixIcon: Image.asset('Icon/Search.png'),
                                 hintText: 'Search',
@@ -330,7 +335,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(10.0),
-                                )
+                                ),
                               ),
                             ),
                           ),
@@ -370,7 +375,48 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Dashboard', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Purchasing Module', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width / 8,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF2A85FF),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: DropdownButtonFormField(
+                                      dropdownColor: Colors.white,
+                                      value: null,
+                                      hint: Text('Create New', style: TextStyle(color: Colors.white),),
+                                      items: const [
+                                        DropdownMenuItem(
+                                          value: 'NEW-PO-002',
+                                          child: Text('Purchase Import', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                        ),
+                                        DropdownMenuItem(
+                                          value: 'NEW-PO-003',
+                                          child: Text('Purchase Local', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                        ),
+                                      ], 
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.all(3.sp)
+                                      ),
+                                      icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                                      onChanged: (value){
+                                        // if(value == 'NEW-SO-002'){
+                                        //   Get.to(NewSalesIndexLarge());
+                                        // } else if (value == 'NEW-SO-003'){
+                                        //   Get.to(NewSPPBLarge());
+                                        // } else if (value == 'NEW-SO-004'){
+                                        //   Get.to(NewProfitLarge());
+                                        // }
+                                      }
+                                    ),
+                                  )
+                                ],
+                              ),
                               SizedBox(height: 10.h,),
                               //Card Overview
                               Card(
@@ -435,7 +481,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                       children: [
                                                         Image.asset('Icon/Attandance.png'),
                                                         SizedBox(width: 2.w,),
-                                                        Text('Attandance', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                        Text('Pending Purchase', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
                                                       ],
                                                     ),
                                                   ),
@@ -461,7 +507,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                       children: [
                                                         Image.asset('Icon/Late.png'),
                                                         SizedBox(width: 2.w,),
-                                                        Text('Late', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                        Text('Order In Transit', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
                                                       ],
                                                     ),
                                                   ),
@@ -487,7 +533,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                       children: [
                                                         Image.asset('Icon/Absent.png'),
                                                         SizedBox(width: 2.w,),
-                                                        Text('Absent', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                        Text('Top Item', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
                                                       ],
                                                     ),
                                                   ),
