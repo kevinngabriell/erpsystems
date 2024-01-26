@@ -421,7 +421,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Shipping.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Shipping', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Supplier', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),

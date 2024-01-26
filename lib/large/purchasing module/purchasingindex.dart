@@ -1,9 +1,10 @@
+import 'package:erpsystems/large/login.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
+import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
-import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,10 +23,14 @@ class PurchasingIndexLarge extends StatefulWidget {
 class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
   String profileName = 'Kevin';
   TextEditingController txtSearchText = TextEditingController();
+  int jumlahpendingPurchase = 4;
+  int jumlahOrderInTransit = 2;
+  String TopItem = 'ABC';
   
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Purchasing',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -246,7 +251,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                       //Setting Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SettingTemplateLarge());
+                          Get.to(const SettingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -271,7 +276,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                       //Logout Button
                       ElevatedButton(
                         onPressed: (){
-                          // Get.to(MainApp());
+                          Get.off(LoginLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -352,7 +357,205 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                       ),
                     ),
                     //Content
-                    
+                    if(txtSearchText.text == '')
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF4F4F4)
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 5.sp, top: 7.sp, bottom: 5.sp, right: 7.sp),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Dashboard', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                              SizedBox(height: 10.h,),
+                              //Card Overview
+                              Card(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(12))
+                                ),
+                                color: Colors.white,
+                                child: Column(
+                                  children: [
+                                    //Text and Filter Area
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 7.sp, right: 5.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Overview', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width / 9,
+                                            child: DropdownButtonFormField(
+                                              value: '001',
+                                              items: const [
+                                                DropdownMenuItem(
+                                                  value: '001',
+                                                  child: Text('This week', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                )
+                                              ], 
+                                              decoration: InputDecoration(
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                )
+                                              ),
+                                              onChanged: (value){
+                                            
+                                              }
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    //4 Card in a Row
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          //Attandance Card
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              color: const Color.fromARGB(255, 220, 240, 229),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                    child: Row(
+                                                      children: [
+                                                        Image.asset('Icon/Attandance.png'),
+                                                        SizedBox(width: 2.w,),
+                                                        Text('Attandance', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
+                                                    child: Text(jumlahpendingPurchase.toString(), style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  ),
+                                                ],
+                                              )
+                                            ),
+                                          ),
+                                          //Late Card
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              color: const Color.fromARGB(255, 237, 198, 198),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                    child: Row(
+                                                      children: [
+                                                        Image.asset('Icon/Late.png'),
+                                                        SizedBox(width: 2.w,),
+                                                        Text('Late', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
+                                                    child: Text(jumlahOrderInTransit.toString(), style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  ),
+                                                ],
+                                              )
+                                            ),
+                                          ),
+                                          //Absent Card
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              color: const Color.fromARGB(255, 240, 226, 191),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                    child: Row(
+                                                      children: [
+                                                        Image.asset('Icon/Absent.png'),
+                                                        SizedBox(width: 2.w,),
+                                                        Text('Absent', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
+                                                    child: Text(jumlahOrderInTransit.toString(), style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  ),
+                                                ],
+                                              )
+                                            ),
+                                          ),
+                                          //Leave Card
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              color: const Color.fromARGB(255, 194, 202, 242),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                    child: Row(
+                                                      children: [
+                                                        Image.asset('Icon/Leave.png'),
+                                                        SizedBox(width: 2.w,),
+                                                        Text('Remaining Leave', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
+                                                    child: Text(TopItem, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                  ),
+                                                ],
+                                              )
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 15.h,),
+                              
+                            ],
+                          ),
+                        ),
+                      )
+                    ,if(txtSearchText.text != '')
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF4F4F4)
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 5.sp, top: 7.sp, bottom: 5.sp, right: 7.sp),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Search Result', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                              SizedBox(height: 10.h,),
+                            ],
+                          ),
+                        ),
+                      )
                   ],
                 )
               )
