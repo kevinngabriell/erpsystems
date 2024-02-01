@@ -30,7 +30,6 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
   String profileName = '';
   String companyName = '';
   String companyId = '';
-  String companyPhoneNumber = '021 2590 9871';
   TextEditingController txtPhoneNumber = TextEditingController();
   TextEditingController txtWebsite = TextEditingController();
   TextEditingController txtEmail = TextEditingController();

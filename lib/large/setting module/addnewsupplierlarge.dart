@@ -2,6 +2,8 @@
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/services/masterservices.dart';
+import 'package:erpsystems/services/settings/supplierdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,29 +14,73 @@ import '../template/documenttemplatelarge.dart';
 import '../template/financetemplatelarge.dart';
 import '../template/hrtemplatelarge.dart';
 import '../template/warehousetemplatelarge.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
-class DetailShippingSettingLarge extends StatefulWidget {
-  const DetailShippingSettingLarge({super.key});
+class AddSupplierSettingLarge extends StatefulWidget {
+  const AddSupplierSettingLarge({super.key});
 
   @override
-  State<DetailShippingSettingLarge> createState() => _DetailShippingSettingLargeState();
+  State<AddSupplierSettingLarge> createState() => _AddSupplierSettingLargeState();
 }
 
-class _DetailShippingSettingLargeState extends State<DetailShippingSettingLarge> {
+class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
   String profileName = '';
   String companyName = '';
+  String companyId = '';
+  TextEditingController txtSupplierName = TextEditingController();
+  TextEditingController txtSupplierPhone = TextEditingController();
+  TextEditingController txtSupplierAddress = TextEditingController();
+  TextEditingController txtSupplierPICName = TextEditingController();
+  TextEditingController txtSupplierPICContact = TextEditingController();
+
+  //For country dropdown
+  List<Map<String, String>> countries = [];
+  String selectedCountry = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCountryList();
+  }
+
+  Future<void> fetchCountryList() async {
+    final response = await http.get(
+        Uri.parse(apiCountry));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['StatusCode'] == 200) {
+        setState(() {
+          countries = (data['Data'] as List)
+              .map((reason) => Map<String, String>.from(reason))
+              .toList();
+          if (countries.isNotEmpty) {
+            selectedCountry = countries[0]['origin_id']!;
+          }
+        });
+      } else {
+        // Handle API error
+        print('Failed to fetch data');
+      }
+    } else {
+      // Handle HTTP error
+      print('Failed to fetch data');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     //Read session
     companyName = storage.read('companyName').toString();
     profileName = storage.read('firstName').toString();
+    companyId = storage.read('companyId').toString();
 
     return MaterialApp(
-      title: 'Detail Shipping Configuration',
+      title: 'Supplier Configuration',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -379,7 +425,7 @@ class _DetailShippingSettingLargeState extends State<DetailShippingSettingLarge>
                               onTap: (){
                                 Get.back();
                               },
-                              child: Text('Shipping settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
+                              child: Text('Supplier settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
                             ),
                             SizedBox(height: 10.h,),
                             SizedBox(
@@ -389,13 +435,13 @@ class _DetailShippingSettingLargeState extends State<DetailShippingSettingLarge>
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    //Add New Shipping Information Title
+                                    //Add New Supplier Information Title
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
-                                      child: Text('Shipping Information', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                      child: Text('Add New Supplier', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                     ),
                                     SizedBox(height: 10.h,),
-                                    //Text Form New Shipping
+                                    //Text Form New Supplier
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
                                       child: SizedBox(
@@ -410,10 +456,10 @@ class _DetailShippingSettingLargeState extends State<DetailShippingSettingLarge>
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Shipping Name'),
+                                                      Text('Supplier Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
-                                                        // controller: txtTarget2031,
+                                                        controller: txtSupplierName,
                                                         decoration: InputDecoration(
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: const BorderSide(width: 0.0),
@@ -434,23 +480,10 @@ class _DetailShippingSettingLargeState extends State<DetailShippingSettingLarge>
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Shipping Method'),
+                                                      Text('Supplier Phone'),
                                                       SizedBox(height: 5.h,),
-                                                      DropdownButtonFormField(
-                                                        value: '001',
-                                                        items: const [
-                                                          DropdownMenuItem(
-                                                            value: '001',
-                                                            child: Text('Air', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                          ),
-                                                          DropdownMenuItem(
-                                                            value: '002',
-                                                            child: Text('Sea', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                          )
-                                                        ], 
-                                                        onChanged: (value){
-                                                        
-                                                        },
+                                                      TextFormField(
+                                                        controller: txtSupplierPhone,
                                                         decoration: InputDecoration(
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: const BorderSide(width: 0.0),
@@ -460,94 +493,137 @@ class _DetailShippingSettingLargeState extends State<DetailShippingSettingLarge>
                                                             borderSide: const BorderSide(width: 0.0),
                                                             borderRadius: BorderRadius.circular(10.0),
                                                           ),
-                                                          hintText: 'PT. AXX XXXX'
+                                                          hintText: '08xx xxxx xxxx'
                                                         ),
-                                                      )
-                                                      // TextFormField(
-                                                      //   // controller: txtTarget2031,
-                                                      //   decoration: InputDecoration(
-                                                      //     enabledBorder: OutlineInputBorder(
-                                                      //       borderSide: const BorderSide(width: 0.0),
-                                                      //       borderRadius: BorderRadius.circular(10.0),
-                                                      //     ),
-                                                      //     focusedBorder: OutlineInputBorder(
-                                                      //       borderSide: const BorderSide(width: 0.0),
-                                                      //       borderRadius: BorderRadius.circular(10.0),
-                                                      //     ),
-                                                      //     hintText: 'PT. AXX XXXX'
-                                                      //   ),
-                                                      // ),
+                                                      ),
                                                     ],
                                                   )
                                                 ),
                                               ],
                                             ),
-                                            // SizedBox(height: 20.h,),
-                                            // Row(
-                                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            //   children: [
-                                            //     SizedBox(
-                                            //       width: (MediaQuery.of(context).size.width - 500)/ 2,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                                            //         children: [
-                                            //           Text('Customer Phone Number'),
-                                            //           SizedBox(height: 5.h,),
-                                            //           TextFormField(
-                                            //             // controller: txtTarget2031,
-                                            //             decoration: InputDecoration(
-                                            //               enabledBorder: OutlineInputBorder(
-                                            //                 borderSide: const BorderSide(width: 0.0),
-                                            //                 borderRadius: BorderRadius.circular(10.0),
-                                            //               ),
-                                            //               focusedBorder: OutlineInputBorder(
-                                            //                 borderSide: const BorderSide(width: 0.0),
-                                            //                 borderRadius: BorderRadius.circular(10.0),
-                                            //               ),
-                                            //               hintText: 'PT. AXX XXXX'
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       )
-                                            //     ),
-                                            //     SizedBox(
-                                            //       width: (MediaQuery.of(context).size.width - 500)/ 2,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                                            //         children: [
-                                            //           Text('Customer Phone Number'),
-                                            //           SizedBox(height: 5.h,),
-                                            //           TextFormField(
-                                            //             // controller: txtTarget2031,
-                                            //             decoration: InputDecoration(
-                                            //               enabledBorder: OutlineInputBorder(
-                                            //                 borderSide: const BorderSide(width: 0.0),
-                                            //                 borderRadius: BorderRadius.circular(10.0),
-                                            //               ),
-                                            //               focusedBorder: OutlineInputBorder(
-                                            //                 borderSide: const BorderSide(width: 0.0),
-                                            //                 borderRadius: BorderRadius.circular(10.0),
-                                            //               ),
-                                            //               hintText: 'PT. AXX XXXX'
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       )
-                                            //     ),
-                                            //   ],
-                                            // ),
+                                            SizedBox(height: 20.h,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('Supplier Address'),
+                                                      SizedBox(height: 5.h,),
+                                                      TextFormField(
+                                                        maxLines: 3,
+                                                        controller: txtSupplierAddress,
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: 'Jl. AXX XXXX'
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ),
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('Supplier PIC Name'),
+                                                      SizedBox(height: 5.h,),
+                                                      TextFormField(
+                                                        controller: txtSupplierPICName,
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: 'PIC Name'
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 20.h,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('Supplier PIC Contact'),
+                                                      SizedBox(height: 5.h,),
+                                                      TextFormField(
+                                                        controller: txtSupplierPICContact,
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: 'Contact PIC'
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ),
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('Supplier Country'),
+                                                      SizedBox(height: 5.h,),
+                                                      DropdownButtonFormField<String>(
+                                                        value: selectedCountry,
+                                                        hint: Text('Choose country'),
+                                                        onChanged: (String? newValue) {
+                                                          selectedCountry = newValue!;
+                                                        },
+                                                        items: countries.map<DropdownMenuItem<String>>(
+                                                          (Map<String, String> country) {
+                                                            return DropdownMenuItem<String>(
+                                                              value: country['origin_id'],
+                                                              child: Text(country['origin_name']!),
+                                                            );
+                                                           },
+                                                         ).toList(),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ),
+                                              ],
+                                            ),
                                             SizedBox(height: 50.h,),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 ElevatedButton(
                                                   onPressed: (){
-                                                    // Get.to(AddCustomerSettingLarge());
+                                                    insertSupplier(txtSupplierName.text, selectedCountry, txtSupplierAddress.text, txtSupplierPhone.text, txtSupplierPICName.text, txtSupplierPICContact.text, companyId, context);
                                                   }, 
                                                   style: ElevatedButton.styleFrom(
                                                     elevation: 0,
                                                     alignment: Alignment.centerLeft,
-                                                    minimumSize: Size(20.w, 35.h),
+                                                    minimumSize: Size(20.w, 45.h),
                                                     foregroundColor: Colors.white,
                                                     backgroundColor: const Color(0xFF2A85FF),
                                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -557,54 +633,6 @@ class _DetailShippingSettingLargeState extends State<DetailShippingSettingLarge>
                                               ],
                                             )
                                           ],
-                                        )
-                                        
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 15.h,),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Card(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    //Customer Information Title
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
-                                      child: Text('Shipping History Information', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
-                                    ),
-                                    SizedBox(height: 10.h,),
-                                    //Text Form Customer
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
-                                      child: SizedBox(
-                                        width: MediaQuery.of(context).size.width,
-                                        child: DataTable(
-                                          showCheckboxColumn: false,
-                                          columns: const <DataColumn> [
-                                            DataColumn(label: Text('Purchase Order Number')),
-                                            DataColumn(label: Text('Shipping Date')),
-                                            DataColumn(label: Text('Status')),
-                                          ],  
-                                          rows: <DataRow>[
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                              ],
-                                              onSelectChanged: (selected) {
-                                                if (selected!) {
-                                                  // Get.to(DetailCustomerSettingLarge());
-                                                }
-                                              },
-                                            ),
-                                          ]
                                         )
                                         
                                       ),

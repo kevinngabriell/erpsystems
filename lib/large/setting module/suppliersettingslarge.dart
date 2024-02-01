@@ -1,8 +1,9 @@
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
-import 'package:erpsystems/large/setting%20module/addnewshippinglarge.dart';
-import 'package:erpsystems/large/setting%20module/detailshipping.dart';
+import 'package:erpsystems/large/setting%20module/addnewsupplierlarge.dart';
+import 'package:erpsystems/large/setting%20module/detailsupplier.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/services/settings/supplierdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,15 @@ class _SupplierSettingLargeState extends State<SupplierSettingLarge> {
   final storage = GetStorage();
   String profileName = '';
   String companyName = '';
+  String companyId = '';
+  late Future<List<Map<String, dynamic>>> supplierList;
+
+  @override
+  void initState() {
+    super.initState();
+    companyId = storage.read('companyId').toString();
+    supplierList = allSupplierDataService(companyId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -398,12 +408,12 @@ class _SupplierSettingLargeState extends State<SupplierSettingLarge> {
                                           Text('Supplier', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddShippingSettingLarge());
+                                              Get.to(AddSupplierSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
                                               alignment: Alignment.centerLeft,
-                                              minimumSize: Size(30.w, 35.h),
+                                              minimumSize: Size(30.w, 45.h),
                                               foregroundColor: Colors.white,
                                               backgroundColor: const Color(0xFF2A85FF),
                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -418,42 +428,46 @@ class _SupplierSettingLargeState extends State<SupplierSettingLarge> {
                                       padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
-                                        child: DataTable(
-                                          showCheckboxColumn: false,
-                                          columns: const <DataColumn> [
-                                            DataColumn(label: Text('No')),
-                                            DataColumn(label: Text('Shipping Name')),
-                                            DataColumn(label: Text('Shipping Method')),
-                                          ], 
-                                          rows: <DataRow>[
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                              ],
-                                              onSelectChanged: (selected) {
-                                                if (selected!) {
-                                                  Get.to(DetailShippingSettingLarge());
-                                                }
-                                              },
-                                            ),
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                              ]
-                                            ),
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                              ]
-                                            )
-                                          ],
-                                          
+                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                          future: supplierList,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                              return const Center(child: CircularProgressIndicator());
+                                            } else if (snapshot.hasError) {
+                                              return Center(child: Text('Error: ${snapshot.error}'));
+                                            } else if (snapshot.hasData) {
+                                              return DataTable(
+                                                showCheckboxColumn: false,
+                                                columns: const <DataColumn> [
+                                                  DataColumn(label: Text('No')),
+                                                  DataColumn(label: Text('Supplier Name')),
+                                                  DataColumn(label: Text('Supplier Phone')),
+                                                  DataColumn(label: Text('Country')),
+                                                ], 
+                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
+                                                  int index = entry.key + 1;
+                                                  Map<String, dynamic> supplier = entry.value;
+                                                  return DataRow(
+                                                    cells: <DataCell>[
+                                                      DataCell(Text('$index')),
+                                                      DataCell(Text(supplier['supplier_name'])),
+                                                      DataCell(Text(supplier['supplier_phone'])),
+                                                      DataCell(Text(supplier['origin_name'])),
+                                                    ],
+                                                    onSelectChanged: (selected) {
+                                                      if (selected!) {
+                                                        Get.to(DetailSupplierSettingLarge(supplier['supplier_id']));
+                                                      }
+                                                    },
+                                                  );
+                                                }).toList(),
+                                                
+                                              );
+                                            } else {
+                                              return const Center(child: Text('No data available'));
+                                            }
+                                            
+                                          }
                                         ),
                                       ),
                                     )

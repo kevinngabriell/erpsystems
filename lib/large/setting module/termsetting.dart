@@ -1,5 +1,4 @@
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
-import 'package:erpsystems/large/setting%20module/detailshipping.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
@@ -433,7 +432,7 @@ class _TermSettingLargeState extends State<TermSettingLarge> {
                                               ],
                                               onSelectChanged: (selected) {
                                                 if (selected!) {
-                                                  Get.to(DetailShippingSettingLarge());
+                                                  // Get.to(DetailShippingSettingLarge());
                                                 }
                                               },
                                             ),
