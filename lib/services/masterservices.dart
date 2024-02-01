@@ -1,6 +1,9 @@
-// ignore_for_file: unused_import
+class ApiEndpoints {
+  static final String baseUrl = 'http://localhost/erpAPI-v.1.0/';
 
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+  static String get apiCountry => baseUrl + 'master/origin/getorigin.php';
+  static String apiCustomer(String companyId) => baseUrl + 'master/customer/getallcustomer.php?company=$companyId';
 
-String apiCountry = 'http://localhost/erpAPI-v.1.0/master/origin/getorigin.php';
+  // Add more API endpoints as needed
+}
+

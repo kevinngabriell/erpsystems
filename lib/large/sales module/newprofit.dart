@@ -1,4 +1,5 @@
 import 'package:erpsystems/large/index.dart';
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
@@ -114,7 +115,7 @@ class _NewProfitLargeState extends State<NewProfitLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

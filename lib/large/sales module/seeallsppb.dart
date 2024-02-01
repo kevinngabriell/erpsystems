@@ -1,3 +1,4 @@
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:flutter/material.dart';
 import 'package:erpsystems/large/index.dart';
@@ -116,7 +117,7 @@ class _SeeAllSPPBLargeState extends State<SeeAllSPPBLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

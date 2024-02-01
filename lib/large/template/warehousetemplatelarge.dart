@@ -1,7 +1,8 @@
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
+import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +11,6 @@ import 'package:get_storage/get_storage.dart';
 
 import '../index.dart';
 import 'financetemplatelarge.dart';
-import 'salestemplatelarge.dart';
 
 class WarehouseTemplateLarge extends StatefulWidget {
   const WarehouseTemplateLarge({super.key});
@@ -75,7 +75,7 @@ class _WarehouseTemplateLargeState extends State<WarehouseTemplateLarge> {
                       //Sales Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SalesTemplateLarge());
+                          Get.to(const SalesIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -100,7 +100,7 @@ class _WarehouseTemplateLargeState extends State<WarehouseTemplateLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

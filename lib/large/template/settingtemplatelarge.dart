@@ -1,5 +1,6 @@
 
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
+import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,6 @@ import 'analyticstemplatelarge.dart';
 import 'documenttemplatelarge.dart';
 import 'financetemplatelarge.dart';
 import 'hrtemplatelarge.dart';
-import 'salestemplatelarge.dart';
 import 'warehousetemplatelarge.dart';
 
 class SettingTemplateLarge extends StatefulWidget {
@@ -76,7 +76,7 @@ class _SettingTemplateLargeState extends State<SettingTemplateLarge> {
                       //Sales Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SalesTemplateLarge());
+                          Get.to(const SalesIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -101,7 +101,7 @@ class _SettingTemplateLargeState extends State<SettingTemplateLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

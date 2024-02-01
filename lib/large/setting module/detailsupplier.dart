@@ -52,7 +52,7 @@ class _DetailSupplierSettingLargeState extends State<DetailSupplierSettingLarge>
 
   Future<void> fetchCountryList() async {
     final response = await http.get(
-        Uri.parse(apiCountry));
+        Uri.parse(ApiEndpoints.apiCountry));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

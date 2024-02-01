@@ -1,4 +1,5 @@
 
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
@@ -49,7 +50,7 @@ class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
 
   Future<void> fetchCountryList() async {
     final response = await http.get(
-        Uri.parse(apiCountry));
+        Uri.parse(ApiEndpoints.apiCountry));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -149,7 +150,7 @@ class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

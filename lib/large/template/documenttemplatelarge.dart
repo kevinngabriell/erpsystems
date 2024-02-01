@@ -1,4 +1,6 @@
 
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
+import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +78,7 @@ class _DocumentTemplateLargeState extends State<DocumentTemplateLarge> {
                       //Sales Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const SalesTemplateLarge());
+                          Get.to(const SalesIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -101,7 +103,7 @@ class _DocumentTemplateLargeState extends State<DocumentTemplateLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

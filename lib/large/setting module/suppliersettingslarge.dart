@@ -1,3 +1,4 @@
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/addnewsupplierlarge.dart';
 import 'package:erpsystems/large/setting%20module/detailsupplier.dart';
@@ -114,7 +115,7 @@ class _SupplierSettingLargeState extends State<SupplierSettingLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

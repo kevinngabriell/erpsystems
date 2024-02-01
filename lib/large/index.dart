@@ -285,6 +285,7 @@ class _IndexLargeState extends State<IndexLarge> {
                       //Logout Button
                       ElevatedButton(
                         onPressed: (){
+                          // GetStorage().
                           Get.off(LoginLarge());
                         }, 
                         style: ElevatedButton.styleFrom(

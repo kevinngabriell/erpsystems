@@ -1,5 +1,6 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:erpsystems/large/index.dart';
+import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
@@ -12,7 +13,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+import '../../services/masterservices.dart';
 import 'salesindex.dart';
 
 class NewSalesIndexLarge extends StatefulWidget {
@@ -25,10 +29,12 @@ class NewSalesIndexLarge extends StatefulWidget {
 class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
+  String companyId = '';
   String profileName = '';
   String companyName = '';
   String jumlahSales = '2';
   String selectedItem = '';
+  String customerAddress = '';
   TextEditingController hargaController = TextEditingController();
   TextEditingController txtDataTableTotal = TextEditingController();
   TextEditingController txtDataTablePPN = TextEditingController();
@@ -47,11 +53,44 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
 
   List<Item> selectedItems = [];
 
+  //For country dropdown
+  List<Map<String, String>> customers = [];
+  String selectedCustomers = '';
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    
+    fetchCustomerList();
+  }
+
+  Future<void> fetchCustomerList() async {
+    companyId = storage.read('companyId').toString();
+
+    final response = await http.get(
+        Uri.parse(ApiEndpoints.apiCustomer(companyId))
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['StatusCode'] == 200) {
+        setState(() {
+          customers = (data['Data'] as List)
+              .map((customer) => Map<String, String>.from(customer))
+              .toList();
+          if (customers.isNotEmpty) {
+            selectedCustomers = customers[0]['company_id']!;
+            customerAddress = customers[0]['company_address']!;
+          }
+        });
+      } else {
+        // Handle API error
+        print('API, Failed to fetch data');
+      }
+    } else {
+      // Handle HTTP error
+      print('HTTP, Failed to fetch data');
+    }
   }
 
   @override
@@ -130,7 +169,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                       //Purchasing Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const PurchasingTemplateLarge());
+                          Get.to(const PurchasingIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -509,35 +548,27 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                             children: [
                                               Text('Customer', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                               SizedBox(height: 5.h,),
-                                              DropdownButtonFormField(
-                                                value: 'CUST-001',
-                                                items: const [
-                                                  DropdownMenuItem(
-                                                    value: 'CUST-001',
-                                                    child: Text('PT. ABC', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  ),
-                                                  DropdownMenuItem(
-                                                    value: 'CUST-002',
-                                                    child: Text('PT. DEF', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  ),
-                                                  DropdownMenuItem(
-                                                    value: 'CUST-003',
-                                                    child: Text('PT. GHI', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                  ),
-                                                ], 
-                                                decoration: InputDecoration(
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: const BorderSide(width: 0.0),
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: const BorderSide(width: 0.0),
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                  )
-                                                ),
-                                                onChanged: (value){
-
-                                                }
+                                              DropdownButtonFormField<String>(
+                                                value: selectedCustomers,
+                                                hint: Text('Select your customer'),
+                                                onChanged: (String? newValue) {
+                                                  setState(() {
+                                                    selectedCustomers = newValue!;
+                                                    // Update the selectedCustomerAddress based on the selected customer
+                                                    // Assuming customerAddresses is a map with customer IDs as keys and addresses as values
+                                                    customerAddress = customers
+                                                    .firstWhere((customer) => customer['company_id'] == newValue)
+                                                    ['company_address'] ?? '';
+                                                  });
+                                                },
+                                                items: customers.map<DropdownMenuItem<String>>(
+                                                  (Map<String, String> customer) {
+                                                    return DropdownMenuItem<String>(
+                                                      value: customer['company_id'],
+                                                      child: Text(customer['company_name']!),
+                                                    );
+                                                  },
+                                                ).toList(),
                                               ),
                                             ],
                                           ),
@@ -549,7 +580,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                             children: [
                                               Text('Address', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                               SizedBox(height: 5.h,),
-                                              Text('Jln. M. H. Thamrin No. A1, Jakarta Pusat, DKI Jakarta', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 4.sp, fontWeight: FontWeight.w500,),)
+                                              Text(customerAddress, style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 4.sp, fontWeight: FontWeight.w500,),)
                                               
                                             ],
                                           ),
