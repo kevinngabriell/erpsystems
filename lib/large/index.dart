@@ -11,9 +11,11 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class IndexLarge extends StatefulWidget {
-  const IndexLarge({super.key});
+  final String companyName;
+  const IndexLarge(this.companyName);
 
   @override
   State<IndexLarge> createState() => _IndexLargeState();
@@ -21,7 +23,9 @@ class IndexLarge extends StatefulWidget {
 
 class _IndexLargeState extends State<IndexLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
   String jumlahAttandance = '3';
   String jumlahLate = '3';
   String jumlahAbsence = '3';
@@ -29,6 +33,10 @@ class _IndexLargeState extends State<IndexLarge> {
 
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+
     print(txtSearchText.text);
     return MaterialApp(
       title: 'Venken ERP Systems',
@@ -50,7 +58,7 @@ class _IndexLargeState extends State<IndexLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(widget.companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

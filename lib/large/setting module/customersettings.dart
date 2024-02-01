@@ -4,9 +4,11 @@ import 'package:erpsystems/large/setting%20module/addcustomersettings.dart';
 import 'package:erpsystems/large/setting%20module/detailcustomerinformation.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/services/settings/customerdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../index.dart';
 import '../template/analyticstemplatelarge.dart';
 import '../template/documenttemplatelarge.dart';
@@ -24,8 +26,10 @@ class CustomerSettingLarge extends StatefulWidget {
 
 class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
-  String companyName = 'PT. Demo Company';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
+  String companyId = '';
   String companyPhoneNumber = '021 2590 9871';
   TextEditingController txtPhoneNumber = TextEditingController();
   TextEditingController txtWebsite = TextEditingController();
@@ -42,8 +46,21 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
   TextEditingController txtTarget2030 = TextEditingController();
   TextEditingController txtTarget2031 = TextEditingController();
 
+  late Future<List<Map<String, dynamic>>> customerList;
+
+  @override
+  void initState() {
+    super.initState();
+    companyId = storage.read('companyId').toString();
+    customerList = allCustomerDataService(companyId);
+  }
+
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+
     return MaterialApp(
       title: 'Customer Configuration',
       home: Scaffold(
@@ -64,7 +81,7 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -428,46 +445,42 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                       padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
-                                        child: DataTable(
-                                          showCheckboxColumn: false,
-                                          columns: const <DataColumn> [
-                                            DataColumn(label: Text('No')),
-                                            DataColumn(label: Text('Name')),
-                                            DataColumn(label: Text('Address')),
-                                            DataColumn(label: Text('Phone number')),
-                                          ], 
-                                          rows: <DataRow>[
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                              ],
-                                              onSelectChanged: (selected) {
-                                                if (selected!) {
-                                                  Get.to(DetailCustomerSettingLarge());
-                                                }
-                                              },
-                                            ),
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                              ]
-                                            ),
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                                DataCell(Text('1')),
-                                                DataCell(Text('PT. AXXX XXXX XXXX')),
-                                              ]
-                                            )
-                                          ],
-                                          
+                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                          future: customerList,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                              return const Center(child: CircularProgressIndicator());
+                                            } else if (snapshot.hasError) {
+                                              return Center(child: Text('Error: ${snapshot.error}'));
+                                            } else if (snapshot.hasData) {
+                                              return DataTable(
+                                                showCheckboxColumn: false,
+                                                columns: const <DataColumn> [
+                                                  DataColumn(label: Text('No')),
+                                                  DataColumn(label: Text('Name')),
+                                                  DataColumn(label: Text('Address')),
+                                                  DataColumn(label: Text('Phone number')),
+                                                ], 
+                                                rows: snapshot.data!.map<DataRow>((customer) {
+                                                  return DataRow(
+                                                    cells: <DataCell>[
+                                                      DataCell(Text(customer['company_name'])),
+                                                      DataCell(Text(customer['company_name'])),
+                                                      DataCell(Text(customer['company_address'])),
+                                                      DataCell(Text(customer['company_phone'])),
+                                                    ],
+                                                    onSelectChanged: (selected) {
+                                                      if (selected!) {
+                                                        Get.to(DetailCustomerSettingLarge(customer['company_id']));
+                                                      }
+                                                    },
+                                                  );
+                                                }).toList(),
+                                              );
+                                            } else {
+                                              return const Center(child: Text('No data available'));
+                                            }
+                                          }
                                         ),
                                       ),
                                     )

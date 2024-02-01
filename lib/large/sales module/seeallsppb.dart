@@ -10,6 +10,7 @@ import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class SeeAllSPPBLarge extends StatefulWidget {
   const SeeAllSPPBLarge({super.key});
@@ -20,7 +21,9 @@ class SeeAllSPPBLarge extends StatefulWidget {
 
 class _SeeAllSPPBLargeState extends State<SeeAllSPPBLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
 
   List<String> months = [
     'January', 'February', 'March', 'April',
@@ -39,6 +42,10 @@ class _SeeAllSPPBLargeState extends State<SeeAllSPPBLarge> {
 
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+
     return MaterialApp(
       home: Scaffold(
         body: SingleChildScrollView(
@@ -58,7 +65,7 @@ class _SeeAllSPPBLargeState extends State<SeeAllSPPBLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

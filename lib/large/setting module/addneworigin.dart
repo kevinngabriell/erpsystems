@@ -5,6 +5,7 @@ import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../index.dart';
 import '../template/analyticstemplatelarge.dart';
 import '../template/documenttemplatelarge.dart';
@@ -22,10 +23,15 @@ class AddOriginSettingLarge extends StatefulWidget {
 
 class _AddOriginSettingLargeState extends State<AddOriginSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
 
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
     return MaterialApp(
       title: 'Origin Configuration',
       home: Scaffold(
@@ -46,7 +52,7 @@ class _AddOriginSettingLargeState extends State<AddOriginSettingLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -403,7 +409,7 @@ class _AddOriginSettingLargeState extends State<AddOriginSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Country'),
+                                                      const Text('Country'),
                                                       SizedBox(height: 5.h,),
                                                       DropdownButtonFormField(
                                                         value: '006',
@@ -440,7 +446,7 @@ class _AddOriginSettingLargeState extends State<AddOriginSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Is AFTA Area ?'),
+                                                      const Text('Is AFTA Area ?'),
                                                       SizedBox(height: 5.h,),
                                                       DropdownButtonFormField(
                                                         value: '001',

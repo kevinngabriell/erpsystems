@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class NewSPPBLarge extends StatefulWidget {
   const NewSPPBLarge({super.key});
@@ -22,7 +23,9 @@ class NewSPPBLarge extends StatefulWidget {
 
 class _NewSPPBLargeState extends State<NewSPPBLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
   String jumlahSales = '2';
   bool showSuggestions = false;
   late DateTime today;
@@ -48,6 +51,10 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
 
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+
     return MaterialApp(
       home: Scaffold(
         body: SingleChildScrollView(
@@ -67,7 +74,7 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

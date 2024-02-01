@@ -5,6 +5,7 @@ import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../index.dart';
 import '../template/analyticstemplatelarge.dart';
 import '../template/documenttemplatelarge.dart';
@@ -22,10 +23,16 @@ class PaymentSettingLarge extends StatefulWidget {
 
 class _PaymentSettingLargeState extends State<PaymentSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
 
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+
     return MaterialApp(
       title: 'Payment Configuration',
       home: Scaffold(
@@ -46,7 +53,7 @@ class _PaymentSettingLargeState extends State<PaymentSettingLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

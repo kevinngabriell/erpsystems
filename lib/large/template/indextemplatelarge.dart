@@ -9,6 +9,7 @@ import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../index.dart';
 
@@ -20,8 +21,16 @@ class IndexTemplateLarge extends StatefulWidget {
 }
 
 class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
+  
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+
     return MaterialApp(
       home: Scaffold(
         body: SingleChildScrollView(
@@ -41,7 +50,7 @@ class _IndexTemplateLargeState extends State<IndexTemplateLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

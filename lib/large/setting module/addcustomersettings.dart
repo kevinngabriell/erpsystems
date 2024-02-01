@@ -2,9 +2,11 @@
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/services/settings/customerdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../index.dart';
 import '../template/analyticstemplatelarge.dart';
 import '../template/documenttemplatelarge.dart';
@@ -22,10 +24,24 @@ class AddCustomerSettingLarge extends StatefulWidget {
 
 class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
+  String companyId = '';
+
+  TextEditingController txtCompanyName = TextEditingController();
+  TextEditingController txtCompanyAddress = TextEditingController();
+  TextEditingController txtCompanyPhone = TextEditingController();
+  TextEditingController txtCompanyPICName = TextEditingController();
+  TextEditingController txtCompanyPICContact = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+    companyId = storage.read('companyId').toString();
+
     return MaterialApp(
       title: 'Customer Configuration',
       home: Scaffold(
@@ -46,7 +62,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -395,9 +411,12 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                         width: MediaQuery.of(context).size.width,
                                         child: Column(
                                           children: [
+                                            //Customer Name & Address
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
+                                                //Customer Name 
                                                 SizedBox(
                                                   width: (MediaQuery.of(context).size.width - 500)/ 2,
                                                   child: Column(
@@ -406,7 +425,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                       Text('Customer Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
-                                                        // controller: txtTarget2031,
+                                                        controller: txtCompanyName,
                                                         decoration: InputDecoration(
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: const BorderSide(width: 0.0),
@@ -422,6 +441,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                     ],
                                                   )
                                                 ),
+                                                //Customer Address
                                                 SizedBox(
                                                   width: (MediaQuery.of(context).size.width - 500)/ 2,
                                                   child: Column(
@@ -430,7 +450,8 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                       Text('Customer Address'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
-                                                        // controller: txtTarget2031,
+                                                        maxLines: 3,
+                                                        controller: txtCompanyAddress,
                                                         decoration: InputDecoration(
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: const BorderSide(width: 0.0),
@@ -440,7 +461,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                             borderSide: const BorderSide(width: 0.0),
                                                             borderRadius: BorderRadius.circular(10.0),
                                                           ),
-                                                          hintText: 'PT. AXX XXXX'
+                                                          hintText: 'Jl. AXX XXXX'
                                                         ),
                                                       ),
                                                     ],
@@ -449,9 +470,11 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                               ],
                                             ),
                                             SizedBox(height: 20.h,),
+                                            //Customer Phone Number & PIC Name
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
+                                                //Customer Phone Number
                                                 SizedBox(
                                                   width: (MediaQuery.of(context).size.width - 500)/ 2,
                                                   child: Column(
@@ -460,7 +483,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                       Text('Customer Phone Number'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
-                                                        // controller: txtTarget2031,
+                                                        controller: txtCompanyPhone,
                                                         decoration: InputDecoration(
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: const BorderSide(width: 0.0),
@@ -470,21 +493,22 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                             borderSide: const BorderSide(width: 0.0),
                                                             borderRadius: BorderRadius.circular(10.0),
                                                           ),
-                                                          hintText: 'PT. AXX XXXX'
+                                                          hintText: '(021) xxxx xxxx'
                                                         ),
                                                       ),
                                                     ],
                                                   )
                                                 ),
+                                                //Customer PIC Name
                                                 SizedBox(
                                                   width: (MediaQuery.of(context).size.width - 500)/ 2,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer Phone Number'),
+                                                      Text('Customer PIC Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
-                                                        // controller: txtTarget2031,
+                                                        controller: txtCompanyPICName,
                                                         decoration: InputDecoration(
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: const BorderSide(width: 0.0),
@@ -494,7 +518,39 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                             borderSide: const BorderSide(width: 0.0),
                                                             borderRadius: BorderRadius.circular(10.0),
                                                           ),
-                                                          hintText: 'PT. AXX XXXX'
+                                                          hintText: 'PIC Name'
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 20.h,),
+                                            //Customer PIC Contact
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                //Customer PIC Contact
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('Customer PIC Contact'),
+                                                      SizedBox(height: 5.h,),
+                                                      TextFormField(
+                                                        controller: txtCompanyPICContact,
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: '08xx xxxx xxxx'
                                                         ),
                                                       ),
                                                     ],
@@ -508,12 +564,12 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                               children: [
                                                 ElevatedButton(
                                                   onPressed: (){
-                                                    // Get.to(AddCustomerSettingLarge());
+                                                    insertCustomerData(txtCompanyName.text, txtCompanyAddress.text, txtCompanyPhone.text, txtCompanyPICName.text, txtCompanyPICContact.text, companyId, context);
                                                   }, 
                                                   style: ElevatedButton.styleFrom(
                                                     elevation: 0,
                                                     alignment: Alignment.centerLeft,
-                                                    minimumSize: Size(20.w, 35.h),
+                                                    minimumSize: Size(25.w, 40.h),
                                                     foregroundColor: Colors.white,
                                                     backgroundColor: const Color(0xFF2A85FF),
                                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

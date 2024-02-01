@@ -1,9 +1,11 @@
+import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/login.dart';
 import 'package:erpsystems/medium/login.dart';
 import 'package:erpsystems/web-settings/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,7 +58,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void checkDevice() {
 
     if(ResponsiveWidget.isLargeScreen(context)){
-      Get.to(LoginLarge());
+      final storage = GetStorage();
+      String profileName = storage.read('firstName').toString();
+      String companyName = storage.read('companyName').toString();
+
+      if(profileName.isNotEmpty){
+        Get.to(IndexLarge(companyName));
+      } else if (profileName.isEmpty){
+        Get.to(LoginLarge());
+      }
+      
     } else {
       Get.to(LoginMedium());
     }

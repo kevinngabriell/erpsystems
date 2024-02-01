@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/medium/template/indextemplatemedium.dart';
 import 'package:erpsystems/small/template/indextemplatesmall.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import '../web-settings/responsive.dart';
 
@@ -93,8 +96,17 @@ Future <void> loginService(String username, String password, BuildContext contex
           }
         );
       } else if (response.statusCode == 200){
+        var result = json.decode(response.body);
+        GetStorage().write('username', result['username']);
+        GetStorage().write('permissionAccess', result['permissionAccess']);
+        GetStorage().write('companyId', result['companyId']);
+        GetStorage().write('companyName', result['companyNameString']);
+        GetStorage().write('firstName', result['firstName']);
+
+        String companyName = result['companyNameString'];
+
         if(ResponsiveWidget.isLargeScreen(context)){
-          Get.to(const IndexLarge());
+          Get.to(IndexLarge(companyName));
         } else if (ResponsiveWidget.isMediumScreen(context)){
           Get.to(const IndexTemplateMedium());
         } else if (ResponsiveWidget.isSmallScreen(context)){

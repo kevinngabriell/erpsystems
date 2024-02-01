@@ -17,6 +17,7 @@ import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class SalesIndexLarge extends StatefulWidget {
   const SalesIndexLarge({super.key});
@@ -27,7 +28,9 @@ class SalesIndexLarge extends StatefulWidget {
 
 class _SalesIndexLargeState extends State<SalesIndexLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
   String jumlahSales = '2';
   String KPITarget = '4';
   String InTransit = '5';
@@ -35,6 +38,10 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
 
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+
     return MaterialApp(
       home: Scaffold(
         body: SingleChildScrollView(
@@ -54,7 +61,7 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

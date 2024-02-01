@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'salesindex.dart';
 
@@ -23,7 +24,9 @@ class NewSalesIndexLarge extends StatefulWidget {
 
 class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
   TextEditingController txtSearchText = TextEditingController();
-  String profileName = 'Kevin';
+  final storage = GetStorage();
+  String profileName = '';
+  String companyName = '';
   String jumlahSales = '2';
   String selectedItem = '';
   TextEditingController hargaController = TextEditingController();
@@ -53,6 +56,10 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
 
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+
     return MaterialApp(
       home: Scaffold(
         body: SingleChildScrollView(
@@ -72,7 +79,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                       //Dashboard Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(const IndexLarge());
+                          Get.to(IndexLarge(companyName));
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
