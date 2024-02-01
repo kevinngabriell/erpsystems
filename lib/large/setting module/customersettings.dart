@@ -461,10 +461,12 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                                   DataColumn(label: Text('Address')),
                                                   DataColumn(label: Text('Phone number')),
                                                 ], 
-                                                rows: snapshot.data!.map<DataRow>((customer) {
+                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
+                                                  int index = entry.key + 1;
+                                                  Map<String, dynamic> customer = entry.value;
                                                   return DataRow(
                                                     cells: <DataCell>[
-                                                      DataCell(Text(customer['company_name'])),
+                                                      DataCell(Text('$index')),
                                                       DataCell(Text(customer['company_name'])),
                                                       DataCell(Text(customer['company_address'])),
                                                       DataCell(Text(customer['company_phone'])),

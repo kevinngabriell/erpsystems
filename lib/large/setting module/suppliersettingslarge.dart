@@ -15,14 +15,14 @@ import '../template/hrtemplatelarge.dart';
 import '../template/warehousetemplatelarge.dart';
 
 
-class ShippingSettingLarge extends StatefulWidget {
-  const ShippingSettingLarge({super.key});
+class SupplierSettingLarge extends StatefulWidget {
+  const SupplierSettingLarge({super.key});
 
   @override
-  State<ShippingSettingLarge> createState() => _ShippingSettingLargeState();
+  State<SupplierSettingLarge> createState() => _SupplierSettingLargeState();
 }
 
-class _ShippingSettingLargeState extends State<ShippingSettingLarge> {
+class _SupplierSettingLargeState extends State<SupplierSettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
   String profileName = '';
@@ -35,7 +35,7 @@ class _ShippingSettingLargeState extends State<ShippingSettingLarge> {
     profileName = storage.read('firstName').toString();
 
     return MaterialApp(
-      title: 'Shipping Configuration',
+      title: 'Supplier Configuration',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -380,7 +380,7 @@ class _ShippingSettingLargeState extends State<ShippingSettingLarge> {
                               onTap: (){
                                 Get.back();
                               },
-                              child: Text('Shipping settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
+                              child: Text('Supplier settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
                             ),
                             SizedBox(height: 10.h,),
                             SizedBox(
@@ -395,7 +395,7 @@ class _ShippingSettingLargeState extends State<ShippingSettingLarge> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Shipping', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                          Text('Supplier', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
                                               Get.to(AddShippingSettingLarge());
@@ -408,7 +408,7 @@ class _ShippingSettingLargeState extends State<ShippingSettingLarge> {
                                               backgroundColor: const Color(0xFF2A85FF),
                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                             ),
-                                            child: Text('Add New Shipping', style: TextStyle(fontSize: 4.sp),)
+                                            child: Text('Add New Supplier', style: TextStyle(fontSize: 4.sp),)
                                           )
                                         ],
                                       ),

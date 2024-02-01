@@ -3,10 +3,8 @@ import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/customersettings.dart';
 import 'package:erpsystems/large/setting%20module/internalsettings.dart';
 import 'package:erpsystems/large/setting%20module/originsettings.dart';
-import 'package:erpsystems/large/setting%20module/packagingsettings.dart';
 import 'package:erpsystems/large/setting%20module/paymentsetting.dart';
-import 'package:erpsystems/large/setting%20module/productsettings.dart';
-import 'package:erpsystems/large/setting%20module/shippingsettingslarge.dart';
+import 'package:erpsystems/large/setting%20module/suppliersettingslarge.dart';
 import 'package:erpsystems/large/setting%20module/termsetting.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
@@ -415,10 +413,10 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                             ),
                                           ),
                                         ),
-                                        //Shipping Card
+                                        //Supplier Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(ShippingSettingLarge());
+                                            Get.to(SupplierSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -435,7 +433,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                             ),
                                           ),
                                         ),
-                                        //Payment Card
+                                        //Product Card
                                         GestureDetector(
                                           onTap: () {
                                             Get.to(PaymentSettingLarge());
@@ -448,14 +446,14 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Payment.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Payment', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Product', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
                                             ),
                                           ),
                                         ),
-                                        //Term Card
+                                        //Packaging Card
                                         GestureDetector(
                                           onTap: () {
                                             Get.to(TermSettingLarge());
@@ -468,7 +466,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Term.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Term', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Packaging', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -484,46 +482,6 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        //Product Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(ProductSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Product.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Product', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Packaging Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(PackagingSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Packaging.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Packaging', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
                                         //Origin Card
                                         GestureDetector(
                                           onTap: () {
@@ -563,7 +521,47 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                               ),
                                             ),
                                           ),
-                                        )
+                                        ),
+                                        //Product Card
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Get.to(ProductSettingLarge());
+                                          },
+                                          child: SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              child: Column(
+                                                children: [
+                                                  // SizedBox(height: 15.h,),
+                                                  // Image.asset('Icon/Product.png'),
+                                                  // SizedBox(height: 10.h,),
+                                                  // Text('Product', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  // SizedBox(height: 15.h,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        //Packaging Card
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Get.to(PackagingSettingLarge());
+                                          },
+                                          child: SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              child: Column(
+                                                children: [
+                                                  // SizedBox(height: 15.h,),
+                                                  // Image.asset('Icon/Packaging.png'),
+                                                  // SizedBox(height: 10.h,),
+                                                  // Text('Packaging', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  // SizedBox(height: 15.h,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),

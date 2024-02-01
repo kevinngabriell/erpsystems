@@ -3,6 +3,7 @@ import 'package:erpsystems/large/setting%20module/addneworigin.dart';
 import 'package:erpsystems/large/setting%20module/detailorigin.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/services/settings/origindataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,14 @@ class _OriginSettingLargeState extends State<OriginSettingLarge> {
   final storage = GetStorage();
   String profileName = '';
   String companyName = '';
+
+  late Future<List<Map<String, dynamic>>> originList;
+
+ @override
+  void initState() {
+    super.initState();
+    originList = allOriginDataService();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -403,7 +412,7 @@ class _OriginSettingLargeState extends State<OriginSettingLarge> {
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
                                               alignment: Alignment.centerLeft,
-                                              minimumSize: Size(30.w, 40.h),
+                                              minimumSize: Size(30.w, 45.h),
                                               foregroundColor: Colors.white,
                                               backgroundColor: const Color(0xFF2A85FF),
                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -418,35 +427,42 @@ class _OriginSettingLargeState extends State<OriginSettingLarge> {
                                       padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
-                                        child: DataTable(
-                                          showCheckboxColumn: false,
-                                          columns: const <DataColumn> [
-                                            DataColumn(label: Text('No')),
-                                            DataColumn(label: Text('Origin')),
-                                            DataColumn(label: Text('AFTA Area')),
-                                          ], 
-                                          rows: <DataRow>[
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('Indonesia')),
-                                                DataCell(Text('Yes')),
-                                              ],
-                                              onSelectChanged: (selected) {
-                                                if (selected!) {
-                                                  Get.to(DetailOriginSettingLarge());
-                                                }
-                                              },
-                                            ),
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('2')),
-                                                DataCell(Text('Singapore')),
-                                                DataCell(Text('Yes')),
-                                              ]
-                                            ),
-                                          ],
-                                          
+                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                          future: originList,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                              return const Center(child: CircularProgressIndicator());
+                                            } else if (snapshot.hasError) {
+                                              return Center(child: Text('Error: ${snapshot.error}'));
+                                            } else if (snapshot.hasData) {
+                                              return DataTable(
+                                                showCheckboxColumn: false,
+                                                columns: const <DataColumn> [
+                                                  DataColumn(label: Text('No')),
+                                                  DataColumn(label: Text('Origin')),
+                                                  DataColumn(label: Text('AFTA Area')),
+                                                ], 
+                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
+                                                  int index = entry.key + 1;
+                                                  Map<String, dynamic> origin = entry.value;
+                                                  return DataRow(
+                                                    cells: <DataCell>[
+                                                      DataCell(Text('$index')),
+                                                      DataCell(Text(origin['origin_name'])),
+                                                      DataCell(Text(convertToYesNo(origin['origin_is_free_trade'])))
+                                                    ],
+                                                    onSelectChanged: (selected) {
+                                                      if (selected!) {
+                                                        Get.to(DetailOriginSettingLarge(origin['origin_id']));
+                                                      }
+                                                    },
+                                                  );
+                                                }).toList()
+                                              );
+                                            } else {
+                                               return const Center(child: Text('No data available'));
+                                            }
+                                          }
                                         ),
                                       ),
                                     )
@@ -466,5 +482,9 @@ class _OriginSettingLargeState extends State<OriginSettingLarge> {
         ),
       ),
     );
+  }
+
+  String convertToYesNo(String value) {
+    return value == '1' ? 'Yes' : 'No';
   }
 }

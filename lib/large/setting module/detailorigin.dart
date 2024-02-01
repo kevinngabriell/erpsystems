@@ -2,6 +2,7 @@
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/services/settings/origindataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,8 @@ import '../template/warehousetemplatelarge.dart';
 
 
 class DetailOriginSettingLarge extends StatefulWidget {
-  const DetailOriginSettingLarge({super.key});
+  final String originId;
+  DetailOriginSettingLarge(this.originId);
 
   @override
   State<DetailOriginSettingLarge> createState() => _DetailOriginSettingLargeState();
@@ -26,6 +28,9 @@ class _DetailOriginSettingLargeState extends State<DetailOriginSettingLarge> {
   final storage = GetStorage();
   String profileName = '';
   String companyName = '';
+  
+  TextEditingController txtCountryName = TextEditingController();
+  String isAFTA = '';
 
   @override
   Widget build(BuildContext context) {
@@ -400,122 +405,115 @@ class _DetailOriginSettingLargeState extends State<DetailOriginSettingLarge> {
                                       padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                SizedBox(
-                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                        child: FutureBuilder<Map<String, dynamic>>(
+                                          future: getDetailOrigin(widget.originId),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                              return CircularProgressIndicator();
+                                            } else if (snapshot.hasError) {
+                                              return Text('Error: ${snapshot.error}');
+                                            } else {
+                                              Map<String, dynamic> apiResponse = snapshot.data!;
+                                              List<dynamic> data = apiResponse['Data'];
+                                              Origin origin = Origin.fromJson(data[0]);
+
+                                              txtCountryName.text = origin.origin_name;
+                                              isAFTA = origin.origin_is_free_trade;
+
+                                              return Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      Text('Country'),
-                                                      SizedBox(height: 5.h,),
-                                                      DropdownButtonFormField(
-                                                        value: '006',
-                                                        items: const [
-                                                          DropdownMenuItem(
-                                                            value: '006',
-                                                            child: Text('United States of America', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                          ),
-                                                          DropdownMenuItem(
-                                                            value: '007',
-                                                            child: Text('Japan', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                          )
-                                                        ], 
-                                                        onChanged: (value){
-                                                        
-                                                        },
-                                                        decoration: InputDecoration(
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 0.0),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 0.0),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          hintText: 'PT. AXX XXXX'
-                                                        ),
-                                                      )
+                                                      //Country Name
+                                                      SizedBox(
+                                                        width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('Country'),
+                                                            SizedBox(height: 5.h,),
+                                                            TextFormField(
+                                                              controller: txtCountryName,
+                                                              decoration: InputDecoration(
+                                                                enabledBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                hintText: 'Country Name'
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ),
+                                                      //IS AFTA
+                                                      SizedBox(
+                                                        width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('Is AFTA Area ?'),
+                                                            SizedBox(height: 5.h,),
+                                                            DropdownButtonFormField(
+                                                              value: isAFTA,
+                                                              items: const [
+                                                                DropdownMenuItem(
+                                                                  value: '0',
+                                                                  child: Text('No', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                                ),
+                                                                DropdownMenuItem(
+                                                                  value: '1',
+                                                                  child: Text('Yes', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                                )
+                                                              ], 
+                                                              onChanged: (value){
+                                                                isAFTA = value.toString();
+                                                              },
+                                                              decoration: InputDecoration(
+                                                                enabledBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                hintText: 'PT. AXX XXXX'
+                                                              ),
+                                                            )
+                                                          ],
+                                                        )
+                                                      ),
                                                     ],
-                                                  )
-                                                ),
-                                                SizedBox(
-                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('Is AFTA Area ?'),
-                                                      SizedBox(height: 5.h,),
-                                                      DropdownButtonFormField(
-                                                        value: '001',
-                                                        items: const [
-                                                          DropdownMenuItem(
-                                                            value: '001',
-                                                            child: Text('Yes', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                          ),
-                                                          DropdownMenuItem(
-                                                            value: '002',
-                                                            child: Text('No', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                          )
-                                                        ], 
-                                                        onChanged: (value){
-                                                        
-                                                        },
-                                                        decoration: InputDecoration(
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 0.0),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 0.0),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          hintText: 'PT. AXX XXXX'
-                                                        ),
-                                                      )
-                                                      // TextFormField(
-                                                      //   // controller: txtTarget2031,
-                                                      //   decoration: InputDecoration(
-                                                      //     enabledBorder: OutlineInputBorder(
-                                                      //       borderSide: const BorderSide(width: 0.0),
-                                                      //       borderRadius: BorderRadius.circular(10.0),
-                                                      //     ),
-                                                      //     focusedBorder: OutlineInputBorder(
-                                                      //       borderSide: const BorderSide(width: 0.0),
-                                                      //       borderRadius: BorderRadius.circular(10.0),
-                                                      //     ),
-                                                      //     hintText: 'PT. AXX XXXX'
-                                                      //   ),
-                                                      // ),
-                                                    ],
-                                                  )
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 50.h,),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                ElevatedButton(
-                                                  onPressed: (){
-                                                    // Get.to(AddCustomerSettingLarge());
-                                                  }, 
-                                                  style: ElevatedButton.styleFrom(
-                                                    elevation: 0,
-                                                    alignment: Alignment.centerLeft,
-                                                    minimumSize: Size(20.w, 40.h),
-                                                    foregroundColor: Colors.white,
-                                                    backgroundColor: const Color(0xFF2A85FF),
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                   ),
-                                                  child: Text('Submit', style: TextStyle(fontSize: 4.sp),)
-                                                )
-                                              ],
-                                            )
-                                          ],
+                                                  SizedBox(height: 50.h,),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: (){
+                                                          updateoriginData(widget.originId, txtCountryName.text, isAFTA, context);
+                                                        }, 
+                                                        style: ElevatedButton.styleFrom(
+                                                          elevation: 0,
+                                                          alignment: Alignment.centerLeft,
+                                                          minimumSize: Size(20.w, 40.h),
+                                                          foregroundColor: Colors.white,
+                                                          backgroundColor: const Color(0xFF2A85FF),
+                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                        ),
+                                                        child: Text('Update', style: TextStyle(fontSize: 4.sp),)
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              );
+                                            }
+                                          }
                                         )
                                         
                                       ),

@@ -1,5 +1,4 @@
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
-import 'package:erpsystems/large/setting%20module/detailorigin.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:flutter/material.dart';
@@ -433,7 +432,7 @@ class _PackagingSettingLargeState extends State<PackagingSettingLarge> {
                                               ],
                                               onSelectChanged: (selected) {
                                                 if (selected!) {
-                                                  Get.to(DetailOriginSettingLarge());
+                                                  // Get.to(DetailOriginSettingLarge());
                                                 }
                                               },
                                             ),
