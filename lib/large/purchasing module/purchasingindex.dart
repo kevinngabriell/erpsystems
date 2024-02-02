@@ -1,4 +1,6 @@
 import 'package:erpsystems/large/login.dart';
+import 'package:erpsystems/large/purchasing%20module/newpurchasingimport.dart';
+import 'package:erpsystems/large/purchasing%20module/newpurchasinglocal.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
@@ -411,13 +413,11 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                       ),
                                       icon: Icon(Icons.arrow_drop_down, color: Colors.white),
                                       onChanged: (value){
-                                        // if(value == 'NEW-SO-002'){
-                                        //   Get.to(NewSalesIndexLarge());
-                                        // } else if (value == 'NEW-SO-003'){
-                                        //   Get.to(NewSPPBLarge());
-                                        // } else if (value == 'NEW-SO-004'){
-                                        //   Get.to(NewProfitLarge());
-                                        // }
+                                        if(value == 'NEW-PO-002'){
+                                          Get.to(NewPurchasingImportLarge());
+                                        } else if (value == 'NEW-PO-003'){
+                                          Get.to(NewPurchasingLocalLarge());
+                                        }
                                       }
                                     ),
                                   )
@@ -599,7 +599,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Purchase Import', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                          Text('Item in Transit', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                           GestureDetector(
                                             onTap: () {
                                               // Get.to(SeeAllSalesOrder());
@@ -660,7 +660,82 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                               )
                             ),
                             SizedBox(height: 15.h,),
-                              Text('data')
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12))
+                              ),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 5.sp),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Item in Transit (Local)', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                          GestureDetector(
+                                            onTap: () {
+                                              // Get.to(SeeAllSalesOrder());
+                                            },
+                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 15.h,),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: (MediaQuery.of(context).size.height - 433.h),
+                                      child: ListView.builder(
+                                        itemCount: 4,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                      
+                                          return Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            color: backgroundColor,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                      SizedBox(height: 3.h,),
+                                                      Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                    ],
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: (){
+                                                      // Get.to(AddCustomerSettingLarge());
+                                                    }, 
+                                                    style: ElevatedButton.styleFrom(
+                                                      elevation: 0,
+                                                      alignment: Alignment.centerLeft,
+                                                      minimumSize: Size(20.w, 40.h),
+                                                      foregroundColor: Colors.white,
+                                                      backgroundColor: const Color(0xFF2A85FF),
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                    ),
+                                                    child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          );
+                                        }
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 15.h,),
                             ],
                           ),
                         ),

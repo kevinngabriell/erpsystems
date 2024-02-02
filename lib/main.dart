@@ -62,11 +62,19 @@ class _MyHomePageState extends State<MyHomePage> {
       String profileName = storage.read('firstName').toString();
       String companyName = storage.read('companyName').toString();
 
-      if(profileName.isNotEmpty){
-        Get.to(IndexLarge(companyName));
-      } else if (profileName.isEmpty){
+      print(profileName);
+
+      if(profileName.isEmpty || profileName == 'null'){
         Get.to(LoginLarge());
+      } else {
+        Get.to(IndexLarge(companyName));
       }
+
+      // if(profileName != null){
+      //   Get.to(IndexLarge(companyName));
+      // } else if (profileName == null){
+      //   Get.to(LoginLarge());
+      // }
       
     } else {
       Get.to(LoginMedium());
