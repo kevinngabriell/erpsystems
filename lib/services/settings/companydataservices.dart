@@ -6,7 +6,7 @@ import 'dart:convert';
 
 Future <Map<String, dynamic>> CompanyDataService(company_id) async{
   final response = await http.get(
-        Uri.parse('http://localhost/erpAPI-v.1.0/company/companyData/getdetailcompany.php?company_id=$company_id'));
+        Uri.parse('https://kevinngabriell.com/erpAPI-v.1.0/company/companyData/getdetailcompany.php?company_id=$company_id'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -158,7 +158,7 @@ Future <void> updateCompanyData(companyID, companyName, companyAddress, companyP
 
     //Call the API
     try{
-      String apiRegister = "http://localhost/erpAPI-v.1.0/company/companyData/updatedetailcompany.php";
+      String apiRegister = "https://kevinngabriell.com/erpAPI-v.1.0/company/companyData/updatedetailcompany.php";
 
       final response = await http.post(
         Uri.parse(apiRegister),
@@ -245,4 +245,17 @@ Future <void> updateCompanyData(companyID, companyName, companyAddress, companyP
     }
 
   }
+}
+
+
+Future <List<Map<String, dynamic>>> allUserService() async{
+ final response = await http.get(
+        Uri.parse('https://kevinngabriell.com/erpAPI-v.1.0/company/companyData/getlistuser.php'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['Data'];
+      return List<Map<String, dynamic>>.from(data);
+    } else {
+      throw Exception('Failed to load data');
+    }
 }

@@ -8,7 +8,7 @@ import 'dart:convert';
 
 Future <List<Map<String, dynamic>>> allSupplierDataService(companyId) async{
   final response = await http.get(
-        Uri.parse('http://localhost/erpAPI-v.1.0/master/supplier/getallsupplier.php?company=$companyId'));
+        Uri.parse('https://kevinngabriell.com/erpAPI-v.1.0/master/supplier/getallsupplier.php?company=$companyId'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body)['Data'];
@@ -20,7 +20,7 @@ Future <List<Map<String, dynamic>>> allSupplierDataService(companyId) async{
 
 Future<Map<String, dynamic>> getDetailSupplier(supplierId) async {
   final response = await http.get(
-    Uri.parse('http://localhost/erpAPI-v.1.0/master/supplier/getsupplierdetail.php?supplier_id=$supplierId'));
+    Uri.parse('https://kevinngabriell.com/erpAPI-v.1.0/master/supplier/getsupplierdetail.php?supplier_id=$supplierId'));
 
   if (response.statusCode == 200) {
     return json.decode(response.body);
@@ -159,7 +159,7 @@ Future <void> updateSupplier(supplierId, supplierName, supplierPhone, supplierAd
   } else {
 
     try{
-      String apiRegister = "http://localhost/erpAPI-v.1.0/master/supplier/updatesupplier.php";
+      String apiRegister = "https://kevinngabriell.com/erpAPI-v.1.0/master/supplier/updatesupplier.php";
 
       final response = await http.post(
         Uri.parse(apiRegister),
@@ -363,7 +363,7 @@ Future <void> insertSupplier(supplierName, supplierOrigin, supplierAddress, supp
     
     //Call the API
     try{
-      String apiRegister = "http://localhost/erpAPI-v.1.0/master/supplier/insertsupplier.php";
+      String apiRegister = "https://kevinngabriell.com/erpAPI-v.1.0/master/supplier/insertsupplier.php";
 
       final response = await http.post(
         Uri.parse(apiRegister),

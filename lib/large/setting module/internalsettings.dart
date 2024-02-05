@@ -2,6 +2,7 @@
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/services/masterservices.dart';
 import 'package:erpsystems/services/settings/companydataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,8 @@ import '../template/documenttemplatelarge.dart';
 import '../template/financetemplatelarge.dart';
 import '../template/hrtemplatelarge.dart';
 import '../template/warehousetemplatelarge.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class InternalSettingLarge extends StatefulWidget {
@@ -22,7 +25,7 @@ class InternalSettingLarge extends StatefulWidget {
   State<InternalSettingLarge> createState() => _InternalSettingLargeState();
 }
 
-class _InternalSettingLargeState extends State<InternalSettingLarge> {
+class _InternalSettingLargeState extends State<InternalSettingLarge>  with TickerProviderStateMixin {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
   String profileName = '';
@@ -44,6 +47,60 @@ class _InternalSettingLargeState extends State<InternalSettingLarge> {
   TextEditingController txtTarget2029 = TextEditingController();
   TextEditingController txtTarget2030 = TextEditingController();
   TextEditingController txtTarget2031 = TextEditingController();
+
+  late TabController tabController;
+  late Future<List<Map<String, dynamic>>> userManagementList;
+  List<Map<String, String>> limitUsers = [];
+  String refferalIDValue = '';
+  String limitUserValue = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    tabController = TabController(length: 3, vsync: this);
+    userManagementList = allUserService();
+    getRefferalID();
+  }
+
+  Future<void> getRefferalID() async {
+    final response = await http.get(
+        Uri.parse(ApiEndpoints.limitUser)
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['StatusCode'] == 200) {
+        setState(() {
+          limitUsers = (data['Data'] as List)
+              .map((limituser) => Map<String, String>.from(limituser))
+              .toList();
+          if (limitUsers.isNotEmpty) {
+            refferalIDValue = limitUsers[0]['refferal_id']!;
+            limitUserValue = limitUsers[0]['limit_user']!;
+          }
+        });
+      } else {
+        // Handle API error
+        print('API, Failed to fetch data');
+      }
+    } else {
+      // Handle HTTP error
+      print('HTTP, Failed to fetch data');
+    }
+  }
+
+  Future<void> updateRefferalandLimit ()async {
+    
+  }
+
+  Future<void> getDetailUserPermission ()async {
+    
+  }
+
+  Future<void> updateUserPermission () async {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -423,505 +480,548 @@ class _InternalSettingLargeState extends State<InternalSettingLarge> {
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
-                                            child: Text('Company', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                          TabBar(
+                                            isScrollable: false,
+                                            controller: tabController,
+                                            labelColor: const Color.fromRGBO(78, 195, 252, 1),
+                                            unselectedLabelColor: Colors.black,
+                                            tabs: [
+                                              Tab( 
+                                                child: Text(
+                                                  'Company setting', 
+                                                  style: TextStyle(
+                                                    fontSize: 4.sp, 
+                                                    fontWeight: FontWeight.w400,
+                                                    //color: tabController.index == 0 ? Color.fromRGBO(78, 195, 252, 1) : Colors.black
+                                                  ),
+                                                ),
+                                              ),
+                                              Tab( 
+                                                child: Text(
+                                                  'Company target', 
+                                                  style: TextStyle(
+                                                    fontSize: 4.sp, 
+                                                    fontWeight: FontWeight.w400,
+                                                    //color: tabController.index == 0 ? Color.fromRGBO(78, 195, 252, 1) : Colors.black
+                                                  ),
+                                                ),
+                                              ),
+                                              Tab( 
+                                                child: Text(
+                                                  'User management', 
+                                                  style: TextStyle(
+                                                    fontSize: 4.sp, 
+                                                    fontWeight: FontWeight.w400,
+                                                    //color: tabController.index == 0 ? Color.fromRGBO(78, 195, 252, 1) : Colors.black
+                                                  ),
+                                                ),
+                                              ),
+                                            ]
                                           ),
-                                          //Company Name & Phone Form
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          SizedBox(
+                                            height: MediaQuery.of(context).size.height,
+                                            child: TabBarView(
+                                              controller: tabController,
                                               children: [
-                                                //Company Name
-                                                SizedBox(
-                                                  width: (MediaQuery.of(context).size.width - 490) / 2,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('Company name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                                      SizedBox(height: 15.h,),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(context).size.width,
-                                                        child: TextFormField(
-                                                          controller: txtCompanyName,
-                                                          readOnly: false,
-                                                          decoration: InputDecoration(
-                                                            enabledBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                      child: Text('Company setting', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                                    ),
+                                                    //Company Name & Phone Form
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          //Company Name
+                                                          SizedBox(
+                                                            width: (MediaQuery.of(context).size.width - 490) / 2,
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text('Company name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
+                                                                SizedBox(height: 15.h,),
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(context).size.width,
+                                                                  child: TextFormField(
+                                                                    controller: txtCompanyName,
+                                                                    readOnly: false,
+                                                                    decoration: InputDecoration(
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      hintText: 'PT. ABXXXXXX'
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
                                                             ),
-                                                            focusedBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          SizedBox(width: 15.w,),
+                                                          //Company Phone
+                                                          SizedBox(
+                                                            width: (MediaQuery.of(context).size.width - 490) / 2,
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text('Company phone number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
+                                                                SizedBox(height: 15.h,),
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(context).size.width,
+                                                                  child: TextFormField(
+                                                                    controller: txtPhoneNumber,
+                                                                    decoration: InputDecoration(
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      hintText: '021 xxxxxxxx'
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
                                                             ),
-                                                            hintText: 'PT. ABXXXXXX'
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10.h,),
+                                                    //Company Website & Email
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          //Company Website        
+                                                          SizedBox(
+                                                            width: (MediaQuery.of(context).size.width - 490) / 2,
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text('Company website', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
+                                                                SizedBox(height: 15.h,),
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(context).size.width,
+                                                                  child: TextFormField(
+                                                                    controller: txtWebsite,
+                                                                    readOnly: false,
+                                                                    decoration: InputDecoration(
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      hintText: 'www.ABXX.com'
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 15.w,),
+                                                          //Company Email
+                                                          SizedBox(
+                                                            width: (MediaQuery.of(context).size.width - 490) / 2,
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text('Company email', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
+                                                                SizedBox(height: 15.h,),
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(context).size.width,
+                                                                  child: TextFormField(
+                                                                    controller: txtEmail,
+                                                                    decoration: InputDecoration(
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      hintText: 'democompany@demo.id'
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10.h,),
+                                                    //Company Address & Industry
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          //Company Address
+                                                          SizedBox(
+                                                            width: (MediaQuery.of(context).size.width - 490) / 2,
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text('Company address', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
+                                                                SizedBox(height: 15.h,),
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(context).size.width,
+                                                                  child: TextFormField(
+                                                                    maxLines: 3,
+                                                                    controller: txtAddress,
+                                                                    readOnly: false,
+                                                                    decoration: InputDecoration(
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      hintText: 'Jl. Abcd'
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 15.w,),
+                                                          //Company Industry
+                                                          SizedBox(
+                                                            width: (MediaQuery.of(context).size.width - 490) / 2,
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text('Company industry', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
+                                                                SizedBox(height: 15.h,),
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(context).size.width,
+                                                                  child: TextFormField(
+                                                                    controller: txtIndustry,
+                                                                    decoration: InputDecoration(
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderSide: const BorderSide(width: 0.0),
+                                                                        borderRadius: BorderRadius.circular(10.0),
+                                                                      ),
+                                                                      hintText: 'Finance'
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 50.h,),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                        children: [
+                                                          ElevatedButton(
+                                                            onPressed: (){
+                                                              updateCompanyData(companyId, txtCompanyName.text, txtAddress.text, txtPhoneNumber.text, txtWebsite.text, txtIndustry.text, txtEmail.text, context);
+                                                            }, 
+                                                            style: ElevatedButton.styleFrom(
+                                                              elevation: 0,
+                                                              alignment: Alignment.center,
+                                                              minimumSize: const Size(60, 50),
+                                                              foregroundColor: Colors.white,
+                                                              backgroundColor: Color(0xFF2A85FF),
+                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                            ),
+                                                            child: Text('Update')
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 50.h,),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Text('Company target', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            children: [
+                                                              ElevatedButton(
+                                                                onPressed: (){
+                                                                  // updateCompanyData(companyId, txtCompanyName.text, txtAddress.text, txtPhoneNumber.text, txtWebsite.text, txtIndustry.text, txtEmail.text, context);
+                                                                }, 
+                                                                style: ElevatedButton.styleFrom(
+                                                                  elevation: 0,
+                                                                  alignment: Alignment.center,
+                                                                  minimumSize: const Size(60, 50),
+                                                                  foregroundColor: Colors.white,
+                                                                  backgroundColor: Color(0xFF2A85FF),
+                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                                ),
+                                                                child: Text('Add target')
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      )
-                                                    ],
-                                                  ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
-                                                SizedBox(width: 15.w,),
-                                                //Company Phone
-                                                SizedBox(
-                                                  width: (MediaQuery.of(context).size.width - 490) / 2,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('Company phone number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                                      SizedBox(height: 15.h,),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(context).size.width,
-                                                        child: TextFormField(
-                                                          controller: txtPhoneNumber,
-                                                          decoration: InputDecoration(
-                                                            enabledBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            focusedBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            hintText: '021 xxxxxxxx'
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Text('User management', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            children: [
+                                                              ElevatedButton(
+                                                                onPressed: (){
+                                                                  showDialog(
+                                                                    context: context, 
+                                                                    builder: (_) {
+                                                                      return AlertDialog(
+                                                                        title: Text('Edit refferal code'),
+                                                                        contentPadding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                                                                        content: SizedBox(
+                                                                          width: 300.0, // Set the width of the AlertDialog content
+                                                                          height: 200.0,
+                                                                          child: Column(
+                                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Text('Refferal ID'),
+                                                                              SizedBox(height: 5.h,),
+                                                                              TextFormField(
+                                                                                initialValue: refferalIDValue,
+                                                                                decoration: InputDecoration(
+                                                                                  hintText: 'Refferal Code',
+                                                                                  enabledBorder: OutlineInputBorder(
+                                                                                    borderSide: const BorderSide(width: 0.0),
+                                                                                    borderRadius: BorderRadius.circular(10.0),
+                                                                                  ),
+                                                                                  focusedBorder: OutlineInputBorder(
+                                                                                    borderSide: const BorderSide(width: 0.0),
+                                                                                    borderRadius: BorderRadius.circular(10.0),
+                                                                                  )
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(height: 20.h,),
+                                                                              Text('User Limit'),
+                                                                              SizedBox(height: 5.h,),
+                                                                              TextFormField(
+                                                                                initialValue: limitUserValue,
+                                                                                keyboardType: TextInputType.number,
+                                                                                decoration: InputDecoration(
+                                                                                  hintText: 'Input user limit',
+                                                                                  enabledBorder: OutlineInputBorder(
+                                                                                    borderSide: const BorderSide(width: 0.0),
+                                                                                    borderRadius: BorderRadius.circular(10.0),
+                                                                                  ),
+                                                                                  focusedBorder: OutlineInputBorder(
+                                                                                    borderSide: const BorderSide(width: 0.0),
+                                                                                    borderRadius: BorderRadius.circular(10.0),
+                                                                                  )
+                                                                                ),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        actions: [
+                                                                          ElevatedButton(
+                                                                            onPressed: (){
+                                                                      
+                                                                            }, 
+                                                                            style: ElevatedButton.styleFrom(
+                                                                              elevation: 0,
+                                                                              alignment: Alignment.centerLeft,
+                                                                              minimumSize: Size(20.w, 50.h),
+                                                                              foregroundColor: Colors.white,
+                                                                              backgroundColor: const Color(0xFF2A85FF),
+                                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                                            ),
+                                                                            child: Text('Update')
+                                                                          )
+                                                                        ],
+                                                                      );
+                                                                    }
+                                                                  );
+                                                                }, 
+                                                                style: ElevatedButton.styleFrom(
+                                                                  elevation: 0,
+                                                                  alignment: Alignment.center,
+                                                                  minimumSize: const Size(60, 50),
+                                                                  foregroundColor: Colors.white,
+                                                                  backgroundColor: Color(0xFF2A85FF),
+                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                                ),
+                                                                child: Text('Edit refferal')
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      )
-                                                    ],
-                                                  ),
+                                                      ],
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
+                                                      child: SizedBox(
+                                                        width: MediaQuery.of(context).size.width,
+                                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                                          future: userManagementList,
+                                                          builder: (context, snapshot) {
+                                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                                              return const Center(child: CircularProgressIndicator());
+                                                            } else if (snapshot.hasError) {
+                                                              return Center(child: Text('Error: ${snapshot.error}'));
+                                                            } else if (snapshot.hasData) {
+                                                              print(snapshot.data?.length);                                                            
+                                                              return DataTable(
+                                                                showCheckboxColumn: false,
+                                                                columns: const <DataColumn> [
+                                                                  DataColumn(label: Text('No')),
+                                                                  DataColumn(label: Text('Username')),
+                                                                  DataColumn(label: Text('Name')),
+                                                                  DataColumn(label: Text('Permission')),
+                                                                ], 
+                                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
+                                                                  int index = entry.key + 1;
+                                                                  Map<String, dynamic> users = entry.value;
+                                                                  return DataRow(
+                                                                    cells: <DataCell>[
+                                                                      DataCell(Text('$index')),
+                                                                      DataCell(Text(users['username'])),
+                                                                      DataCell(Text(users['first_name'])),
+                                                                      DataCell(Text(users['permission_access'])),
+                                                                    ],
+                                                                    onSelectChanged: (selected) {
+                                                                      if (selected!) {
+                                                                        showDialog(
+                                                                          context: context, 
+                                                                          builder: (_) {
+                                                                            return AlertDialog(
+                                                                              title: Text('Edit permission'),
+                                                                              contentPadding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                                                                              content: SizedBox(
+                                                                                width: 300.0, // Set the width of the AlertDialog content
+                                                                                height: 200.0,
+                                                                                child: Column(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  children: [
+                                                                                    Text('Username'),
+                                                                                    SizedBox(height: 5.h,),
+                                                                                    TextFormField(
+                                                                                      readOnly: true,
+                                                                                      initialValue: users['username'],
+                                                                                      decoration: InputDecoration(
+                                                                                        hintText: 'Refferal Code',
+                                                                                        enabledBorder: OutlineInputBorder(
+                                                                                          borderSide: const BorderSide(width: 0.0),
+                                                                                          borderRadius: BorderRadius.circular(10.0),
+                                                                                        ),
+                                                                                        focusedBorder: OutlineInputBorder(
+                                                                                          borderSide: const BorderSide(width: 0.0),
+                                                                                          borderRadius: BorderRadius.circular(10.0),
+                                                                                        )
+                                                                                      ),
+                                                                                    ),
+                                                                                    SizedBox(height: 20.h,),
+                                                                                    Text('Permission'),
+                                                                                    SizedBox(height: 5.h,),
+                                                                                    TextFormField(
+                                                                                      initialValue: users['permission_access'],
+                                                                                      keyboardType: TextInputType.number,
+                                                                                      decoration: InputDecoration(
+                                                                                        hintText: 'Input user limit',
+                                                                                        enabledBorder: OutlineInputBorder(
+                                                                                          borderSide: const BorderSide(width: 0.0),
+                                                                                          borderRadius: BorderRadius.circular(10.0),
+                                                                                        ),
+                                                                                        focusedBorder: OutlineInputBorder(
+                                                                                          borderSide: const BorderSide(width: 0.0),
+                                                                                          borderRadius: BorderRadius.circular(10.0),
+                                                                                        )
+                                                                                      ),
+                                                                                    )
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                              actions: [
+                                                                                ElevatedButton(
+                                                                                  onPressed: (){
+                                                                            
+                                                                                  }, 
+                                                                                  style: ElevatedButton.styleFrom(
+                                                                                    elevation: 0,
+                                                                                    alignment: Alignment.centerLeft,
+                                                                                    minimumSize: Size(20.w, 50.h),
+                                                                                    foregroundColor: Colors.white,
+                                                                                    backgroundColor: const Color(0xFF2A85FF),
+                                                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                                                  ),
+                                                                                  child: Text('Update')
+                                                                                )
+                                                                              ],
+                                                                            );
+                                                                          }
+                                                                        );
+                                                                        // Get.to(DetailCustomerSettingLarge(customer['company_id']));
+                                                                      }
+                                                                    },
+                                                                  );
+                                                                }).toList(),
+                                                              );
+                                                            } else {
+                                                              return const Center(child: Text('No data available'));
+                                                            }
+                                                          }
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                              ],
+                                              ]
                                             ),
-                                          ),
-                                          SizedBox(height: 10.h,),
-                                          //Company Website & Email
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                //Company Website        
-                                                SizedBox(
-                                                  width: (MediaQuery.of(context).size.width - 490) / 2,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('Company website', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                                      SizedBox(height: 15.h,),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(context).size.width,
-                                                        child: TextFormField(
-                                                          controller: txtWebsite,
-                                                          readOnly: false,
-                                                          decoration: InputDecoration(
-                                                            enabledBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            focusedBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            hintText: 'www.ABXX.com'
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(width: 15.w,),
-                                                //Company Email
-                                                SizedBox(
-                                                  width: (MediaQuery.of(context).size.width - 490) / 2,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('Company email', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                                      SizedBox(height: 15.h,),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(context).size.width,
-                                                        child: TextFormField(
-                                                          controller: txtEmail,
-                                                          decoration: InputDecoration(
-                                                            enabledBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            focusedBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            hintText: 'democompany@demo.id'
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: 10.h,),
-                                          //Company Address & Industry
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                //Company Address
-                                                SizedBox(
-                                                  width: (MediaQuery.of(context).size.width - 490) / 2,
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('Company address', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                                      SizedBox(height: 15.h,),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(context).size.width,
-                                                        child: TextFormField(
-                                                          maxLines: 3,
-                                                          controller: txtAddress,
-                                                          readOnly: false,
-                                                          decoration: InputDecoration(
-                                                            enabledBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            focusedBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            hintText: 'Jl. Abcd'
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(width: 15.w,),
-                                                //Company Industry
-                                                SizedBox(
-                                                  width: (MediaQuery.of(context).size.width - 490) / 2,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('Company industry', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                                      SizedBox(height: 15.h,),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(context).size.width,
-                                                        child: TextFormField(
-                                                          controller: txtIndustry,
-                                                          decoration: InputDecoration(
-                                                            enabledBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            focusedBorder: OutlineInputBorder(
-                                                              borderSide: const BorderSide(width: 0.0),
-                                                              borderRadius: BorderRadius.circular(10.0),
-                                                            ),
-                                                            hintText: 'Finance'
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: 50.h,),
-                                          // Padding(
-                                          //   padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
-                                          //   child: Text('Company Target', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
-                                          // ),
-                                          // Padding(
-                                          //   padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
-                                          //   child: Row(
-                                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          //     children: [
-                                          //       SizedBox(
-                                          //         width: (MediaQuery.of(context).size.width - 490) / 2,
-                                          //         child: Column(
-                                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                                          //           children: [
-                                          //             Text('Target 2024', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                          //             SizedBox(height: 15.h,),
-                                          //             SizedBox(
-                                          //               width: MediaQuery.of(context).size.width,
-                                          //               child: TextFormField(
-                                          //                 controller: txtTarget2024,
-                                          //                 readOnly: false,
-                                          //                 decoration: InputDecoration(
-                                          //                   enabledBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   focusedBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   hintText: 'Rp. 1xx.xxx.xxx'
-                                          //                 ),
-                                          //               ),
-                                          //             )
-                                          //           ],
-                                          //         ),
-                                          //       ),
-                                          //       SizedBox(width: 15.w,),
-                                          //       SizedBox(
-                                          //         width: (MediaQuery.of(context).size.width - 490) / 2,
-                                          //         child: Column(
-                                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                                          //           children: [
-                                          //             Text('Target 2025', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                          //             SizedBox(height: 15.h,),
-                                          //             SizedBox(
-                                          //               width: MediaQuery.of(context).size.width,
-                                          //               child: TextFormField(
-                                          //                 controller: txtTarget2025,
-                                          //                 decoration: InputDecoration(
-                                          //                   enabledBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   focusedBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   hintText: 'Rp. 1xx.xxx.xxx'
-                                          //                 ),
-                                          //               ),
-                                          //             )
-                                          //           ],
-                                          //         ),
-                                          //       ),
-                                          //     ],
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 10.h,),
-                                          // Padding(
-                                          //   padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
-                                          //   child: Row(
-                                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          //     children: [
-                                          //       SizedBox(
-                                          //         width: (MediaQuery.of(context).size.width - 490) / 2,
-                                          //         child: Column(
-                                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                                          //           children: [
-                                          //             Text('Target 2026', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                          //             SizedBox(height: 15.h,),
-                                          //             SizedBox(
-                                          //               width: MediaQuery.of(context).size.width,
-                                          //               child: TextFormField(
-                                          //                 controller: txtTarget2026,
-                                          //                 readOnly: false,
-                                          //                 decoration: InputDecoration(
-                                          //                   enabledBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   focusedBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   hintText: 'Rp. 1xx.xxx.xxx'
-                                          //                 ),
-                                          //               ),
-                                          //             )
-                                          //           ],
-                                          //         ),
-                                          //       ),
-                                          //       SizedBox(width: 15.w,),
-                                          //       SizedBox(
-                                          //         width: (MediaQuery.of(context).size.width - 490) / 2,
-                                          //         child: Column(
-                                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                                          //           children: [
-                                          //             Text('Target 2027', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                          //             SizedBox(height: 15.h,),
-                                          //             SizedBox(
-                                          //               width: MediaQuery.of(context).size.width,
-                                          //               child: TextFormField(
-                                          //                 controller: txtTarget2027,
-                                          //                 decoration: InputDecoration(
-                                          //                   enabledBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   focusedBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   hintText: 'Rp. 1xx.xxx.xxx'
-                                          //                 ),
-                                          //               ),
-                                          //             )
-                                          //           ],
-                                          //         ),
-                                          //       ),
-                                          //     ],
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 10.h,),
-                                          // Padding(
-                                          //   padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
-                                          //   child: Row(
-                                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          //     children: [
-                                          //       SizedBox(
-                                          //         width: (MediaQuery.of(context).size.width - 490) / 2,
-                                          //         child: Column(
-                                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                                          //           children: [
-                                          //             Text('Target 2028', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                          //             SizedBox(height: 15.h,),
-                                          //             SizedBox(
-                                          //               width: MediaQuery.of(context).size.width,
-                                          //               child: TextFormField(
-                                          //                 controller: txtTarget2028,
-                                          //                 readOnly: false,
-                                          //                 decoration: InputDecoration(
-                                          //                   enabledBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   focusedBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   hintText: 'Rp. 1xx.xxx.xxx'
-                                          //                 ),
-                                          //               ),
-                                          //             )
-                                          //           ],
-                                          //         ),
-                                          //       ),
-                                          //       SizedBox(width: 15.w,),
-                                          //       SizedBox(
-                                          //         width: (MediaQuery.of(context).size.width - 490) / 2,
-                                          //         child: Column(
-                                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                                          //           children: [
-                                          //             Text('Target 2029', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                          //             SizedBox(height: 15.h,),
-                                          //             SizedBox(
-                                          //               width: MediaQuery.of(context).size.width,
-                                          //               child: TextFormField(
-                                          //                 controller: txtTarget2029,
-                                          //                 decoration: InputDecoration(
-                                          //                   enabledBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   focusedBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   hintText: 'Rp. 1xx.xxx.xxx'
-                                          //                 ),
-                                          //               ),
-                                          //             )
-                                          //           ],
-                                          //         ),
-                                          //       ),
-                                          //     ],
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 10.h,),
-                                          // Padding(
-                                          //   padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
-                                          //   child: Row(
-                                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          //     children: [
-                                          //       SizedBox(
-                                          //         width: (MediaQuery.of(context).size.width - 490) / 2,
-                                          //         child: Column(
-                                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                                          //           children: [
-                                          //             Text('Target 2030', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                          //             SizedBox(height: 15.h,),
-                                          //             SizedBox(
-                                          //               width: MediaQuery.of(context).size.width,
-                                          //               child: TextFormField(
-                                          //                 controller: txtTarget2030,
-                                          //                 readOnly: false,
-                                          //                 decoration: InputDecoration(
-                                          //                   enabledBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   focusedBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   hintText: 'Rp. 1xx.xxx.xxx'
-                                          //                 ),
-                                          //               ),
-                                          //             )
-                                          //           ],
-                                          //         ),
-                                          //       ),
-                                          //       SizedBox(width: 15.w,),
-                                          //       SizedBox(
-                                          //         width: (MediaQuery.of(context).size.width - 490) / 2,
-                                          //         child: Column(
-                                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                                          //           children: [
-                                          //             Text('Target 2031', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w500),),
-                                          //             SizedBox(height: 15.h,),
-                                          //             SizedBox(
-                                          //               width: MediaQuery.of(context).size.width,
-                                          //               child: TextFormField(
-                                          //                 controller: txtTarget2031,
-                                          //                 decoration: InputDecoration(
-                                          //                   enabledBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   focusedBorder: OutlineInputBorder(
-                                          //                     borderSide: const BorderSide(width: 0.0),
-                                          //                     borderRadius: BorderRadius.circular(10.0),
-                                          //                   ),
-                                          //                   hintText: 'Rp. 1xx.xxx.xxx'
-                                          //                 ),
-                                          //               ),
-                                          //             )
-                                          //           ],
-                                          //         ),
-                                          //       ),
-                                          //     ],
-                                          //   ),
-                                          // ),
-                                          // SizedBox(height: 10.h,),
-                                          //Update Button
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 5.sp),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                ElevatedButton(
-                                                  onPressed: (){
-                                                    updateCompanyData(companyId, txtCompanyName.text, txtAddress.text, txtPhoneNumber.text, txtWebsite.text, txtIndustry.text, txtEmail.text, context);
-                                                  }, 
-                                                  style: ElevatedButton.styleFrom(
-                                                    elevation: 0,
-                                                    alignment: Alignment.center,
-                                                    minimumSize: const Size(60, 50),
-                                                    foregroundColor: Colors.white,
-                                                    backgroundColor: Color(0xFF2A85FF),
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                                  ),
-                                                  child: Text('Update')
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: 50.h,),
+                                          )
+                                         
+                                          
+                                          
                                       
                                         ],
                                       );

@@ -4,7 +4,6 @@ import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/addcustomersettings.dart';
 import 'package:erpsystems/large/setting%20module/detailcustomerinformation.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/services/settings/customerdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

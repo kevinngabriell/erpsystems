@@ -8,7 +8,7 @@ import 'dart:convert';
 
 Future <List<Map<String, dynamic>>> allOriginDataService() async{
   final response = await http.get(
-        Uri.parse('http://localhost/erpAPI-v.1.0/master/origin/getorigin.php'));
+        Uri.parse('https://kevinngabriell.com/erpAPI-v.1.0/master/origin/getorigin.php'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body)['Data'];
@@ -20,7 +20,7 @@ Future <List<Map<String, dynamic>>> allOriginDataService() async{
 
 Future<Map<String, dynamic>> getDetailOrigin(originId) async {
   final response = await http.get(
-    Uri.parse('http://localhost/erpAPI-v.1.0/master/origin/getdetailorigin.php?origin_id=$originId'));
+    Uri.parse('https://kevinngabriell.com/erpAPI-v.1.0/master/origin/getdetailorigin.php?origin_id=$originId'));
 
   if (response.statusCode == 200) {
     return json.decode(response.body);
@@ -89,7 +89,7 @@ Future <void> updateoriginData(originId, originName, originIsFreeTrade, BuildCon
   } else {
     //Call the API
     try{
-      String apiRegister = "http://localhost/erpAPI-v.1.0/master/origin/updateorigin.php";
+      String apiRegister = "https://kevinngabriell.com/erpAPI-v.1.0/master/origin/updateorigin.php";
 
       final response = await http.post(
         Uri.parse(apiRegister),

@@ -3,7 +3,6 @@ import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/addnewsupplierlarge.dart';
 import 'package:erpsystems/large/setting%20module/detailsupplier.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/services/settings/supplierdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

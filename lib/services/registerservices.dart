@@ -136,7 +136,7 @@ Future <void> registerServices(String firstName, String lastName, String usernam
 
     //Call the API
     try{
-      String apiRegister = "http://localhost/erpAPI-v.1.0/user/createuser.php";
+      String apiRegister = "https://kevinngabriell.com/erpAPI-v.1.0/user/createuser.php";
 
       final response = await http.post(
         Uri.parse(apiRegister),

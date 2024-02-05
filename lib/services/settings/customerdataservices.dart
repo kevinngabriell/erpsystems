@@ -9,7 +9,7 @@ import 'dart:convert';
 
 Future <List<Map<String, dynamic>>> allCustomerDataService(company_id) async{
   final response = await http.get(
-        Uri.parse('http://localhost/erpAPI-v.1.0/master/customer/getallcustomer.php?company=$company_id'));
+        Uri.parse('https://kevinngabriell.com/erpAPI-v.1.0/master/customer/getallcustomer.php?company=$company_id'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body)['Data'];
@@ -79,7 +79,7 @@ Future <void> insertCustomerData(customerName, customerAddress, customerPhone, c
 
     //Call the API
     try{
-      String apiRegister = "http://localhost/erpAPI-v.1.0/master/customer/insertcustomer.php";
+      String apiRegister = "https://kevinngabriell.com/erpAPI-v.1.0/master/customer/insertcustomer.php";
 
       final response = await http.post(
         Uri.parse(apiRegister),
@@ -170,7 +170,7 @@ Future <void> insertCustomerData(customerName, customerAddress, customerPhone, c
 
 Future<Map<String, dynamic>> getDetailCustomerData(customerId) async {
   final response = await http.get(
-    Uri.parse('http://localhost/erpAPI-v.1.0/master/customer/getdetailcustomer.php?company_id=$customerId'));
+    Uri.parse('https://kevinngabriell.com/erpAPI-v.1.0/master/customer/getdetailcustomer.php?company_id=$customerId'));
 
   if (response.statusCode == 200) {
     return json.decode(response.body);
@@ -267,7 +267,7 @@ Future <void> updateCustomerData(customerId, customerName, customerAddress, cust
 
     //Call the API
     try{
-      String apiRegister = "http://localhost/erpAPI-v.1.0/master/customer/updatecustomer.php";
+      String apiRegister = "https://kevinngabriell.com/erpAPI-v.1.0/master/customer/updatecustomer.php";
 
       final response = await http.post(
         Uri.parse(apiRegister),

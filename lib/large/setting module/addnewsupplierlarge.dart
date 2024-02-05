@@ -2,7 +2,6 @@
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/services/masterservices.dart';
 import 'package:erpsystems/services/settings/supplierdataservices.dart';
 import 'package:flutter/material.dart';

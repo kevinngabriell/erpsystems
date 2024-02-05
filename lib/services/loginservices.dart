@@ -49,7 +49,7 @@ Future <void> loginService(String username, String password, BuildContext contex
   } else {
     
     try{
-      String apiLogin = "http://localhost/erpAPI-v.1.0/user/login.php";
+      String apiLogin = "https://kevinngabriell.com/erpAPI-v.1.0/user/login.php";
 
       final response = await http.post(
         Uri.parse(apiLogin),
