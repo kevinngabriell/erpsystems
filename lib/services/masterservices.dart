@@ -4,6 +4,7 @@ class ApiEndpoints {
   static String get apiCountry => baseUrl + 'master/origin/getorigin.php';
   static String apiCustomer(String companyId) => baseUrl + 'master/customer/getallcustomer.php?company=$companyId';
   static String get limitUser => baseUrl + 'company/companyData/getlistuser.php';
+  static String get permissionList => baseUrl + 'company/permission/getlistpermission.php';
   // Add more API endpoints as needed
 }
 
