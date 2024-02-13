@@ -21,6 +21,7 @@ dependencies:
   get_storage: ^2.1.1
   http: ^1.2.0
   intl: ^0.17.0
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
@@ -66,3 +67,5 @@ flutter:
     - Assets/Icon/Packaging.png
     - Assets/Icon/Flag.png
     - Assets/Icon/Settings.png
+    - Assets/Icon/addTarget.png
+    - Assets/Icon/addTargetYear.png
