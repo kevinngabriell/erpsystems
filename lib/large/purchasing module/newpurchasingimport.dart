@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/login.dart';
@@ -9,11 +11,12 @@ import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
+import 'package:erpsystems/services/masterservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
 
 class NewPurchasingImportLarge extends StatefulWidget {
   const NewPurchasingImportLarge({super.key});
@@ -29,6 +32,19 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
   String profileName = '';
   String companyName = '';
   bool showSuggestions = false;
+  bool isLoading = false;
+  String Years2Digit = '';
+  String romanNumeral = '';
+
+  List<Map<String, String>> listSuppliers = [];
+  List<Map<String, String>> listSuppliersPICName = [];
+  String selectedSupplier = '';
+  List<Map<String, String>> listTerms = [];
+  String selectedTerm = '';
+  List<Map<String, String>> listOrigins = [];
+  List<Map<String, String>> listOrigins1 = [];
+  String selectedOrigin = '';
+  String supplierPIC = '';
 
   List<Item> items = [
     Item(name: 'Item 1', quantity: 10, harga: 10000),
@@ -38,16 +54,266 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
   ];
 
   List<Item> selectedItems = [];
+
+  String convertToRoman(int number) {
+    if (number < 1 || number > 12) {
+      throw ArgumentError('Month should be between 1 and 12');
+    }
+
+    List<String> romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+    return romanNumerals[number - 1];
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSupplier();
+    getOrigin();
+    getTerm();
+  }
+
+  //Services
+  Future<void> getOrigin() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.apiCountry),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          setState(() {
+            listOrigins = (data['Data'] as List)
+                .map((origin) => Map<String, String>.from(origin))
+                .toList();
+          });
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+
+
+    } catch (e){
+      print(e);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> getTerm() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.termList),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          setState(() {
+            listTerms = (data['Data'] as List)
+                .map((term) => Map<String, String>.from(term))
+                .toList();
+            selectedTerm = listTerms[0]['term_id']!;
+          });
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+
+
+    } catch (e){
+      print(e);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> getSupplier() async{
+    try {
+      companyId = storage.read('companyId').toString();
+
+      // Set loading state before making the API call
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.listSupplier(companyId)),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          setState(() {
+            listSuppliers = (data['Data'] as List)
+                .map((supplier) => Map<String, String>.from(supplier))
+                .toList();
+            selectedSupplier = listSuppliers[0]['supplier_id']!;
+            selectedOrigin = listSuppliers[0]['supplier_origin']!;
+            supplierPIC = listSuppliers[0]['supplier_pic_name']!;
+          });
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+    } finally {
+      // Set loading state to false when data fetching is completed
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
   
+  Future<void> getSupplierOrigin(supplierID) async {
+    try{
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.supplierOrigin(supplierID)),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          if (response.statusCode == 200) {
+            final data = json.decode(response.body);
+            if (data['StatusCode'] == 200) {
+              setState(() {
+                listOrigins1 = (data['Data'] as List)
+                    .map((origin) => Map<String, String>.from(origin))
+                    .toList();
+                if (listOrigins1.isNotEmpty && listOrigins1[0]['supplier_origin'] != null) {
+                  selectedOrigin = listOrigins1[0]['supplier_origin']!;
+                } else {
+                  // Handle the case where 'supplier_origin' is null or the list is empty
+                  print('Error: Null value encountered while accessing supplier_origin');
+                }
+
+
+              });
+            } else {
+              // Handle API error
+              print('Failed to fetch data');
+            }
+          } else {
+            // Handle HTTP error
+            print('Failed to fetch data');
+          }
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> getSupplierPICName(supplierID) async {
+    try{
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.supplierPICName(supplierID)),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          if (response.statusCode == 200) {
+            final data = json.decode(response.body);
+            if (data['StatusCode'] == 200) {
+              setState(() {
+                listSuppliersPICName = (data['Data'] as List)
+                    .map((origin) => Map<String, String>.from(origin))
+                    .toList();
+                if (listSuppliersPICName.isNotEmpty && listSuppliersPICName[0]['supplier_pic_name'] != null) {
+                  supplierPIC = listSuppliersPICName[0]['supplier_pic_name']!;
+                } else {
+                  // Handle the case where 'supplier_origin' is null or the list is empty
+                  print('Error: Null value encountered while accessing supplier_origin');
+                }
+
+
+              });
+            } else {
+              // Handle API error
+              print('Failed to fetch data');
+            }
+          } else {
+            // Handle HTTP error
+            print('Failed to fetch data');
+          }
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     //Read session
     companyName = storage.read('companyName').toString();
     profileName = storage.read('firstName').toString();
 
+    DateTime now = DateTime.now();
+    int currentYear = now.year;
+    Years2Digit = (currentYear % 100).toString();
+    int currentMonth = now.month;
+    romanNumeral = convertToRoman(currentMonth);
+
     return MaterialApp(
       home: Scaffold(
-        body: SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +355,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                       //Sales Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(SalesIndexLarge());
+                          Get.to(const SalesIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -291,7 +557,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                       //Logout Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.off(LoginLarge());
+                          Get.off(const LoginLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -417,7 +683,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                               children: [
                                                 Text('Purchase Order Number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                                 SizedBox(height: 5.h,),
-                                                Text('#24122178', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w600,),),
+                                                Text('VIK/$Years2Digit/$romanNumeral/0001', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w600,),),
                                               ],
                                             ),
                                           ),
@@ -429,11 +695,23 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                 Text('Date', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                                 SizedBox(height: 5.h,),
                                                 DateTimePicker(
-                                                  dateHintText: 'Input sales date',
+                                                  dateHintText: 'Input purchase date',
                                                   firstDate: DateTime(2023),
                                                   lastDate: DateTime(2100),
                                                   initialDate: DateTime.now(),
                                                   dateMask: 'd MMM yyyy',
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: Image.asset('Icon/CalendarIcon.png'),
+                                                    hintText: 'Input purchase date',
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    )
+                                                  ),
                                                   onChanged: (value) {
                                                     setState(() {
                                                       // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
@@ -451,19 +729,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                               children: [
                                                 Text('To', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                                 SizedBox(height: 5.h,),
-                                                DropdownButtonFormField(
-                                                  value: 'PPN01',
-                                                  items: const [
-                                                    DropdownMenuItem(
-                                                      value: 'PPN01',
-                                                      child: Text('NPWP', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PPN02',
-                                                      child: Text('Non-NPWP', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                  ], 
+                                                DropdownButtonFormField<String>(
+                                                  value: selectedSupplier,
                                                   decoration: InputDecoration(
+                                                    // prefixIcon: Image.asset('Icon/CalendarIcon.png'),
+                                                    hintText: 'Select supplier',
                                                     enabledBorder: OutlineInputBorder(
                                                       borderSide: const BorderSide(width: 0.0),
                                                       borderRadius: BorderRadius.circular(10.0),
@@ -473,155 +743,20 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                       borderRadius: BorderRadius.circular(10.0),
                                                     )
                                                   ),
-                                                  onChanged: (value){
-                                                    
+                                                  items: listSuppliers.map<DropdownMenuItem<String>>(
+                                                    (Map<String, String> supplier) {
+                                                      return DropdownMenuItem<String>(
+                                                        value: supplier['supplier_id'],
+                                                        child: Text(supplier['supplier_name']!),
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                  onChanged: (String? newValue){
+                                                    selectedSupplier = newValue!;
+                                                    getSupplierOrigin(selectedSupplier);
+                                                    getSupplierPICName(selectedSupplier);
                                                   }
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                      child: Text('Attn', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text('Customer', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
-                                                SizedBox(height: 5.h,),
-                                                DropdownButtonFormField(
-                                                  value: 'PO-LIST-001',
-                                                  items: const [
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-001',
-                                                      child: Text('PO/11/2023/0001', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-002',
-                                                      child: Text('PO/11/2023/0002', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-003',
-                                                      child: Text('PO/11/2023/0003', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-004',
-                                                      child: Text('PO/11/2023/0004', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    )
-                                                  ], 
-                                                  decoration: InputDecoration(
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    )
-                                                  ),
-                                                  onChanged: (value){
-                                                    
-                                                  }
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text('Address', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
-                                                SizedBox(height: 5.h,),
-                                                DropdownButtonFormField(
-                                                  value: 'PO-LIST-001',
-                                                  items: const [
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-001',
-                                                      child: Text('PO/11/2023/0001', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-002',
-                                                      child: Text('PO/11/2023/0002', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-003',
-                                                      child: Text('PO/11/2023/0003', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-004',
-                                                      child: Text('PO/11/2023/0004', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    )
-                                                  ], 
-                                                  decoration: InputDecoration(
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    )
-                                                  ),
-                                                  onChanged: (value){
-                                                    
-                                                  }
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text('PO Number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
-                                                SizedBox(height: 5.h,),
-                                                DropdownButtonFormField(
-                                                  value: 'PO-LIST-001',
-                                                  items: const [
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-001',
-                                                      child: Text('PO/11/2023/0001', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-002',
-                                                      child: Text('PO/11/2023/0002', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-003',
-                                                      child: Text('PO/11/2023/0003', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-004',
-                                                      child: Text('PO/11/2023/0004', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    )
-                                                  ], 
-                                                  decoration: InputDecoration(
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    )
-                                                  ),
-                                                  onChanged: (value){
-                                                    
-                                                  }
-                                                ),
+                                                )
                                               ],
                                             ),
                                           ),
@@ -635,162 +770,158 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) ,
-                                            child: TypeAheadField<Item>(
-                                              builder: (context, controller, focusNode) {
-                                                return TextField(
-                                                  controller: controller,
-                                                  focusNode: focusNode,
-                                                  autofocus: true,
-                                                  onTap: () {
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Attn', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                                SizedBox(height: 5.h,),
+                                                TextFormField(
+                                                  initialValue: supplierPIC,
+                                                  readOnly: true,
+                                                  decoration: InputDecoration(
+                                                    // prefixIcon: Image.asset('Icon/CalendarIcon.png'),
+                                                    hintText: 'Supplier PIC',
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    )
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Shipment', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                                SizedBox(height: 5.h,),
+                                                DateTimePicker(
+                                                  dateHintText: 'Input shipment date',
+                                                  firstDate: DateTime(2023),
+                                                  lastDate: DateTime(2100),
+                                                  initialDate: DateTime.now(),
+                                                  dateMask: 'd MMM yyyy',
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: Image.asset('Icon/ShipmentIcon.png'),
+                                                    hintText: 'Input shipment date',
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    )
+                                                  ),
+                                                  onChanged: (value) {
                                                     setState(() {
-                                                      showSuggestions = true; // Open suggestions when the TextField is tapped
+                                                      // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
+                                                      //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
                                                     });
                                                   },
-                                                  decoration: InputDecoration(
-                                                    border: OutlineInputBorder(),
-                                                    labelText: 'Browse Product',
-                                                  )
-                                                );
-                                              },
-                                              suggestionsCallback: (String search) async {
-                                                if (showSuggestions) {
-                                                  await Future.delayed(Duration(milliseconds: 300));
-                                                  return items
-                                                      .where((item) =>
-                                                          item.name.toLowerCase().contains(search.toLowerCase()))
-                                                      .toList();
-                                                } else {
-                                                  return [];
-                                                }
-                                              },
-                                              itemBuilder: (context, Item) {
-                                                return ListTile(
-                                                  title: Text(Item.name),
-                                                );
-                                              },
-                                              onSelected: (Item selectedItem) {
-                                                setState(() {
-                                                  selectedItems.add(selectedItem);
-                                                });
-                                              },
-                                            )
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                          
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Term', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                                SizedBox(height: 5.h,),
+                                                DropdownButtonFormField<String>(
+                                                  value: selectedTerm,
+                                                  decoration: InputDecoration(
+                                                    // prefixIcon: Image.asset('Icon/CalendarIcon.png'),
+                                                    hintText: 'Select term',
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    )
+                                                  ),
+                                                  items: listTerms.map<DropdownMenuItem<String>>(
+                                                    (Map<String, String> term) {
+                                                      return DropdownMenuItem<String>(
+                                                        value: term['term_id'],
+                                                        child: Text(term['term_name']!),
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                  onChanged: (String? newValue){
+                                                    selectedTerm = newValue!;
+                                                  }
+                                                )
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                      child: SizedBox(
-                                        width: (MediaQuery.of(context).size.width),
-                                        child: DataTable(
-                                          columns: [
-                                            DataColumn(label: Text('No')),
-                                            DataColumn(label: Text('Product Name')),
-                                            DataColumn(label: Text('Quantity')),
-                                            DataColumn(label: Text('Packaging Size')),
-                                            DataColumn(label: Text('Unit Price')),
-                                            DataColumn(label: Text('Total'))
-                                          ],
-                                          rows: [
-                                            ...selectedItems.asMap().entries.map((entry) {
-                                              int index = entry.key;
-                                              Item item = entry.value;
-                                              TextEditingController hargaController = TextEditingController(text: item.harga.toString());
-                                              int? harga = int.tryParse(hargaController.text);
-                                              int quantity = item.quantity;
-                                              int? total = (harga != null) ? (harga * quantity) : null;
-                                              double ppn = (total! * 0.01);
-                                              TextEditingController txtDataTablePPN = TextEditingController(text: ppn.toString());
-                                              TextEditingController txtDataTableTotal = TextEditingController(text: total.toString());
-
-                                              return DataRow(cells: [
-                                                DataCell(Text((index + 1).toString())),
-                                                DataCell(Text(item.name)),
-                                                DataCell(
-                                                  TextField(
-                                                    controller: TextEditingController(text: item.quantity.toString()),
-                                                    readOnly: true,
-                                                  ),
-                                                ),
-                                                DataCell(Text('')), // Placeholder for 'Packaging Size'
-                                                DataCell(
-                                                  TextField(
-                                                    controller: hargaController,
-                                                    onChanged: (value) {
-                                                      int? harga = int.tryParse(value);
-                                                      int quantity = selectedItems[index].quantity;
-                                                      int total = (harga != null) ? (harga * quantity) : 0;
-                                                      double ppn = (total * 0.01);
-                                                      txtDataTableTotal.text = total.toString();
-                                                      txtDataTablePPN.text = ppn.toString();
-                                                      selectedItems[index].harga = harga ?? 0;
-                                                    },
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  TextField(
-                                                    controller: txtDataTableTotal,
-                                                    readOnly: true,
-                                                    onChanged: (value) {},
-                                                  ),
-                                                ),
-                                              ]);
-                                            }).toList(),
-
-                                            // Add an extra row for totals
-                                            DataRow(cells: [
-                                              DataCell(Text('Total:')),
-                                              DataCell(Text('')),
-                                              DataCell(
-                                                Text(selectedItems.fold<int>(0, (sum, item) => sum + item.quantity).toString()),
-                                              ),
-                                              DataCell(Text('')), // Placeholder for 'Pacakging Size'
-                                              DataCell(
-                                                Text(selectedItems.fold<int>(0, (sum, item) => sum + (item.harga * item.quantity)).toString()),
-                                              ),
-                                              DataCell(
-                                                Text(selectedItems.fold<int>(0, (sum, item) => sum + (item.harga * item.quantity)).toString()),
-                                              ),
-                                            ]),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                       child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 200.w) / 2,
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Payment', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                                SizedBox(height: 5.h,),
+                                                DateTimePicker(
+                                                  dateHintText: 'Input shipment date',
+                                                  firstDate: DateTime(2023),
+                                                  lastDate: DateTime(2100),
+                                                  initialDate: DateTime.now(),
+                                                  dateMask: 'd MMM yyyy',
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: Image.asset('Icon/ShipmentIcon.png'),
+                                                    hintText: 'Input payment date',
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    )
+                                                  ),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
+                                                      //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
+                                                    });
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 149.w) / 3,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text('Origin', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                                 SizedBox(height: 5.h,),
-                                                DropdownButtonFormField(
-                                                  value: 'PO-LIST-001',
-                                                  items: const [
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-001',
-                                                      child: Text('PO/11/2023/0001', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-002',
-                                                      child: Text('PO/11/2023/0002', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-003',
-                                                      child: Text('PO/11/2023/0003', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: 'PO-LIST-004',
-                                                      child: Text('PO/11/2023/0004', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
-                                                    )
-                                                  ], 
+                                                DropdownButtonFormField<String>(
+                                                  value: selectedOrigin,
                                                   decoration: InputDecoration(
+                                                    // prefixIcon: Image.asset('Icon/CalendarIcon.png'),
+                                                    hintText: 'Select origin',
                                                     enabledBorder: OutlineInputBorder(
                                                       borderSide: const BorderSide(width: 0.0),
                                                       borderRadius: BorderRadius.circular(10.0),
@@ -800,61 +931,91 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                       borderRadius: BorderRadius.circular(10.0),
                                                     )
                                                   ),
-                                                  onChanged: (value){
-                                                    
+                                                  items: listOrigins.map<DropdownMenuItem<String>>(
+                                                    (Map<String, String> origin) {
+                                                      return DropdownMenuItem<String>(
+                                                        value: origin['origin_id'],
+                                                        child: Text(origin['origin_name']!),
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                  onChanged: (String? newValue){
+                                                    selectedOrigin = newValue!;
                                                   }
-                                                ),
+                                                )
                                               ],
                                             ),
                                           ),
-                                          SizedBox(width: 20.w,),
                                           SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 300.w) / 2,
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            child: const Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            child: const Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text('Shipping Marks', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                Text('Shipping marks', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                                 SizedBox(height: 5.h,),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 70.w,
-                                                      child: TextFormField(
-                                                        maxLines: 3,
-                                                        initialValue: "Default value + .... \nDefault value + .... \nJakarta",
-                                                        decoration: InputDecoration(
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 0.0),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 0.0),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          hintText: 'Remarks'
-                                                        ),
-                                                      ),
+                                                TextFormField(
+                                                  maxLines: 3,
+                                                  initialValue: 'Default value + .... \nDefault value + .... \nJakarta',
+                                                  decoration: InputDecoration(
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
                                                     ),
-                                                    SizedBox(width: 10.w,),
-                                                    SizedBox(
-                                                      width: 70.w,
-                                                      child: TextFormField(
-                                                        maxLines: 3,
-                                                        decoration: InputDecoration(
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 0.0),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 0.0),
-                                                            borderRadius: BorderRadius.circular(10.0),
-                                                          ),
-                                                          hintText: 'Remarks'
-                                                        ),
-                                                      ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
                                                     ),
-                                                  ],
-                                                ),
+                                                  )
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(' ', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                                SizedBox(height: 5.h,),
+                                                TextFormField(
+                                                  maxLines: 3,
+                                                  decoration: InputDecoration(
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    hintText: 'Remarks'
+                                                  )
+                                                )
                                               ],
                                             ),
                                           ),

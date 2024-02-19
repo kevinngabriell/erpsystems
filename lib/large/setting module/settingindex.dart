@@ -3,7 +3,6 @@ import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/customersettings.dart';
 import 'package:erpsystems/large/setting%20module/internalsettings.dart';
 import 'package:erpsystems/large/setting%20module/originsettings.dart';
-import 'package:erpsystems/large/setting%20module/paymentsetting.dart';
 import 'package:erpsystems/large/setting%20module/suppliersettingslarge.dart';
 import 'package:erpsystems/large/setting%20module/termsetting.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
@@ -433,10 +432,10 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                             ),
                                           ),
                                         ),
-                                        //Product Card
+                                        //Term Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(PaymentSettingLarge());
+                                            Get.to(TermSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -446,7 +445,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Payment.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Product', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Term', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),

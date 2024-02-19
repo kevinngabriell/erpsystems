@@ -43,7 +43,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
     companyId = storage.read('companyId').toString();
 
     return MaterialApp(
-      title: 'Customer Configuration',
+      title: 'Add New Customer Configuration',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,

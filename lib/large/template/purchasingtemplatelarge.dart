@@ -12,7 +12,6 @@ import 'package:get_storage/get_storage.dart';
 
 import '../index.dart';
 import 'financetemplatelarge.dart';
-import 'salestemplatelarge.dart';
 
 class PurchasingTemplateLarge extends StatefulWidget {
   const PurchasingTemplateLarge({super.key});

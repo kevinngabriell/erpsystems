@@ -1,18 +1,15 @@
 
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import '../index.dart';
 import 'analyticstemplatelarge.dart';
 import 'financetemplatelarge.dart';
 import 'hrtemplatelarge.dart';
-import 'salestemplatelarge.dart';
 import 'warehousetemplatelarge.dart';
 
 class DocumentTemplateLarge extends StatefulWidget {

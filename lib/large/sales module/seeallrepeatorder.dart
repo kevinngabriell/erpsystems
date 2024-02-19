@@ -6,7 +6,6 @@ import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
 import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
-import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
 import 'package:erpsystems/large/template/settingtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
