@@ -2,6 +2,7 @@
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
+import 'package:erpsystems/services/settings/paymentdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,8 @@ class _AddPaymentSettingLargeState extends State<AddPaymentSettingLarge> {
   final storage = GetStorage();
   String profileName = '';
   String companyName = '';
+
+  TextEditingController txtPaymentName = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -413,7 +416,7 @@ class _AddPaymentSettingLargeState extends State<AddPaymentSettingLarge> {
                                                       const Text('Payment Method'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
-                                                        // controller: txtTarget2031,
+                                                        controller: txtPaymentName,
                                                         decoration: InputDecoration(
                                                           enabledBorder: OutlineInputBorder(
                                                             borderSide: const BorderSide(width: 0.0),
@@ -434,93 +437,24 @@ class _AddPaymentSettingLargeState extends State<AddPaymentSettingLarge> {
                                                   child: const Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      // Text('Customer Address'),
-                                                      // SizedBox(height: 5.h,),
-                                                      // TextFormField(
-                                                      //   // controller: txtTarget2031,
-                                                      //   decoration: InputDecoration(
-                                                      //     enabledBorder: OutlineInputBorder(
-                                                      //       borderSide: const BorderSide(width: 0.0),
-                                                      //       borderRadius: BorderRadius.circular(10.0),
-                                                      //     ),
-                                                      //     focusedBorder: OutlineInputBorder(
-                                                      //       borderSide: const BorderSide(width: 0.0),
-                                                      //       borderRadius: BorderRadius.circular(10.0),
-                                                      //     ),
-                                                      //     hintText: 'PT. AXX XXXX'
-                                                      //   ),
-                                                      // ),
+                                                      
                                                     ],
                                                   )
                                                 ),
                                               ],
                                             ),
-                                            // SizedBox(height: 20.h,),
-                                            // Row(
-                                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            //   children: [
-                                            //     SizedBox(
-                                            //       width: (MediaQuery.of(context).size.width - 500)/ 2,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                                            //         children: [
-                                            //           const Text('Customer Phone Number'),
-                                            //           SizedBox(height: 5.h,),
-                                            //           TextFormField(
-                                            //             // controller: txtTarget2031,
-                                            //             decoration: InputDecoration(
-                                            //               enabledBorder: OutlineInputBorder(
-                                            //                 borderSide: const BorderSide(width: 0.0),
-                                            //                 borderRadius: BorderRadius.circular(10.0),
-                                            //               ),
-                                            //               focusedBorder: OutlineInputBorder(
-                                            //                 borderSide: const BorderSide(width: 0.0),
-                                            //                 borderRadius: BorderRadius.circular(10.0),
-                                            //               ),
-                                            //               hintText: 'PT. AXX XXXX'
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       )
-                                            //     ),
-                                            //     SizedBox(
-                                            //       width: (MediaQuery.of(context).size.width - 500)/ 2,
-                                            //       child: Column(
-                                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                                            //         children: [
-                                            //           const Text('Customer Phone Number'),
-                                            //           SizedBox(height: 5.h,),
-                                            //           TextFormField(
-                                            //             // controller: txtTarget2031,
-                                            //             decoration: InputDecoration(
-                                            //               enabledBorder: OutlineInputBorder(
-                                            //                 borderSide: const BorderSide(width: 0.0),
-                                            //                 borderRadius: BorderRadius.circular(10.0),
-                                            //               ),
-                                            //               focusedBorder: OutlineInputBorder(
-                                            //                 borderSide: const BorderSide(width: 0.0),
-                                            //                 borderRadius: BorderRadius.circular(10.0),
-                                            //               ),
-                                            //               hintText: 'PT. AXX XXXX'
-                                            //             ),
-                                            //           ),
-                                            //         ],
-                                            //       )
-                                            //     ),
-                                            //   ],
-                                            // ),
                                             SizedBox(height: 50.h,),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 ElevatedButton(
                                                   onPressed: (){
-                                                    // Get.to(AddCustomerSettingLarge());
+                                                    insertPaymentData(txtPaymentName.text, context);
                                                   }, 
                                                   style: ElevatedButton.styleFrom(
                                                     elevation: 0,
                                                     alignment: Alignment.centerLeft,
-                                                    minimumSize: Size(20.w, 35.h),
+                                                    minimumSize: Size(25.w, 40.h),
                                                     foregroundColor: Colors.white,
                                                     backgroundColor: const Color(0xFF2A85FF),
                                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

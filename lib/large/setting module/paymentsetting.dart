@@ -2,6 +2,7 @@ import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/addpaymentmethod.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
+import 'package:erpsystems/services/settings/paymentdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,15 @@ class _PaymentSettingLargeState extends State<PaymentSettingLarge> {
   final storage = GetStorage();
   String profileName = '';
   String companyName = '';
+
+  late Future<List<Map<String, dynamic>>> paymentList;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    paymentList = allPaymentData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -403,7 +413,7 @@ class _PaymentSettingLargeState extends State<PaymentSettingLarge> {
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
                                               alignment: Alignment.centerLeft,
-                                              minimumSize: Size(30.w, 35.h),
+                                              minimumSize: Size(30.w, 45.h),
                                               foregroundColor: Colors.white,
                                               backgroundColor: const Color(0xFF2A85FF),
                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -418,27 +428,40 @@ class _PaymentSettingLargeState extends State<PaymentSettingLarge> {
                                       padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
-                                        child: DataTable(
-                                          showCheckboxColumn: false,
-                                          columns: const <DataColumn> [
-                                            DataColumn(label: Text('No')),
-                                            DataColumn(label: Text('Payment Method')),
-                                          ], 
-                                          rows: <DataRow>[
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('1')),
-                                                DataCell(Text('Bank Wired Transfer')),
-                                              ],
-                                            ),
-                                            DataRow(
-                                              cells: <DataCell> [
-                                                DataCell(Text('2')),
-                                                DataCell(Text('Letter of Credit (L/C)')),
-                                              ]
-                                            ),
-                                          ],
-                                          
+                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                          future: paymentList,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                              return const Center(child: CircularProgressIndicator());
+                                            } else if (snapshot.hasError) {
+                                              return Center(child: Text('Error: ${snapshot.error}'));
+                                            } else if (snapshot.hasData) {
+                                              return DataTable(
+                                                showCheckboxColumn: false,
+                                                columns: const <DataColumn> [
+                                                  DataColumn(label: Text('No')),
+                                                  DataColumn(label: Text('Payment Name')),
+                                                ], 
+                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
+                                                  int index = entry.key + 1;
+                                                  Map<String, dynamic> payment= entry.value;
+                                                  return DataRow(
+                                                    cells: <DataCell>[
+                                                      DataCell(Text('$index')),
+                                                      DataCell(Text(payment['payment_name']))
+                                                    ],
+                                                    onSelectChanged: (selected) {
+                                                      if (selected!) {
+                                                        // Get.to(DetailCustomerSettingLarge(customer['company_id']));
+                                                      }
+                                                    },
+                                                  );
+                                                }).toList(),
+                                              );
+                                            } else {
+                                              return const Center(child: Text('No data available'));
+                                            }
+                                          }
                                         ),
                                       ),
                                     )

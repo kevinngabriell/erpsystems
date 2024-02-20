@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:erpsystems/currencyformatter.dart';
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/login.dart';
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
@@ -13,10 +14,12 @@ import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:erpsystems/services/masterservices.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class NewPurchasingImportLarge extends StatefulWidget {
   const NewPurchasingImportLarge({super.key});
@@ -37,23 +40,61 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
   String romanNumeral = '';
 
   List<Map<String, String>> listSuppliers = [];
+  List<Map<String, String>> listShipments = [];
+  List<Map<String, String>> listPayments = [];
   List<Map<String, String>> listSuppliersPICName = [];
-  String selectedSupplier = '';
   List<Map<String, String>> listTerms = [];
-  String selectedTerm = '';
   List<Map<String, String>> listOrigins = [];
   List<Map<String, String>> listOrigins1 = [];
-  String selectedOrigin = '';
+  String selectedCurrency = 'USD';
+  String temporary1 = '';
+  double totalOne = 0;
+  double totalTwo = 0;
+  double totalThree = 0;
+  double totalFour = 0;
+  double totalFive = 0;
+  double totalPrice = 0;
+
+  //Value to be inserted
+  String PONumber = '';
+  DateTime? PurchaseDate;
+  String selectedSupplier = '';
   String supplierPIC = '';
+  String selectedShipment = '';
+  String selectedTerm = '';
+  String selectedPayment = '';
+  String selectedOrigin = '';
+  TextEditingController txtProductNameOne = TextEditingController();
+  TextEditingController txtQuantityOne = TextEditingController();
+  TextEditingController txtPackagingSizeOne = TextEditingController();
+  TextEditingController txtUnitPriceOne = TextEditingController();
+  TextEditingController txtTotalOne = TextEditingController();
+  TextEditingController txtProductNameTwo = TextEditingController();
+  TextEditingController txtQuantityTwo = TextEditingController();
+  TextEditingController txtPackagingSizeTwo = TextEditingController();
+  TextEditingController txtUnitPriceTwo = TextEditingController();
+  TextEditingController txtTotalTwo = TextEditingController();
+  TextEditingController txtProductNameThree = TextEditingController();
+  TextEditingController txtQuantityThree = TextEditingController();
+  TextEditingController txtPackagingSizeThree = TextEditingController();
+  TextEditingController txtUnitPriceThree = TextEditingController();
+  TextEditingController txtTotalThree = TextEditingController();
+  TextEditingController txtProductNameFour = TextEditingController();
+  TextEditingController txtQuantityFour = TextEditingController();
+  TextEditingController txtPackagingSizeFour = TextEditingController();
+  TextEditingController txtUnitPriceFour = TextEditingController();
+  TextEditingController txtTotalFour = TextEditingController();
+  TextEditingController txtProductNameFive = TextEditingController();
+  TextEditingController txtQuantityFive = TextEditingController();
+  TextEditingController txtPackagingSizeFive = TextEditingController();
+  TextEditingController txtUnitPriceFive = TextEditingController();
+  TextEditingController txtTotalFive = TextEditingController();
+  TextEditingController txtTotalPrice = TextEditingController();
 
-  List<Item> items = [
-    Item(name: 'Item 1', quantity: 10, harga: 10000),
-    Item(name: 'Item 2', quantity: 20, harga: 10000),
-    Item(name: 'Item 3', quantity: 15, harga: 10000),
-    // Add more items as needed
-  ];
+  String formatCurrency(double value) {
+    return NumberFormat.currency(locale: 'en_US', symbol: 'USD ', decimalDigits: 2).format(value);
+  }
 
-  List<Item> selectedItems = [];
 
   String convertToRoman(int number) {
     if (number < 1 || number > 12) {
@@ -72,9 +113,87 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
     getSupplier();
     getOrigin();
     getTerm();
+    getShipping();
+    getPayment();
   }
 
   //Services
+  Future<void> getPayment() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.paymentList),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          setState(() {
+            listPayments = (data['Data'] as List)
+                .map((payment) => Map<String, String>.from(payment))
+                .toList();
+            selectedPayment = listPayments[0]['payment_id']!;
+          });
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+
+
+    } catch (e){
+      print(e);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> getShipping() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.shippingList),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          setState(() {
+            listShipments = (data['Data'] as List)
+                .map((shipment) => Map<String, String>.from(shipment))
+                .toList();
+            selectedShipment = listShipments[0]['shipment_id']!;
+          });
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+
+
+    } catch (e){
+      print(e);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   Future<void> getOrigin() async {
     try {
       setState(() {
@@ -298,7 +417,6 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     //Read session
@@ -310,6 +428,8 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
     Years2Digit = (currentYear % 100).toString();
     int currentMonth = now.month;
     romanNumeral = convertToRoman(currentMonth);
+
+    PONumber = 'VIK/$Years2Digit/$romanNumeral/0001';
 
     return MaterialApp(
       home: Scaffold(
@@ -670,12 +790,14 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                       padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 7.sp, right: 5.sp),
                                       child: Text('Purchase Order Import', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
                                     ),
+                                    //Form PO Number, Purchase Date, Supplier Data
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
+                                          //PO Number
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
@@ -683,10 +805,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                               children: [
                                                 Text('Purchase Order Number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                                 SizedBox(height: 5.h,),
-                                                Text('VIK/$Years2Digit/$romanNumeral/0001', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w600,),),
+                                                Text(PONumber, style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w600,),),
                                               ],
                                             ),
                                           ),
+                                          //Purchase Date
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
@@ -714,14 +837,14 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                   ),
                                                   onChanged: (value) {
                                                     setState(() {
-                                                      // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
-                                                      //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
+                                                      PurchaseDate = DateFormat('yyyy-MM-dd').parse(value);
                                                     });
                                                   },
                                                 )
                                               ],
                                             ),
                                           ),
+                                          //Supplier Data
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
@@ -732,7 +855,6 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                 DropdownButtonFormField<String>(
                                                   value: selectedSupplier,
                                                   decoration: InputDecoration(
-                                                    // prefixIcon: Image.asset('Icon/CalendarIcon.png'),
                                                     hintText: 'Select supplier',
                                                     enabledBorder: OutlineInputBorder(
                                                       borderSide: const BorderSide(width: 0.0),
@@ -763,12 +885,14 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                         ],
                                       ),
                                     ),
+                                    //Form Supplier PIC Name, Shipment Date, Term
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
+                                          //Supplier PIC Name
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
@@ -780,7 +904,6 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                   initialValue: supplierPIC,
                                                   readOnly: true,
                                                   decoration: InputDecoration(
-                                                    // prefixIcon: Image.asset('Icon/CalendarIcon.png'),
                                                     hintText: 'Supplier PIC',
                                                     enabledBorder: OutlineInputBorder(
                                                       borderSide: const BorderSide(width: 0.0),
@@ -795,6 +918,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                               ],
                                             ),
                                           ),
+                                          //Shipment Date
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
@@ -802,15 +926,10 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                               children: [
                                                 Text('Shipment', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                                 SizedBox(height: 5.h,),
-                                                DateTimePicker(
-                                                  dateHintText: 'Input shipment date',
-                                                  firstDate: DateTime(2023),
-                                                  lastDate: DateTime(2100),
-                                                  initialDate: DateTime.now(),
-                                                  dateMask: 'd MMM yyyy',
+                                                DropdownButtonFormField<String>(
+                                                  value: selectedShipment,
                                                   decoration: InputDecoration(
-                                                    prefixIcon: Image.asset('Icon/ShipmentIcon.png'),
-                                                    hintText: 'Input shipment date',
+                                                    hintText: 'Select shipment',
                                                     enabledBorder: OutlineInputBorder(
                                                       borderSide: const BorderSide(width: 0.0),
                                                       borderRadius: BorderRadius.circular(10.0),
@@ -820,16 +939,22 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                       borderRadius: BorderRadius.circular(10.0),
                                                     )
                                                   ),
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
-                                                      //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
-                                                    });
-                                                  },
+                                                  items: listShipments.map<DropdownMenuItem<String>>(
+                                                    (Map<String, String> shipment) {
+                                                      return DropdownMenuItem<String>(
+                                                        value: shipment['shipment_id'],
+                                                        child: Text(shipment['shipment_name']!),
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                  onChanged: (String? newValue){
+                                                    selectedShipment = newValue!;
+                                                  }
                                                 )
                                               ],
                                             ),
                                           ),
+                                          //Term
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
@@ -840,7 +965,6 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                 DropdownButtonFormField<String>(
                                                   value: selectedTerm,
                                                   decoration: InputDecoration(
-                                                    // prefixIcon: Image.asset('Icon/CalendarIcon.png'),
                                                     hintText: 'Select term',
                                                     enabledBorder: OutlineInputBorder(
                                                       borderSide: const BorderSide(width: 0.0),
@@ -869,28 +993,25 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                         ],
                                       ),
                                     ),
+                                    //Form Payment, Origin
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
+                                          //Payment
                                           SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 2,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text('Payment', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
                                                 SizedBox(height: 5.h,),
-                                                DateTimePicker(
-                                                  dateHintText: 'Input shipment date',
-                                                  firstDate: DateTime(2023),
-                                                  lastDate: DateTime(2100),
-                                                  initialDate: DateTime.now(),
-                                                  dateMask: 'd MMM yyyy',
+                                                DropdownButtonFormField<String>(
+                                                  value: selectedPayment,
                                                   decoration: InputDecoration(
-                                                    prefixIcon: Image.asset('Icon/ShipmentIcon.png'),
-                                                    hintText: 'Input payment date',
+                                                    hintText: 'Select payment',
                                                     enabledBorder: OutlineInputBorder(
                                                       borderSide: const BorderSide(width: 0.0),
                                                       borderRadius: BorderRadius.circular(10.0),
@@ -900,16 +1021,22 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                       borderRadius: BorderRadius.circular(10.0),
                                                     )
                                                   ),
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      // TanggalPulangAwal = DateFormat('yyyy-MM-dd').parse(value);
-                                                      //selectedDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(txtTanggal);
-                                                    });
-                                                  },
+                                                  items: listPayments.map<DropdownMenuItem<String>>(
+                                                    (Map<String, String> payment) {
+                                                      return DropdownMenuItem<String>(
+                                                        value: payment['payment_id'],
+                                                        child: Text(payment['payment_name']!),
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                  onChanged: (String? newValue){
+                                                    selectedPayment = newValue!;
+                                                  }
                                                 )
                                               ],
                                             ),
                                           ),
+                                          //Origin
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 149.w) / 3,
                                             child: Column(
@@ -920,7 +1047,6 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                 DropdownButtonFormField<String>(
                                                   value: selectedOrigin,
                                                   decoration: InputDecoration(
-                                                    // prefixIcon: Image.asset('Icon/CalendarIcon.png'),
                                                     hintText: 'Select origin',
                                                     enabledBorder: OutlineInputBorder(
                                                       borderSide: const BorderSide(width: 0.0),
@@ -946,18 +1072,1219 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                               ],
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                            child: const Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
+                                          //Kosong
+                                          // SizedBox(
+                                          //   width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                          //   child: const Column(
+                                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                                          //     children: [
                                                 
-                                              ],
-                                            ),
-                                          ),
+                                          //     ],
+                                          //   ),
+                                          // ),
                                         ],
                                       ),
                                     ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
+                                      child: SizedBox(
+                                        width: MediaQuery.of(context).size.width - 50.w,
+                                        child: Card(
+                                          color: const Color(0xFFF4F4F4),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 7.sp, bottom: 7.sp),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                //Product 1 #1
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    //Product Name #1
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            controller: txtProductNameOne,
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert product name',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    //Quantity #1
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            controller: txtQuantityOne,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
+                                                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert quantity (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                totalOne = double.parse(txtQuantityOne.text) * double.parse(txtUnitPriceOne.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                                totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+                                                                txtTotalOne.text = formatCurrency(totalOne);
+                                                                txtTotalPrice.text = formatCurrency(totalPrice);
+                                                              });
+                                                            }
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    //Packaging #1
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            controller: txtPackagingSizeOne,
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert packaging size (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 15.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    //Unit Price #1
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            controller: txtUnitPriceOne,
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                totalOne = double.parse(txtQuantityOne.text) * double.parse(txtUnitPriceOne.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                                totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+                                                                txtTotalOne.text = formatCurrency(totalOne);
+                                                                txtTotalPrice.text = formatCurrency(totalPrice);
+                                                              });
+                                                            },
+                                                            inputFormatters: [
+                                                              CurrencyFormatterUSD(),
+                                                            ],
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert unit price',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    //Total Price #1
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Total', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            readOnly: true,
+                                                            controller: txtTotalOne,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.digitsOnly,
+                                                              CurrencyFormatterUSD(),
+                                                            ],
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert total',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: const Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 25.h,),
+                                                Divider(),
+                                                SizedBox(height: 25.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert product name',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert quantity (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert packaging size (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 15.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert unit price',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: null,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Total', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            readOnly: true,
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert total',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: null,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: const Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          // Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: Color(0xFF787878))),
+                                                          // Text('data1'),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 25.h,),
+                                                Divider(),
+                                                SizedBox(height: 25.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert product name',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert quantity (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert packaging size (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 15.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert unit price',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: null,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Total', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            readOnly: true,
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert total',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: null,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: const Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          // Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: Color(0xFF787878))),
+                                                          // Text('data1'),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 25.h,),
+                                                Divider(),
+                                                SizedBox(height: 25.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert product name',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert quantity (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert packaging size (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 15.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert unit price',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: null,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Total', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            readOnly: true,
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert total',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: null,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: const Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          // Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: Color(0xFF787878))),
+                                                          // Text('data1'),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 25.h,),
+                                                Divider(),
+                                                SizedBox(height: 25.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert product name',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert quantity (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert packaging size (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 15.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert unit price',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: null,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Total', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            readOnly: true,
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert total',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: null,
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: const Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          // Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: Color(0xFF787878))),
+                                                          // Text('data1'),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 25.h,),
+                                                Divider(),
+                                                SizedBox(height: 25.h,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: const Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: const Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Total', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            readOnly: true,
+                                                            controller: txtTotalPrice,
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert total',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              showDialog(
+                                                                context: context, 
+                                                                builder: (_){
+                                                                  return AlertDialog(
+                                                                    title: Center(child: Text('Exchange rate calculator', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w800))),
+                                                                    content: SizedBox(
+                                                                      height: MediaQuery.of(context).size.height * 0.25,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          SizedBox(height: 15.h,),
+                                                                          Row(
+                                                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  readOnly: true,
+                                                                                  initialValue: '1',
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Insert total',
+                                                                                    enabledBorder: OutlineInputBorder(
+                                                                                      borderSide: const BorderSide(width: 0.0),
+                                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                                    ),
+                                                                                    focusedBorder: OutlineInputBorder(
+                                                                                      borderSide: const BorderSide(width: 0.0),
+                                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                                    ),
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedCurrency,
+                                                                                        onChanged: null,
+                                                                                        decoration: InputDecoration(
+                                                                                          enabledBorder: OutlineInputBorder(
+                                                                                            borderSide: BorderSide.none,
+                                                                                            borderRadius: BorderRadius.circular(4.0),
+                                                                                          ),
+                                                                                          focusedBorder: OutlineInputBorder(
+                                                                                            borderSide: BorderSide.none,
+                                                                                            borderRadius: BorderRadius.circular(4.0),
+                                                                                          )
+                                                                                        ),
+                                                                                        items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 20.w,),
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  initialValue: '15663,45',
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Exchange rate',
+                                                                                    enabledBorder: OutlineInputBorder(
+                                                                                      borderSide: const BorderSide(width: 0.0),
+                                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                                    ),
+                                                                                    focusedBorder: OutlineInputBorder(
+                                                                                      borderSide: const BorderSide(width: 0.0),
+                                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                                    ),
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: 'IDR',
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedCurrency = newValue!;
+                                                                                          });
+                                                                                        },
+                                                                                        decoration: InputDecoration(
+                                                                                          enabledBorder: OutlineInputBorder(
+                                                                                            borderSide: BorderSide.none,
+                                                                                            borderRadius: BorderRadius.circular(4.0),
+                                                                                          ),
+                                                                                          focusedBorder: OutlineInputBorder(
+                                                                                            borderSide: BorderSide.none,
+                                                                                            borderRadius: BorderRadius.circular(4.0),
+                                                                                          )
+                                                                                        ),
+                                                                                        items: ['USD', 'EUR', 'GBP', 'JPY', 'IDR'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(height: 15.h,),
+                                                                          Divider(),
+                                                                          SizedBox(height: 15.h,),
+                                                                          Row(
+                                                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Exchange rate',
+                                                                                    enabledBorder: OutlineInputBorder(
+                                                                                      borderSide: const BorderSide(width: 0.0),
+                                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                                    ),
+                                                                                    focusedBorder: OutlineInputBorder(
+                                                                                      borderSide: const BorderSide(width: 0.0),
+                                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                                    ),
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedCurrency,
+                                                                                        onChanged: null,
+                                                                                        decoration: InputDecoration(
+                                                                                          enabledBorder: OutlineInputBorder(
+                                                                                            borderSide: BorderSide.none,
+                                                                                            borderRadius: BorderRadius.circular(4.0),
+                                                                                          ),
+                                                                                          focusedBorder: OutlineInputBorder(
+                                                                                            borderSide: BorderSide.none,
+                                                                                            borderRadius: BorderRadius.circular(4.0),
+                                                                                          )
+                                                                                        ),
+                                                                                        items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 20.w,),
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  readOnly: true,
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Exchange rate',
+                                                                                    enabledBorder: OutlineInputBorder(
+                                                                                      borderSide: const BorderSide(width: 0.0),
+                                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                                    ),
+                                                                                    focusedBorder: OutlineInputBorder(
+                                                                                      borderSide: const BorderSide(width: 0.0),
+                                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                                    ),
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: 'IDR',
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedCurrency = newValue!;
+                                                                                          });
+                                                                                        },
+                                                                                        decoration: InputDecoration(
+                                                                                          enabledBorder: OutlineInputBorder(
+                                                                                            borderSide: BorderSide.none,
+                                                                                            borderRadius: BorderRadius.circular(4.0),
+                                                                                          ),
+                                                                                          focusedBorder: OutlineInputBorder(
+                                                                                            borderSide: BorderSide.none,
+                                                                                            borderRadius: BorderRadius.circular(4.0),
+                                                                                          )
+                                                                                        ),
+                                                                                        items: ['USD', 'EUR', 'GBP', 'JPY', 'IDR'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: (){
+                                                                          Get.back();
+                                                                        }, 
+                                                                        child: Text('Oke')
+                                                                      )
+                                                                    ],
+                                                                  );
+                                                                }
+                                                              );
+                                                            },
+                                                            child: Text('Exchange rate calculator', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    //color: Color(0xFFF4F4F4)
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                       child: Row(

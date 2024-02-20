@@ -10,6 +10,8 @@ class ApiEndpoints {
   static String supplierOrigin(String supplier) => '${baseUrl}master/origin/getoriginbasedonsupplier.php?supplier=$supplier';
   static String supplierPICName(String supplier) => '${baseUrl}master/supplier/getpicnamebasedonsupplier.php?supplier=$supplier';
   static String get termList => '${baseUrl}master/term/getallterm.php';
+  static String get shippingList => '${baseUrl}master/shipping/getallshipping.php';
+  static String get paymentList => '${baseUrl}master/payment/getallpayment.php';
   // Add more API endpoints as needed
 }
 
