@@ -1036,7 +1036,7 @@ class _InternalSettingLargeState extends State<InternalSettingLarge>  with Ticke
                                                                           text: 'Target : ',
                                                                           style: const TextStyle(color: Color(0xFF1A1D1F), fontWeight: FontWeight.bold),
                                                                           children: <TextSpan>[
-                                                                            TextSpan(text: '${formatCurrency(salesyear1!)} / ', style: const TextStyle(color: Color(0xFF787878), fontWeight: FontWeight.bold)),
+                                                                            TextSpan(text: '${formatCurrency(salesyear1)} / ', style: const TextStyle(color: Color(0xFF787878), fontWeight: FontWeight.bold)),
                                                                             TextSpan(text: formatCurrency(target1!), style: const TextStyle(color: Color(0xFF2A85FF), fontWeight: FontWeight.bold)),
                                                                           ],
                                                                         ),
@@ -1083,7 +1083,7 @@ class _InternalSettingLargeState extends State<InternalSettingLarge>  with Ticke
                                                                           text: 'Target : ',
                                                                           style: const TextStyle(color: Color(0xFF1A1D1F), fontWeight: FontWeight.bold),
                                                                           children: <TextSpan>[
-                                                                            TextSpan(text: '${formatCurrency(salesyear2!)} / ', style: const TextStyle(color: Color(0xFF787878), fontWeight: FontWeight.bold)),
+                                                                            TextSpan(text: '${formatCurrency(salesyear2)} / ', style: const TextStyle(color: Color(0xFF787878), fontWeight: FontWeight.bold)),
                                                                             TextSpan(text: formatCurrency(target2!), style: const TextStyle(color: Color(0xFF2A85FF), fontWeight: FontWeight.bold)),
                                                                           ],
                                                                         ),

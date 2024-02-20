@@ -1,14 +1,8 @@
 
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
-import 'package:erpsystems/large/setting%20module/currencysetting.dart';
-import 'package:erpsystems/large/setting%20module/customersettings.dart';
-import 'package:erpsystems/large/setting%20module/internalsettings.dart';
-import 'package:erpsystems/large/setting%20module/originsettings.dart';
-import 'package:erpsystems/large/setting%20module/paymentsetting.dart';
-import 'package:erpsystems/large/setting%20module/shippingsettings.dart';
-import 'package:erpsystems/large/setting%20module/suppliersettingslarge.dart';
-import 'package:erpsystems/large/setting%20module/termsetting.dart';
+import 'package:erpsystems/large/setting%20module/settingindex.dart';
+import 'package:erpsystems/services/settings/currencydataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -21,18 +15,20 @@ import '../template/hrtemplatelarge.dart';
 import '../template/warehousetemplatelarge.dart';
 
 
-class SettingIndexLarge extends StatefulWidget {
-  const SettingIndexLarge({super.key});
+class AddCurrencySettingLarge extends StatefulWidget {
+  const AddCurrencySettingLarge({super.key});
 
   @override
-  State<SettingIndexLarge> createState() => _SettingIndexLargeState();
+  State<AddCurrencySettingLarge> createState() => _AddCurrencySettingLargeState();
 }
 
-class _SettingIndexLargeState extends State<SettingIndexLarge> {
+class _AddCurrencySettingLargeState extends State<AddCurrencySettingLarge> {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
   String profileName = '';
   String companyName = '';
+
+  TextEditingController txtCurrencyName = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +37,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
     profileName = storage.read('firstName').toString();
 
     return MaterialApp(
-      title: 'Settings',
+      title: 'Payment Configuration',
       home: Scaffold(
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -370,7 +366,9 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                     //Content
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height, // Set the minimal height
+                      ),
                       decoration: const BoxDecoration(
                         color: Color(0xFFF4F4F4)
                       ),
@@ -380,194 +378,98 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Setting', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                            GestureDetector(
+                              onTap: (){
+                                Get.back();
+                              },
+                              child: Text('Currency settings', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),)
+                            ),
                             SizedBox(height: 10.h,),
-                            Card(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(12))
-                              ),
-                              color: Colors.white,
-                              child: Column(
-                                children: [
-                                  //4 Cards
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        //Customer Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(CustomerSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Customer.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Customer', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Card(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    //Add New Currency Information Title
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
+                                      child: Text('Add New Currency', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
+                                    ),
+                                    SizedBox(height: 10.h,),
+                                    //Text Form New Currency
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
+                                      child: SizedBox(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      const Text('Currency'),
+                                                      SizedBox(height: 5.h,),
+                                                      TextFormField(
+                                                        controller: txtCurrencyName,
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: 'XXXXXXX'
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ),
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 500)/ 2,
+                                                  child: const Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      
+                                                    ],
+                                                  )
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ),
-                                        //Supplier Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(SupplierSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Shipping.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Supplier', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Term Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(TermSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Payment.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Term', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Packaging Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(ShippingIndexLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Term.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Shipping', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+                                            SizedBox(height: 50.h,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: (){
+                                                    insertCurrencyData(txtCurrencyName.text, context);
+                                                  }, 
+                                                  style: ElevatedButton.styleFrom(
+                                                    elevation: 0,
+                                                    alignment: Alignment.centerLeft,
+                                                    minimumSize: Size(25.w, 40.h),
+                                                    foregroundColor: Colors.white,
+                                                    backgroundColor: const Color(0xFF2A85FF),
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                  ),
+                                                  child: Text('Submit', style: TextStyle(fontSize: 4.sp),)
+                                                )
+                                              ],
+                                            )
+                                          ],
                                         )
-                                      ],
-                                    ),
-                                  ),
-                                  //4 Cards
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        //Origin Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(OriginSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Flag.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Origin', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Internal Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(InternalSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Settings.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Internal', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Product Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(PaymentSettingLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Product.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Payment', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        //Packaging Card
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(CurrencyIndexLarge());
-                                          },
-                                          child: SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 15.h,),
-                                                  Image.asset('Icon/Packaging.png'),
-                                                  SizedBox(height: 10.h,),
-                                                  Text('Currency', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
-                                                  SizedBox(height: 15.h,),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                        
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             )
                           ],
