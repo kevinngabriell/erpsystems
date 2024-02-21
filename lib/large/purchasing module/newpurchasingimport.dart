@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:erpsystems/currencyformatter.dart';
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/login.dart';
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
@@ -13,6 +12,7 @@ import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:erpsystems/services/masterservices.dart';
+import 'package:erpsystems/services/settings/companydataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,7 +38,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
   bool isLoading = false;
   String Years2Digit = '';
   String romanNumeral = '';
-
+  String permissionAccess = '';
   List<Map<String, String>> listSuppliers = [];
   List<Map<String, String>> listShipments = [];
   List<Map<String, String>> listPayments = [];
@@ -47,6 +47,9 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
   List<Map<String, String>> listOrigins = [];
   List<Map<String, String>> listOrigins1 = [];
   String selectedCurrency = 'USD';
+  String selectedExchangeCurrency = 'IDR';
+  String selectedWeightUnit = 'Pounds';
+  String selectedTargetWeightUnit = 'Kilograms';
   String temporary1 = '';
   double totalOne = 0;
   double totalTwo = 0;
@@ -54,6 +57,13 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
   double totalFour = 0;
   double totalFive = 0;
   double totalPrice = 0;
+  TextEditingController txtExchangeValueThree = TextEditingController();
+  TextEditingController txtExchangeValueOne = TextEditingController(text: '15663.45');
+  TextEditingController txtExchangeValueTwo = TextEditingController();
+  TextEditingController txtWeightValue = TextEditingController();
+  TextEditingController txtWeightResult = TextEditingController();
+  String shouldMentionOne = '';
+  String shouldMentionTwo = '';
 
   //Value to be inserted
   String PONumber = '';
@@ -92,9 +102,30 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
   TextEditingController txtTotalPrice = TextEditingController();
 
   String formatCurrency(double value) {
-    return NumberFormat.currency(locale: 'en_US', symbol: 'USD ', decimalDigits: 2).format(value);
+    return NumberFormat.currency(locale: 'en_US', decimalDigits: 2, symbol: '').format(value);
   }
 
+  String formatThousand(double value) {
+    return NumberFormat.currency(locale: 'en_US', decimalDigits: 2, symbol: '').format(value);
+  }
+
+  // Function to convert weight
+  double convertWeight(double value, String fromUnit, String toUnit) {
+    if (fromUnit == 'Pounds' && toUnit == 'Kilograms') {
+      return value * 0.453592;
+    } else if (fromUnit == 'Ounces' && toUnit == 'Grams') {
+      return value * 28.3495;
+    } else if (fromUnit == 'Gallons' && toUnit == 'Liters') {
+      return value * 3.78541;
+    } else {
+      return value; // Default to no conversion
+    }
+  }
+
+  // Function to format the weight
+  String formatWeight(double weight) {
+    return weight.toStringAsFixed(2);
+  }
 
   String convertToRoman(int number) {
     if (number < 1 || number > 12) {
@@ -422,6 +453,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
     //Read session
     companyName = storage.read('companyName').toString();
     profileName = storage.read('firstName').toString();
+    permissionAccess = storage.read('permissionAccess').toString();
 
     DateTime now = DateTime.now();
     int currentYear = now.year;
@@ -1085,12 +1117,13 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                         ],
                                       ),
                                     ),
+                                    //Product 1-5
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width - 50.w,
                                         child: Card(
-                                          color: const Color(0xFFF4F4F4),
+                                          color: Colors.white,
                                           child: Padding(
                                             padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 7.sp, bottom: 7.sp),
                                             child: Column(
@@ -1121,7 +1154,9 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
@@ -1138,7 +1173,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                             inputFormatters: [
                                                               FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
                                                             ],
-                                                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert quantity (Kg)',
                                                               enabledBorder: OutlineInputBorder(
@@ -1158,6 +1193,155 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 txtTotalPrice.text = formatCurrency(totalPrice);
                                                               });
                                                             }
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              // Change the AlertDialog title
+                                                              showDialog(
+                                                                context: context,
+                                                                builder: (_) {
+                                                                  return AlertDialog(
+                                                                    title: Center(
+                                                                      child: Text(
+                                                                        'Weight Converter',
+                                                                        style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600)
+                                                                      ),
+                                                                    ),
+                                                                    content: SizedBox(
+                                                                      height: MediaQuery.of(context).size.height * 0.25,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 1
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  readOnly: true,
+                                                                                  initialValue: '1',
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Insert weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 20.w),
+                                                                              // 2
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      double result = convertWeight(double.parse(value), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                      txtWeightResult.text = formatWeight(result);
+                                                                                    });
+                                                                                  },
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Enter weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(height: 15.h),
+                                                                          const Divider(),
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 3
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightResult,
+                                                                                  readOnly: true,
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Converted weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedTargetWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedTargetWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for target weight units
+                                                                                        items: ['Kilograms', 'Grams', 'Liters'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: () {
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                        child: const Text('Ok'),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Text('Weight calculator', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                           )
                                                         ],
                                                       ),
@@ -1172,6 +1356,9 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
                                                             controller: txtPackagingSizeOne,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert packaging size (Kg)',
                                                               enabledBorder: OutlineInputBorder(
@@ -1183,13 +1370,16 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                                 SizedBox(height: 15.h,),
+                                                 //Product 1 #2
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
@@ -1205,14 +1395,27 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                             controller: txtUnitPriceOne,
                                                             onChanged: (value){
                                                               setState(() {
-                                                                totalOne = double.parse(txtQuantityOne.text) * double.parse(txtUnitPriceOne.text.replaceAll(RegExp(r'[^0-9.]'), ''));
-                                                                totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
-                                                                txtTotalOne.text = formatCurrency(totalOne);
-                                                                txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                double unitPrice = double.parse(value.replaceAll(',', ''));
+
+                                                                if(txtQuantityOne.text.isEmpty == true || txtQuantityOne.text == ''){
+                                                                  txtQuantityOne.text = '1';
+                                                                  totalOne = double.parse(txtQuantityOne.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalOne.text = formatCurrency(totalOne);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                } else {
+                                                                  totalOne = double.parse(txtQuantityOne.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalOne.text = formatCurrency(totalOne);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                }
+
                                                               });
                                                             },
                                                             inputFormatters: [
-                                                              CurrencyFormatterUSD(),
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}(,\d{3})*')),
                                                             ],
                                                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                             decoration: InputDecoration(
@@ -1224,6 +1427,33 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderSide: const BorderSide(width: 0.0),
                                                                 borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
                                                               ),
                                                             ),
                                                           )
@@ -1241,96 +1471,294 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           TextFormField(
                                                             readOnly: true,
                                                             controller: txtTotalOne,
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert total price',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: const Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    
+                                                  ],
+                                                ),
+                                                SizedBox(height: 25.h,),
+                                                const Divider(),
+                                                SizedBox(height: 25.h,),
+                                                //Product 2 #1
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    //Product Name #2
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            controller: txtProductNameTwo,
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert product name',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    //Quantity #2
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            controller: txtQuantityTwo,
                                                             inputFormatters: [
-                                                              FilteringTextInputFormatter.digitsOnly,
-                                                              CurrencyFormatterUSD(),
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                            decoration: InputDecoration(
+                                                              hintText: 'Insert quantity (Kg)',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: const BorderSide(width: 0.0),
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              )
+                                                            ),
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                totalTwo = double.parse(txtQuantityTwo.text) * double.parse(txtUnitPriceTwo.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                                totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+                                                                txtTotalTwo.text = formatCurrency(totalTwo);
+                                                                txtTotalPrice.text = formatCurrency(totalPrice);
+                                                              });
+                                                            }
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              // Change the AlertDialog title
+                                                              showDialog(
+                                                                context: context,
+                                                                builder: (_) {
+                                                                  return AlertDialog(
+                                                                    title: Center(
+                                                                      child: Text(
+                                                                        'Weight Converter',
+                                                                        style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600)
+                                                                      ),
+                                                                    ),
+                                                                    content: SizedBox(
+                                                                      height: MediaQuery.of(context).size.height * 0.25,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 1
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  readOnly: true,
+                                                                                  initialValue: '1',
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Insert weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 20.w),
+                                                                              // 2
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      double result = convertWeight(double.parse(value), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                      txtWeightResult.text = formatWeight(result);
+                                                                                    });
+                                                                                  },
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Enter weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(height: 15.h),
+                                                                          const Divider(),
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 3
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightResult,
+                                                                                  readOnly: true,
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Converted weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedTargetWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedTargetWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for target weight units
+                                                                                        items: ['Kilograms', 'Grams', 'Liters'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: () {
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                        child: const Text('Ok'),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Text('Weight calculator', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    //Packaging Size #2
+                                                    SizedBox(
+                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
+                                                          SizedBox(height: 5.h,),
+                                                          TextFormField(
+                                                            controller: txtPackagingSizeTwo,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
                                                             ],
                                                             decoration: InputDecoration(
-                                                              hintText: 'Insert total',
-                                                              enabledBorder: OutlineInputBorder(
-                                                                borderSide: const BorderSide(width: 0.0),
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                              ),
-                                                              focusedBorder: OutlineInputBorder(
-                                                                borderSide: const BorderSide(width: 0.0),
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
-                                                      child: const Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 25.h,),
-                                                Divider(),
-                                                SizedBox(height: 25.h,),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
-                                                          SizedBox(height: 5.h,),
-                                                          TextFormField(
-                                                            decoration: InputDecoration(
-                                                              hintText: 'Insert product name',
-                                                              enabledBorder: OutlineInputBorder(
-                                                                borderSide: const BorderSide(width: 0.0),
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                              ),
-                                                              focusedBorder: OutlineInputBorder(
-                                                                borderSide: const BorderSide(width: 0.0),
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                              )
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
-                                                          SizedBox(height: 5.h,),
-                                                          TextFormField(
-                                                            decoration: InputDecoration(
-                                                              hintText: 'Insert quantity (Kg)',
-                                                              enabledBorder: OutlineInputBorder(
-                                                                borderSide: const BorderSide(width: 0.0),
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                              ),
-                                                              focusedBorder: OutlineInputBorder(
-                                                                borderSide: const BorderSide(width: 0.0),
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                              )
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: (MediaQuery.of(context).size.width - 140.w) / 3,
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
-                                                          SizedBox(height: 5.h,),
-                                                          TextFormField(
-                                                            decoration: InputDecoration(
                                                               hintText: 'Insert packaging size (Kg)',
                                                               enabledBorder: OutlineInputBorder(
                                                                 borderSide: const BorderSide(width: 0.0),
@@ -1341,16 +1769,20 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                                 SizedBox(height: 15.h,),
+                                                //Product 2 #2
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
+                                                    //Unit Price #2
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1359,6 +1791,32 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtUnitPriceTwo,
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                double unitPrice = double.parse(value.replaceAll(',', ''));
+
+                                                                if(txtQuantityTwo.text.isEmpty == true || txtQuantityTwo.text == ''){
+                                                                  txtQuantityTwo.text = '1';
+                                                                  totalTwo = double.parse(txtQuantityTwo.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalTwo.text = formatCurrency(totalTwo);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                } else {
+                                                                  totalTwo = double.parse(txtQuantityTwo.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalTwo.text = formatCurrency(totalTwo);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                }
+
+                                                              });
+                                                            },
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}(,\d{3})*')),
+                                                            ],
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert unit price',
                                                               enabledBorder: OutlineInputBorder(
@@ -1373,7 +1831,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 width: 25.w,
                                                                 child: DropdownButtonFormField<String>(
                                                                   value: selectedCurrency,
-                                                                  onChanged: null,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
                                                                   decoration: InputDecoration(
                                                                     enabledBorder: OutlineInputBorder(
                                                                       borderSide: BorderSide.none,
@@ -1397,6 +1859,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                         ],
                                                       ),
                                                     ),
+                                                    //Total #2
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1406,6 +1869,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
                                                             readOnly: true,
+                                                            controller: txtTotalTwo,
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert total',
                                                               enabledBorder: OutlineInputBorder(
@@ -1420,7 +1884,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 width: 25.w,
                                                                 child: DropdownButtonFormField<String>(
                                                                   value: selectedCurrency,
-                                                                  onChanged: null,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
                                                                   decoration: InputDecoration(
                                                                     enabledBorder: OutlineInputBorder(
                                                                       borderSide: BorderSide.none,
@@ -1457,11 +1925,13 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                   ],
                                                 ),
                                                 SizedBox(height: 25.h,),
-                                                Divider(),
+                                                const Divider(),
                                                 SizedBox(height: 25.h,),
+                                                //Product 3 #1
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
+                                                    //Product Name #3
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1470,6 +1940,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtProductNameThree,
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert product name',
                                                               enabledBorder: OutlineInputBorder(
@@ -1481,10 +1952,13 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
+                                                    //Quantity #3
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1493,6 +1967,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtQuantityThree,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert quantity (Kg)',
                                                               enabledBorder: OutlineInputBorder(
@@ -1504,10 +1983,168 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                totalThree = double.parse(txtQuantityThree.text) * double.parse(txtUnitPriceThree.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                                totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+                                                                txtTotalThree.text = formatCurrency(totalThree);
+                                                                txtTotalPrice.text = formatCurrency(totalPrice);
+                                                              });
+                                                            }
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              // Change the AlertDialog title
+                                                              showDialog(
+                                                                context: context,
+                                                                builder: (_) {
+                                                                  return AlertDialog(
+                                                                    title: Center(
+                                                                      child: Text(
+                                                                        'Weight Converter',
+                                                                        style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600)
+                                                                      ),
+                                                                    ),
+                                                                    content: SizedBox(
+                                                                      height: MediaQuery.of(context).size.height * 0.25,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 1
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  readOnly: true,
+                                                                                  initialValue: '1',
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Insert weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 20.w),
+                                                                              // 2
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      double result = convertWeight(double.parse(value), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                      txtWeightResult.text = formatWeight(result);
+                                                                                    });
+                                                                                  },
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Enter weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(height: 15.h),
+                                                                          const Divider(),
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 3
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightResult,
+                                                                                  readOnly: true,
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Converted weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedTargetWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedTargetWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for target weight units
+                                                                                        items: ['Kilograms', 'Grams', 'Liters'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: () {
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                        child: const Text('Ok'),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Text('Weight calculator', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                           )
                                                         ],
                                                       ),
                                                     ),
+                                                    //Packaging Size #3
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1516,6 +2153,10 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtPackagingSizeThree,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert packaging size (Kg)',
                                                               enabledBorder: OutlineInputBorder(
@@ -1527,16 +2168,20 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                                 SizedBox(height: 15.h,),
+                                                //Product 3 #2
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
+                                                    //Unit Price #3
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1545,6 +2190,32 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtUnitPriceThree,
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                double unitPrice = double.parse(value.replaceAll(',', ''));
+
+                                                                if(txtQuantityThree.text.isEmpty == true || txtQuantityThree.text == ''){
+                                                                  txtQuantityThree.text = '1';
+                                                                  totalThree = double.parse(txtQuantityThree.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalThree.text = formatCurrency(totalThree);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                } else {
+                                                                  totalThree = double.parse(txtQuantityThree.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalThree.text = formatCurrency(totalThree);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                }
+
+                                                              });
+                                                            },
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}(,\d{3})*')),
+                                                            ],
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert unit price',
                                                               enabledBorder: OutlineInputBorder(
@@ -1559,7 +2230,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 width: 25.w,
                                                                 child: DropdownButtonFormField<String>(
                                                                   value: selectedCurrency,
-                                                                  onChanged: null,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
                                                                   decoration: InputDecoration(
                                                                     enabledBorder: OutlineInputBorder(
                                                                       borderSide: BorderSide.none,
@@ -1583,6 +2258,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                         ],
                                                       ),
                                                     ),
+                                                    //Total Price #3
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1592,6 +2268,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
                                                             readOnly: true,
+                                                            controller: txtTotalThree,
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert total',
                                                               enabledBorder: OutlineInputBorder(
@@ -1606,7 +2283,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 width: 25.w,
                                                                 child: DropdownButtonFormField<String>(
                                                                   value: selectedCurrency,
-                                                                  onChanged: null,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
                                                                   decoration: InputDecoration(
                                                                     enabledBorder: OutlineInputBorder(
                                                                       borderSide: BorderSide.none,
@@ -1643,11 +2324,13 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                   ],
                                                 ),
                                                 SizedBox(height: 25.h,),
-                                                Divider(),
+                                                const Divider(),
                                                 SizedBox(height: 25.h,),
+                                                //Product 4 #1
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
+                                                    //Product Name #4
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1656,6 +2339,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtProductNameFour,
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert product name',
                                                               enabledBorder: OutlineInputBorder(
@@ -1667,10 +2351,13 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
+                                                    //Quantity #4
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1679,6 +2366,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtQuantityFour,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert quantity (Kg)',
                                                               enabledBorder: OutlineInputBorder(
@@ -1690,10 +2382,168 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                totalFour = double.parse(txtQuantityFour.text) * double.parse(txtUnitPriceFour.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                                totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+                                                                txtTotalFour.text = formatCurrency(totalFour);
+                                                                txtTotalPrice.text = formatCurrency(totalPrice);
+                                                              });
+                                                            }
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              // Change the AlertDialog title
+                                                              showDialog(
+                                                                context: context,
+                                                                builder: (_) {
+                                                                  return AlertDialog(
+                                                                    title: Center(
+                                                                      child: Text(
+                                                                        'Weight Converter',
+                                                                        style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600)
+                                                                      ),
+                                                                    ),
+                                                                    content: SizedBox(
+                                                                      height: MediaQuery.of(context).size.height * 0.25,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 1
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  readOnly: true,
+                                                                                  initialValue: '1',
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Insert weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 20.w),
+                                                                              // 2
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      double result = convertWeight(double.parse(value), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                      txtWeightResult.text = formatWeight(result);
+                                                                                    });
+                                                                                  },
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Enter weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(height: 15.h),
+                                                                          const Divider(),
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 3
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightResult,
+                                                                                  readOnly: true,
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Converted weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedTargetWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedTargetWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for target weight units
+                                                                                        items: ['Kilograms', 'Grams', 'Liters'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: () {
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                        child: const Text('Ok'),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Text('Weight calculator', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                           )
                                                         ],
                                                       ),
                                                     ),
+                                                    //Packaging Size #4
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1702,6 +2552,10 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtPackagingSizeFour,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert packaging size (Kg)',
                                                               enabledBorder: OutlineInputBorder(
@@ -1713,16 +2567,20 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                                 SizedBox(height: 15.h,),
+                                                //Product 4 #2
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
+                                                    //Unit Price #4
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1731,6 +2589,32 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtUnitPriceFour,
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                double unitPrice = double.parse(value.replaceAll(',', ''));
+
+                                                                if(txtQuantityFour.text.isEmpty == true || txtQuantityFour.text == ''){
+                                                                  txtQuantityFour.text = '1';
+                                                                  totalFour = double.parse(txtQuantityFour.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalFour.text = formatCurrency(totalFour);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                } else {
+                                                                  totalFour = double.parse(txtQuantityFour.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalFour.text = formatCurrency(totalFour);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                }
+
+                                                              });
+                                                            },
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}(,\d{3})*')),
+                                                            ],
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert unit price',
                                                               enabledBorder: OutlineInputBorder(
@@ -1745,7 +2629,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 width: 25.w,
                                                                 child: DropdownButtonFormField<String>(
                                                                   value: selectedCurrency,
-                                                                  onChanged: null,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
                                                                   decoration: InputDecoration(
                                                                     enabledBorder: OutlineInputBorder(
                                                                       borderSide: BorderSide.none,
@@ -1769,6 +2657,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                         ],
                                                       ),
                                                     ),
+                                                    //Total Price #4
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1778,6 +2667,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
                                                             readOnly: true,
+                                                            controller: txtTotalFour,
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert total',
                                                               enabledBorder: OutlineInputBorder(
@@ -1792,7 +2682,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 width: 25.w,
                                                                 child: DropdownButtonFormField<String>(
                                                                   value: selectedCurrency,
-                                                                  onChanged: null,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
                                                                   decoration: InputDecoration(
                                                                     enabledBorder: OutlineInputBorder(
                                                                       borderSide: BorderSide.none,
@@ -1829,11 +2723,13 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                   ],
                                                 ),
                                                 SizedBox(height: 25.h,),
-                                                Divider(),
+                                                const Divider(),
                                                 SizedBox(height: 25.h,),
+                                                //Product 5 #1
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
+                                                    //Product Name #5
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1842,6 +2738,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Product Name', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtProductNameFive,
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert product name',
                                                               enabledBorder: OutlineInputBorder(
@@ -1853,10 +2750,13 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
+                                                    //Quantity #5
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1865,6 +2765,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Quantity (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtQuantityFive,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
+                                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert quantity (Kg)',
                                                               enabledBorder: OutlineInputBorder(
@@ -1876,10 +2781,160 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              // Change the AlertDialog title
+                                                              showDialog(
+                                                                context: context,
+                                                                builder: (_) {
+                                                                  return AlertDialog(
+                                                                    title: Center(
+                                                                      child: Text(
+                                                                        'Weight Converter',
+                                                                        style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600)
+                                                                      ),
+                                                                    ),
+                                                                    content: SizedBox(
+                                                                      height: MediaQuery.of(context).size.height * 0.25,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 1
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  readOnly: true,
+                                                                                  initialValue: '1',
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Insert weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(width: 20.w),
+                                                                              // 2
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightValue,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      double result = convertWeight(double.parse(value), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                      txtWeightResult.text = formatWeight(result);
+                                                                                    });
+                                                                                  },
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Enter weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for weight units
+                                                                                        items: ['Pounds', 'Ounces', 'Gallons'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(height: 15.h),
+                                                                          const Divider(),
+                                                                          SizedBox(height: 15.h),
+                                                                          Row(
+                                                                            children: [
+                                                                              // 3
+                                                                              SizedBox(
+                                                                                width: 100.w,
+                                                                                child: TextFormField(
+                                                                                  controller: txtWeightResult,
+                                                                                  readOnly: true,
+                                                                                  decoration: InputDecoration(
+                                                                                    hintText: 'Converted weight',
+                                                                                    // Update the prefixIcon DropdownButtonFormField items
+                                                                                    prefixIcon: SizedBox(
+                                                                                      width: 25.w,
+                                                                                      child: DropdownButtonFormField<String>(
+                                                                                        value: selectedTargetWeightUnit,
+                                                                                        onChanged: (newValue) {
+                                                                                          setState(() {
+                                                                                            selectedTargetWeightUnit = newValue!;
+                                                                                            double result = convertWeight(double.parse(txtWeightValue.text), selectedWeightUnit, selectedTargetWeightUnit);
+                                                                                            txtWeightResult.text = formatWeight(result);
+                                                                                          });
+                                                                                        },
+                                                                                        // Update the items for target weight units
+                                                                                        items: ['Kilograms', 'Grams', 'Liters'].map<DropdownMenuItem<String>>((String value) {
+                                                                                          return DropdownMenuItem<String>(
+                                                                                            value: value,
+                                                                                            child: Text(value),
+                                                                                          );
+                                                                                        }).toList(),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: () {
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                        child: const Text('Ok'),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Text('Weight calculator', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                           )
                                                         ],
                                                       ),
                                                     ),
+                                                    //Packaging Size #5
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1888,6 +2943,10 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Packaging size (Kg)', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtPackagingSizeFive,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,3}')),
+                                                            ],
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert packaging size (Kg)',
                                                               enabledBorder: OutlineInputBorder(
@@ -1899,16 +2958,20 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
-                                                          )
+                                                          ),
+                                                          SizedBox(height: 3.h,),
+                                                          Text(' ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w600, color: const Color(0xFF2A85FF)))
                                                         ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                                 SizedBox(height: 15.h,),
+                                                //Product 5 #2
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
+                                                    //Unit Price #5
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1917,6 +2980,28 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           Text('Unit price', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600, color: const Color(0xFF787878))),
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
+                                                            controller: txtUnitPriceFive,
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                double unitPrice = double.parse(value.replaceAll(',', ''));
+
+                                                                if(txtQuantityFive.text.isEmpty == true || txtQuantityFive.text == ''){
+                                                                  txtQuantityFive.text = '1';
+                                                                  totalFive = double.parse(txtQuantityFive.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalFive.text = formatCurrency(totalFive);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                } else {
+                                                                  totalFive = double.parse(txtQuantityFive.text) * unitPrice;
+                                                                  totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+
+                                                                  txtTotalFive.text = formatCurrency(totalFive);
+                                                                  txtTotalPrice.text = formatCurrency(totalPrice);
+                                                                }
+
+                                                              });
+                                                            },
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert unit price',
                                                               enabledBorder: OutlineInputBorder(
@@ -1931,7 +3016,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 width: 25.w,
                                                                 child: DropdownButtonFormField<String>(
                                                                   value: selectedCurrency,
-                                                                  onChanged: null,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
                                                                   decoration: InputDecoration(
                                                                     enabledBorder: OutlineInputBorder(
                                                                       borderSide: BorderSide.none,
@@ -1955,6 +3044,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                         ],
                                                       ),
                                                     ),
+                                                    //Total Price #5
                                                     SizedBox(
                                                       width: (MediaQuery.of(context).size.width - 140.w) / 3,
                                                       child: Column(
@@ -1964,6 +3054,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                           SizedBox(height: 5.h,),
                                                           TextFormField(
                                                             readOnly: true,
+                                                            controller: txtTotalFive,
                                                             decoration: InputDecoration(
                                                               hintText: 'Insert total',
                                                               enabledBorder: OutlineInputBorder(
@@ -1978,7 +3069,11 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 width: 25.w,
                                                                 child: DropdownButtonFormField<String>(
                                                                   value: selectedCurrency,
-                                                                  onChanged: null,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
                                                                   decoration: InputDecoration(
                                                                     enabledBorder: OutlineInputBorder(
                                                                       borderSide: BorderSide.none,
@@ -2015,8 +3110,9 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                   ],
                                                 ),
                                                 SizedBox(height: 25.h,),
-                                                Divider(),
+                                                const Divider(),
                                                 SizedBox(height: 25.h,),
+                                                //Row for Total Price
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
@@ -2058,11 +3154,42 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderSide: const BorderSide(width: 0.0),
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               ),
+                                                              prefixIcon: SizedBox(
+                                                                width: 25.w,
+                                                                child: DropdownButtonFormField<String>(
+                                                                  value: selectedCurrency,
+                                                                  onChanged: (newValue) {
+                                                                    setState(() {
+                                                                      selectedCurrency = newValue!;
+                                                                    });
+                                                                  },
+                                                                  decoration: InputDecoration(
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide.none,
+                                                                      borderRadius: BorderRadius.circular(4.0),
+                                                                    )
+                                                                  ),
+                                                                  items: ['USD', 'EUR', 'GBP', 'JPY', 'IDR'].map<DropdownMenuItem<String>>((String value) {
+                                                                    return DropdownMenuItem<String>(
+                                                                      value: value,
+                                                                      child: Text(value),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                           SizedBox(height: 3.h,),
+                                                          //Exhange Rate Button
                                                           GestureDetector(
                                                             onTap: () {
+                                                              txtExchangeValueTwo.text = formatCurrency(totalPrice);
+                                                              double result = double.parse(txtExchangeValueOne.text) * double.parse(txtExchangeValueTwo.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                              txtExchangeValueThree.text = formatCurrency(result);
                                                               showDialog(
                                                                 context: context, 
                                                                 builder: (_){
@@ -2076,6 +3203,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                           Row(
                                                                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                             children: [
+                                                                              // 1
                                                                               SizedBox(
                                                                                 width: 100.w,
                                                                                 child: TextFormField(
@@ -2118,10 +3246,17 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                                 ),
                                                                               ),
                                                                               SizedBox(width: 20.w,),
+                                                                              // 2
                                                                               SizedBox(
                                                                                 width: 100.w,
                                                                                 child: TextFormField(
-                                                                                  initialValue: '15663,45',
+                                                                                  controller: txtExchangeValueOne,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      double result = double.parse(txtExchangeValueOne.text) * double.parse(txtExchangeValueTwo.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                                                      txtExchangeValueThree.text = formatCurrency(result);
+                                                                                    });
+                                                                                  },
                                                                                   decoration: InputDecoration(
                                                                                     hintText: 'Exchange rate',
                                                                                     enabledBorder: OutlineInputBorder(
@@ -2135,10 +3270,10 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                                     prefixIcon: SizedBox(
                                                                                       width: 25.w,
                                                                                       child: DropdownButtonFormField<String>(
-                                                                                        value: 'IDR',
+                                                                                        value: selectedExchangeCurrency,
                                                                                         onChanged: (newValue) {
                                                                                           setState(() {
-                                                                                            selectedCurrency = newValue!;
+                                                                                            selectedExchangeCurrency = newValue!;
                                                                                           });
                                                                                         },
                                                                                         decoration: InputDecoration(
@@ -2165,14 +3300,22 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                             ],
                                                                           ),
                                                                           SizedBox(height: 15.h,),
-                                                                          Divider(),
+                                                                          const Divider(),
                                                                           SizedBox(height: 15.h,),
                                                                           Row(
                                                                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                             children: [
+                                                                              //3
                                                                               SizedBox(
                                                                                 width: 100.w,
                                                                                 child: TextFormField(
+                                                                                  controller: txtExchangeValueTwo,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {
+                                                                                      double result = double.parse(txtExchangeValueOne.text) * double.parse(txtExchangeValueTwo.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                                                      txtExchangeValueThree.text = formatCurrency(result);
+                                                                                    });
+                                                                                  },
                                                                                   decoration: InputDecoration(
                                                                                     hintText: 'Exchange rate',
                                                                                     enabledBorder: OutlineInputBorder(
@@ -2214,6 +3357,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                                 width: 100.w,
                                                                                 child: TextFormField(
                                                                                   readOnly: true,
+                                                                                  controller: txtExchangeValueThree,
                                                                                   decoration: InputDecoration(
                                                                                     hintText: 'Exchange rate',
                                                                                     enabledBorder: OutlineInputBorder(
@@ -2227,10 +3371,10 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                                     prefixIcon: SizedBox(
                                                                                       width: 25.w,
                                                                                       child: DropdownButtonFormField<String>(
-                                                                                        value: 'IDR',
+                                                                                        value: selectedExchangeCurrency,
                                                                                         onChanged: (newValue) {
                                                                                           setState(() {
-                                                                                            selectedCurrency = newValue!;
+                                                                                            selectedExchangeCurrency = newValue!;
                                                                                           });
                                                                                         },
                                                                                         decoration: InputDecoration(
@@ -2264,7 +3408,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                         onPressed: (){
                                                                           Get.back();
                                                                         }, 
-                                                                        child: Text('Oke')
+                                                                        child: const Text('Oke')
                                                                       )
                                                                     ],
                                                                   );
@@ -2284,20 +3428,44 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                         ),
                                       ),
                                     ),
-                                    //color: Color(0xFFF4F4F4)
+                                    //Mention and Remarks
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
+                                          //Should Mention
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                            child: const Column(
+                                            child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [],
+                                              children: [
+                                                Text('Should mention name : ', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                                SizedBox(height: 5.h,),
+                                                FutureBuilder(
+                                                  future: CompanyDataService(companyId),
+                                                  builder: (context, snapshot){
+                                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                                      return const CircularProgressIndicator();
+                                                    } else if (snapshot.hasError) {
+                                                      return Text('Error: ${snapshot.error}');
+                                                    } else {
+                                                      Map<String, dynamic> apiResponse = snapshot.data!;
+                                                      List<dynamic> data = apiResponse['Data'];
+                                                      CompanyData company = CompanyData.fromJson(data[0]);
+
+                                                      shouldMentionOne = company.companyName;
+                                                      shouldMentionTwo = company.companyAddress;
+
+                                                      return Text('$shouldMentionOne\n$shouldMentionTwo', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w700,));
+                                                    }
+                                                  }
+                                                )
+                                              ],
                                             ),
                                           ),
+                                          //Shipping Remarks
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
@@ -2322,6 +3490,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                               ],
                                             ),
                                           ),
+                                          //Remarks
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
                                             child: Column(
@@ -2350,6 +3519,119 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                       ),
                                     ),
                                   ],
+                                ),
+                              ),
+                              SizedBox(height: 10.h,),
+                              Card(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(12))
+                                ),
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 8.sp, bottom: 8.sp, left: 5.sp, right: 5.sp),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: (){
+                                  
+                                        }, 
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          alignment: Alignment.center,
+                                          minimumSize: Size(60.w, 55.h),
+                                          foregroundColor: const Color(0xFF2A85FF),
+                                          backgroundColor: Colors.transparent,
+                                          side: const BorderSide(
+                                            color: Color(0xFF2A85FF), // Choose your desired border color
+                                            width: 1.0, // Choose the border width
+                                          ),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                        ),
+                                        child: Text('Export to PDF')
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: (){
+                                          if(permissionAccess == 'Full access'){
+
+                                          } else {
+                                            showDialog(
+                                              context: context, 
+                                              builder: (_){
+                                                return AlertDialog(
+                                                  title: Text('Error'),
+                                                  content: Text('Anda tidak memiliki akses'),
+                                                );
+                                              }
+                                            );
+                                          }
+                                        }, 
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          alignment: Alignment.center,
+                                          minimumSize: Size(60.w, 55.h),
+                                          foregroundColor: const Color(0xFF1F9F61),
+                                          backgroundColor: Colors.transparent,
+                                          side: const BorderSide(
+                                            color: Color(0xFF1F9F61), // Choose your desired border color
+                                            width: 1.0, // Choose the border width
+                                          ),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                        ),
+                                        child: Center(
+                                          child: Text('Approve')
+                                        )
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: (){
+                                          if(permissionAccess == 'Full access'){
+
+                                          } else {
+                                            showDialog(
+                                              context: context, 
+                                              builder: (_){
+                                                return AlertDialog(
+                                                  title: Text('Error'),
+                                                  content: Text('Anda tidak memiliki akses'),
+                                                );
+                                              }
+                                            );
+                                          }
+                                        }, 
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          alignment: Alignment.center,
+                                          minimumSize: Size(60.w, 55.h),
+                                          foregroundColor: const Color(0xFFE47E7E),
+                                          backgroundColor: Colors.transparent,
+                                          side: const BorderSide(
+                                            color: Color(0xFFE47E7E), // Choose your desired border color
+                                            width: 1.0, // Choose the border width
+                                          ),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                        ),
+                                        child: Center(
+                                          child: Text('Reject')
+                                        )
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: (){
+                                  
+                                        }, 
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          alignment: Alignment.center,
+                                          minimumSize: Size(60.w, 55.h),
+                                          foregroundColor: const Color(0xFFFFFFFF),
+                                          backgroundColor: const Color(0xFF2A85FF),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                        ),
+                                        child: Center(
+                                          child: Text('Submit')
+                                        )
+                                      )
+                                    ],
+                                  ),
                                 ),
                               )
                             ],

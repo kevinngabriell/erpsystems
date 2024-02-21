@@ -61,14 +61,43 @@ class ThousandsSeparatorInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    // Use NumberFormat to format the input with commas
-    final format = NumberFormat.decimalPattern();
+    // Extract the numeric part of the input (removing commas, symbols, etc.)
+    String numericText = newValue.text.replaceAll(RegExp(r'[^\d.]'), '');
 
-    String newText = format.format(double.parse(newValue.text.replaceAll(",", "")));
+    // Parse the input value to double, handling empty string as well
+    double value = double.tryParse(numericText) ?? 0.0;
 
-    return newValue.copyWith(
-      text: newText,
-      selection: TextSelection.collapsed(offset: newText.length),
+    // Format the double value as currency without the symbol
+    String formattedText = NumberFormat.currency(locale: 'en_US', decimalDigits: 2, symbol: '').format(value);
+    print(formattedText.length);
+    return TextEditingValue(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length + 2),
+    );
+  }
+}
+
+
+class CurrencyFormatterNoCurrency extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Remove non-digits and "Rp" prefix
+    final cleanedText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (cleanedText.isEmpty) {
+      return newValue;
+    }
+
+    final number = int.parse(cleanedText);
+    final formattedValue = NumberFormat.currency(decimalDigits: 2)
+        .format(number);
+
+    return TextEditingValue(
+      text: formattedValue,
+      selection: TextSelection.fromPosition(TextPosition(offset: formattedValue.length)),
     );
   }
 }
