@@ -464,6 +464,7 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
     PONumber = 'VIK/$Years2Digit/$romanNumeral/0001';
 
     return MaterialApp(
+      title: 'Purchasing',
       home: Scaffold(
         body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -2781,6 +2782,14 @@ class _NewPurchasingImportLargeState extends State<NewPurchasingImportLarge> {
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               )
                                                             ),
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                totalFive = double.parse(txtQuantityFive.text) * double.parse(txtUnitPriceFive.text.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                                                totalPrice = totalOne + totalTwo + totalThree + totalFour + totalFive;
+                                                                txtTotalFive.text = formatCurrency(totalFive);
+                                                                txtTotalPrice.text = formatCurrency(totalPrice);
+                                                              });
+                                                            }
                                                           ),
                                                           SizedBox(height: 3.h,),
                                                           GestureDetector(
