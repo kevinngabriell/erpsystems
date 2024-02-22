@@ -6,6 +6,7 @@ import 'package:erpsystems/large/setting%20module/customersettings.dart';
 import 'package:erpsystems/large/setting%20module/internalsettings.dart';
 import 'package:erpsystems/large/setting%20module/originsettings.dart';
 import 'package:erpsystems/large/setting%20module/paymentsetting.dart';
+import 'package:erpsystems/large/setting%20module/purchasesettings.dart';
 import 'package:erpsystems/large/setting%20module/shippingsettings.dart';
 import 'package:erpsystems/large/setting%20module/suppliersettingslarge.dart';
 import 'package:erpsystems/large/setting%20module/termsetting.dart';
@@ -559,6 +560,94 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 10.h,),
                                                   Text('Currency', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        //Purchase Card
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(PurchaseSettingLarge());
+                                          },
+                                          child: SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(height: 15.h,),
+                                                  Image.asset('Icon/Flag.png'),
+                                                  SizedBox(height: 10.h,),
+                                                  Text('Purchase', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  SizedBox(height: 15.h,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        //Internal Card
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Get.to(InternalSettingLarge());
+                                          },
+                                          child: SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              child: Column(
+                                                children: [
+                                                  // SizedBox(height: 15.h,),
+                                                  // Image.asset('Icon/Settings.png'),
+                                                  // SizedBox(height: 10.h,),
+                                                  // Text('Internal', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  // SizedBox(height: 15.h,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        //Product Card
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Get.to(PaymentSettingLarge());
+                                          },
+                                          child: SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              child: Column(
+                                                children: [
+                                                  // SizedBox(height: 15.h,),
+                                                  // Image.asset('Icon/Product.png'),
+                                                  // SizedBox(height: 10.h,),
+                                                  // Text('Payment', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  // SizedBox(height: 15.h,),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        //Packaging Card
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Get.to(CurrencyIndexLarge());
+                                          },
+                                          child: SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                            child: Card(
+                                              child: Column(
+                                                children: [
+                                                  // SizedBox(height: 15.h,),
+                                                  // Image.asset('Icon/Packaging.png'),
+                                                  // SizedBox(height: 10.h,),
+                                                  // Text('Currency', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  // SizedBox(height: 15.h,),
                                                 ],
                                               ),
                                             ),

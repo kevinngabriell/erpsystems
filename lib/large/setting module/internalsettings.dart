@@ -1212,8 +1212,7 @@ class _InternalSettingLargeState extends State<InternalSettingLarge>  with Ticke
                                                               return const Center(child: CircularProgressIndicator());
                                                             } else if (snapshot.hasError) {
                                                               return Center(child: Text('Error: ${snapshot.error}'));
-                                                            } else if (snapshot.hasData) {
-                                                              print(snapshot.data?.length);                                                            
+                                                            } else if (snapshot.hasData) {                                                     
                                                               return DataTable(
                                                                 showCheckboxColumn: false,
                                                                 columns: const <DataColumn> [

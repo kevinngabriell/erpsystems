@@ -12,6 +12,7 @@ class ApiEndpoints {
   static String get termList => '${baseUrl}master/term/getallterm.php';
   static String get shippingList => '${baseUrl}master/shipping/getallshipping.php';
   static String get paymentList => '${baseUrl}master/payment/getallpayment.php';
+  static String get currencyList => '${baseUrl}master/currency/getallcurrency.php';
   // Add more API endpoints as needed
 }
 

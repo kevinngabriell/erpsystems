@@ -41,8 +41,9 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
   List<Map<String, String>> listShipments = [];
   List<Map<String, String>> listSuppliersPICName = [];
   List<Map<String, String>> listPayments = [];
-  String selectedCurrency = 'USD';
-  String selectedExchangeCurrency = 'IDR';
+  List<Map<String, String>> listCurrency= [];
+  String selectedCurrency = '';
+  String selectedExchangeCurrency = '';
   String selectedWeightUnit = 'Pounds';
   String selectedTargetWeightUnit = 'Kilograms';
   double totalOne = 0;
@@ -59,6 +60,8 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
   TextEditingController txtWeightResult = TextEditingController();
   String shouldMentionOne = '';
   String shouldMentionTwo = '';
+  String Years2Digit = '';
+  String romanNumeral = '';
 
   //Value to be inserted
   String PONumber = '';
@@ -126,6 +129,46 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
     getSupplier();
     getPayment();
     getShipping();
+    getCurrency();
+  }
+
+  Future<void> getCurrency() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.currencyList),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          setState(() {
+            listCurrency = (data['Data'] as List)
+                .map((currency) => Map<String, String>.from(currency))
+                .toList();
+            selectedCurrency = listCurrency[0]['currency_id']!;
+            selectedExchangeCurrency = listCurrency[0]['currency_id']!;
+          });
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+
+
+    } catch (e){
+      print(e);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future<void> getShipping() async {
@@ -352,7 +395,15 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
     }
   }
 
+  String convertToRoman(int number) {
+    if (number < 1 || number > 12) {
+      throw ArgumentError('Month should be between 1 and 12');
+    }
 
+    List<String> romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+    return romanNumerals[number - 1];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -360,6 +411,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
     companyName = storage.read('companyName').toString();
     profileName = storage.read('firstName').toString();
     permissionAccess = storage.read('permissionAccess').toString();
+
+    DateTime now = DateTime.now();
+    int currentYear = now.year;
+    Years2Digit = (currentYear % 100).toString();
+    int currentMonth = now.month;
+    romanNumeral = convertToRoman(currentMonth);
+
+    PONumber = 'VIK/$Years2Digit/$romanNumeral/0001';
 
     return MaterialApp(
       title: 'Purchasing',
@@ -1291,12 +1350,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -1345,12 +1406,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -1697,12 +1760,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -1750,12 +1815,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -2103,12 +2170,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -2156,12 +2225,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -2509,12 +2580,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -2562,12 +2635,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -2911,12 +2986,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -2964,12 +3041,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -3044,12 +3123,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY', 'IDR'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -3098,12 +3179,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                       borderRadius: BorderRadius.circular(4.0),
                                                                     )
                                                                   ),
-                                                                  items: ['USD', 'EUR', 'GBP', 'JPY', 'IDR'].map<DropdownMenuItem<String>>((String value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value,
-                                                                      child: Text(value),
-                                                                    );
-                                                                  }).toList(),
+                                                                  items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                    (Map<String, String> currency) {
+                                                                      return DropdownMenuItem<String>(
+                                                                        value: currency['currency_id'],
+                                                                        child: Text(currency['currency_name']!),
+                                                                      );
+                                                                    },
+                                                                  ).toList(),
                                                                 ),
                                                               ),
                                                             ),
@@ -3159,12 +3242,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                                             borderRadius: BorderRadius.circular(4.0),
                                                                                           )
                                                                                         ),
-                                                                                        items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                                          return DropdownMenuItem<String>(
-                                                                                            value: value,
-                                                                                            child: Text(value),
-                                                                                          );
-                                                                                        }).toList(),
+                                                                                        items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                                          (Map<String, String> currency) {
+                                                                                            return DropdownMenuItem<String>(
+                                                                                              value: currency['currency_id'],
+                                                                                              child: Text(currency['currency_name']!),
+                                                                                            );
+                                                                                          },
+                                                                                        ).toList(),
                                                                                       ),
                                                                                     ),
                                                                                   ),
@@ -3211,12 +3296,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                                             borderRadius: BorderRadius.circular(4.0),
                                                                                           )
                                                                                         ),
-                                                                                        items: ['USD', 'EUR', 'GBP', 'JPY', 'IDR'].map<DropdownMenuItem<String>>((String value) {
-                                                                                          return DropdownMenuItem<String>(
-                                                                                            value: value,
-                                                                                            child: Text(value),
-                                                                                          );
-                                                                                        }).toList(),
+                                                                                        items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                                          (Map<String, String> currency) {
+                                                                                            return DropdownMenuItem<String>(
+                                                                                              value: currency['currency_id'],
+                                                                                              child: Text(currency['currency_name']!),
+                                                                                            );
+                                                                                          },
+                                                                                        ).toList(),
                                                                                       ),
                                                                                     ),
                                                                                   ),
@@ -3266,12 +3353,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                                             borderRadius: BorderRadius.circular(4.0),
                                                                                           )
                                                                                         ),
-                                                                                        items: ['USD', 'EUR', 'GBP', 'JPY'].map<DropdownMenuItem<String>>((String value) {
-                                                                                          return DropdownMenuItem<String>(
-                                                                                            value: value,
-                                                                                            child: Text(value),
-                                                                                          );
-                                                                                        }).toList(),
+                                                                                        items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                                          (Map<String, String> currency) {
+                                                                                            return DropdownMenuItem<String>(
+                                                                                              value: currency['currency_id'],
+                                                                                              child: Text(currency['currency_name']!),
+                                                                                            );
+                                                                                          },
+                                                                                        ).toList(),
                                                                                       ),
                                                                                     ),
                                                                                   ),
@@ -3312,12 +3401,14 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                                                                             borderRadius: BorderRadius.circular(4.0),
                                                                                           )
                                                                                         ),
-                                                                                        items: ['USD', 'EUR', 'GBP', 'JPY', 'IDR'].map<DropdownMenuItem<String>>((String value) {
-                                                                                          return DropdownMenuItem<String>(
-                                                                                            value: value,
-                                                                                            child: Text(value),
-                                                                                          );
-                                                                                        }).toList(),
+                                                                                        items: listCurrency.map<DropdownMenuItem<String>>(
+                                                                                          (Map<String, String> currency) {
+                                                                                            return DropdownMenuItem<String>(
+                                                                                              value: currency['currency_id'],
+                                                                                              child: Text(currency['currency_name']!),
+                                                                                            );
+                                                                                          },
+                                                                                        ).toList(),
                                                                                       ),
                                                                                     ),
                                                                                   ),
