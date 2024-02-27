@@ -11,6 +11,7 @@ import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
 import 'package:erpsystems/services/masterservices.dart';
+import 'package:erpsystems/services/purchase/purchasedataservices.dart';
 import 'package:erpsystems/services/settings/companydataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,6 +43,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
   List<Map<String, String>> listSuppliersPICName = [];
   List<Map<String, String>> listPayments = [];
   List<Map<String, String>> listCurrency= [];
+  List<Map<String, String>> listLastPO = [];
   String selectedCurrency = '';
   String selectedExchangeCurrency = '';
   String selectedWeightUnit = 'Pounds';
@@ -62,6 +64,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
   String shouldMentionTwo = '';
   String Years2Digit = '';
   String romanNumeral = '';
+  String username = "";
 
   //Value to be inserted
   String PONumber = '';
@@ -130,6 +133,46 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
     getPayment();
     getShipping();
     getCurrency();
+    getLastPONumber();
+  }
+
+  Future<void> getLastPONumber() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.lastPONumber),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['StatusCode'] == 200) {
+          setState(() {
+            listLastPO = (data['Data'] as List)
+                .map((currency) => Map<String, String>.from(currency))
+                .toList();
+            PONumber = listLastPO[0]['PONumber']!;
+            generateNextId(PONumber);
+          });
+        } else {
+          // Handle API error
+          print('Failed to fetch data');
+        }
+      } else {
+        // Handle HTTP error
+        print('Failed to fetch data');
+      }
+
+
+    } catch (e){
+      print(e);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future<void> getCurrency() async {
@@ -149,7 +192,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
             listCurrency = (data['Data'] as List)
                 .map((currency) => Map<String, String>.from(currency))
                 .toList();
-            selectedCurrency = listCurrency[0]['currency_id']!;
+            selectedCurrency = listCurrency[4]['currency_id']!;
             selectedExchangeCurrency = listCurrency[0]['currency_id']!;
           });
         } else {
@@ -357,6 +400,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
           if (response.statusCode == 200) {
             final data = json.decode(response.body);
             if (data['StatusCode'] == 200) {
+              
               setState(() {
                 listSuppliersPICName = (data['Data'] as List)
                     .map((origin) => Map<String, String>.from(origin))
@@ -395,6 +439,67 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
     }
   }
 
+  String generateNextId(String currentId) {
+    List<String> parts = currentId.split('/');
+    int currentYear = int.parse(parts[1]);
+    DateTime now = DateTime.now();
+    int currentYearNow = now.year;
+    int Years2DigitA = (currentYearNow % 100);
+    String currentMonth = parts[2];
+    int currentNumber = int.parse(parts[3]) + 1;
+    int currentMonthA = now.month;
+
+    // Increment year and reset numeric part if needed
+    if (Years2DigitA != currentYear) {
+      currentYear++;
+    } else {
+      currentYear = Years2DigitA;
+    }
+
+    int tempA = convertFromRoman(currentMonth);
+    String nextMonth = '';
+
+    if(tempA != currentMonthA){
+      nextMonth = convertToRoman(convertFromRoman(currentMonth) + 1);
+    } else {
+      nextMonth = currentMonth;
+    }
+
+    // Format the new ID
+    PONumber = 'VIK/${currentYear.toString().padLeft(2, '0')}/$nextMonth/${currentNumber.toString().padLeft(4, '0')}';
+    // print(currentNumber.toString().padLeft(4, '0'));
+    return PONumber;
+  }
+
+  int convertFromRoman(String roman) {
+    Map<String, int> romanMap = {
+      'I': 1,
+      'V': 5,
+      'X': 10,
+      'L': 50,
+      'C': 100,
+      'D': 500,
+      'M': 1000,
+    };
+
+    int result = 0;
+    int prevValue = 0;
+
+    for (int i = roman.length - 1; i >= 0; i--) {
+      int value = romanMap[roman[i]]!;
+
+      if (value < prevValue) {
+        result -= value;
+      } else {
+        result += value;
+      }
+
+      prevValue = value;
+    }
+
+    return result;
+  }
+
   String convertToRoman(int number) {
     if (number < 1 || number > 12) {
       throw ArgumentError('Month should be between 1 and 12');
@@ -409,6 +514,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
   Widget build(BuildContext context) {
      //Read session
     companyName = storage.read('companyName').toString();
+    username = storage.read('username').toString();
     profileName = storage.read('firstName').toString();
     permissionAccess = storage.read('permissionAccess').toString();
 
@@ -418,7 +524,11 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
     int currentMonth = now.month;
     romanNumeral = convertToRoman(currentMonth);
 
-    PONumber = 'VIK/$Years2Digit/$romanNumeral/0001';
+    if(PONumber == ''){
+      PONumber = 'VIK/$Years2Digit/$romanNumeral/0001';
+    }
+
+    // PONumber = 'VIK/$Years2Digit/$romanNumeral/0001';
 
     return MaterialApp(
       title: 'Purchasing',
@@ -799,41 +909,6 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                               ],
                                             ),
                                           ),
-                                          //Purchase Date
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text('Date', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
-                                                SizedBox(height: 5.h,),
-                                                DateTimePicker(
-                                                  dateHintText: 'Input purchase date',
-                                                  firstDate: DateTime(2023),
-                                                  lastDate: DateTime(2100),
-                                                  initialDate: DateTime.now(),
-                                                  dateMask: 'd MMM yyyy',
-                                                  decoration: InputDecoration(
-                                                    prefixIcon: Image.asset('Icon/CalendarIcon.png'),
-                                                    hintText: 'Input purchase date',
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 0.0),
-                                                      borderRadius: BorderRadius.circular(10.0),
-                                                    )
-                                                  ),
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      PurchaseDate = DateFormat('yyyy-MM-dd').parse(value);
-                                                    });
-                                                  },
-                                                )
-                                              ],
-                                            ),
-                                          ),
                                           //Supplier Data
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 150.w) / 3,
@@ -872,6 +947,42 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                               ],
                                             ),
                                           ),
+                                          //Purchase Date
+                                          SizedBox(
+                                            width: (MediaQuery.of(context).size.width - 150.w) / 3,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Date', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),
+                                                SizedBox(height: 5.h,),
+                                                DateTimePicker(
+                                                  dateHintText: 'Input purchase date',
+                                                  firstDate: DateTime(2023),
+                                                  lastDate: DateTime(2100),
+                                                  initialDate: DateTime.now(),
+                                                  dateMask: 'd MMM yyyy',
+                                                  decoration: InputDecoration(
+                                                    prefixIcon: Image.asset('Icon/CalendarIcon.png'),
+                                                    hintText: 'Input purchase date',
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(width: 0.0),
+                                                      borderRadius: BorderRadius.circular(10.0),
+                                                    )
+                                                  ),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      PurchaseDate = DateFormat('yyyy-MM-dd').parse(value);
+                                                    });
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          
                                         ],
                                       ),
                                     ),
@@ -3522,7 +3633,27 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                     children: [
                                       ElevatedButton(
                                         onPressed: (){
-                                  
+                                          if(permissionAccess == 'Full access'){
+                                            showDialog(
+                                              context: context, 
+                                              builder: (_){
+                                                return AlertDialog(
+                                                  title: Text('Error'),
+                                                  content: Text('This item is not submitted yet and this action is not allowed at this moment'),
+                                                );
+                                              }
+                                            );
+                                          } else {
+                                            showDialog(
+                                              context: context, 
+                                              builder: (_){
+                                                return AlertDialog(
+                                                  title: Text('Error'),
+                                                  content: Text('You have no access to this feature. Please contact your administrator'),
+                                                );
+                                              }
+                                            );
+                                          }
                                         }, 
                                         style: ElevatedButton.styleFrom(
                                           elevation: 0,
@@ -3541,14 +3672,22 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                       ElevatedButton(
                                         onPressed: (){
                                           if(permissionAccess == 'Full access'){
-
+                                            showDialog(
+                                              context: context, 
+                                              builder: (_){
+                                                return AlertDialog(
+                                                  title: Text('Error'),
+                                                  content: Text('This item is not submitted yet and this action is not allowed at this moment'),
+                                                );
+                                              }
+                                            );
                                           } else {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
                                                 return AlertDialog(
                                                   title: Text('Error'),
-                                                  content: Text('Anda tidak memiliki akses'),
+                                                  content: Text('You have no access to this feature. Please contact your administrator'),
                                                 );
                                               }
                                             );
@@ -3573,14 +3712,22 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                       ElevatedButton(
                                         onPressed: (){
                                           if(permissionAccess == 'Full access'){
-
+                                            showDialog(
+                                              context: context, 
+                                              builder: (_){
+                                                return AlertDialog(
+                                                  title: Text('Error'),
+                                                  content: Text('This item is not submitted yet and this action is not allowed at this moment'),
+                                                );
+                                              }
+                                            );
                                           } else {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
                                                 return AlertDialog(
                                                   title: Text('Error'),
-                                                  content: Text('Anda tidak memiliki akses'),
+                                                  content: Text('You have no access to this feature. Please contact your administrator'),
                                                 );
                                               }
                                             );
@@ -3604,7 +3751,19 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                       ),
                                       ElevatedButton(
                                         onPressed: (){
-                                  
+                                          if(permissionAccess == 'Full access'){
+                                            insertPurchaseLocal(PONumber, PurchaseDate.toString(), selectedSupplier, selectedShipment, selectedPayment, selectedCurrency, username, txtProductNameOne.text, txtQuantityOne.text, txtPackagingSizeOne.text, txtUnitPriceOne.text, txtProductNameTwo.text, txtQuantityTwo.text, txtPackagingSizeTwo.text, txtUnitPriceTwo.text, txtProductNameThree.text, txtQuantityThree.text, txtPackagingSizeThree.text, txtUnitPriceThree.text, txtProductNameFour.text, txtQuantityFour.text, txtPackagingSizeFour.text, txtUnitPriceFour.text, txtProductNameFive.text, txtQuantityFive.text, txtPackagingSizeFive.text, txtUnitPriceFive.text, context);
+                                          } else {
+                                            showDialog(
+                                              context: context, 
+                                              builder: (_){
+                                                return AlertDialog(
+                                                  title: Text('Error'),
+                                                  content: Text('You have no access to this feature. Please contact your administrator'),
+                                                );
+                                              }
+                                            );
+                                          }
                                         }, 
                                         style: ElevatedButton.styleFrom(
                                           elevation: 0,

@@ -13,6 +13,9 @@ class ApiEndpoints {
   static String get shippingList => '${baseUrl}master/shipping/getallshipping.php';
   static String get paymentList => '${baseUrl}master/payment/getallpayment.php';
   static String get currencyList => '${baseUrl}master/currency/getallcurrency.php';
+  static String get lastPONumber => '${baseUrl}purchase/recievelastPOnumber.php';
+  static String get listMonth => '${baseUrl}master/getmonth.php';
+  static String get listYear => '${baseUrl}master/getyear.php';
   // Add more API endpoints as needed
 }
 

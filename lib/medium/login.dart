@@ -96,12 +96,12 @@ class _LoginMediumState extends State<LoginMedium> {
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         alignment: Alignment.center,
-                        minimumSize: const Size(60, 50),
-                        foregroundColor: const Color.fromRGBO(252, 252, 252, 0.75),
-                        backgroundColor: const Color.fromRGBO(110, 46, 253, 0.5),
+                        minimumSize: Size(60.w, 50.h),
+                        foregroundColor: Colors.white,
+                        backgroundColor: const Color.fromRGBO(110, 46, 253, 0.8),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
-                      child: Text('Login', style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w700,),)
+                      child: Text('Login', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w700,),)
                     ),
                   ),
                   SizedBox(height: 15.h,),

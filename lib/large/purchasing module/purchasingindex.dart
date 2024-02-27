@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:erpsystems/large/login.dart';
 import 'package:erpsystems/large/purchasing%20module/newpurchasingimport.dart';
 import 'package:erpsystems/large/purchasing%20module/newpurchasinglocal.dart';
+import 'package:erpsystems/large/purchasing%20module/viewpurchasinglocalall.dart';
+import 'package:erpsystems/large/purchasing%20module/viewpurchasinglocaldetail.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/analyticstemplatelarge.dart';
@@ -8,11 +12,12 @@ import 'package:erpsystems/large/template/documenttemplatelarge.dart';
 import 'package:erpsystems/large/template/financetemplatelarge.dart';
 import 'package:erpsystems/large/template/hrtemplatelarge.dart';
 import 'package:erpsystems/large/template/warehousetemplatelarge.dart';
+import 'package:erpsystems/services/purchase/purchasedataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
+import 'package:intl/intl.dart';
 import '../index.dart';
 
 
@@ -28,9 +33,22 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
   String profileName = '';
   String companyName = '';
   TextEditingController txtSearchText = TextEditingController();
-  int jumlahpendingPurchase = 4;
-  int jumlahOrderInTransit = 2;
-  String TopItem = 'ABC';
+  int jumlahpendingPurchase = 0;
+  int jumlahOrderInTransit = 0;
+  String TopItem = '';
+  String nominalPurchase = '0';
+  late Future<List<Map<String, dynamic>>> TOPPOLocalList;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    TOPPOLocalList = topPurchaseLocal();
+  }
+
+  String formatCurrency(double value) {
+    return NumberFormat.currency(locale: 'id_ID', decimalDigits: 0, symbol: 'Rp. ').format(value);
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -470,270 +488,630 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                     //4 Card in a Row
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, bottom: 7.sp, right: 5.sp),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          //Attandance Card
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              color: const Color.fromARGB(255, 220, 240, 229),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
-                                                    child: Row(
+                                      child: FutureBuilder<Map<String, dynamic>>(
+                                        future: getPurchaseStatistic(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                            return const Center(child: CircularProgressIndicator());
+                                          } else if (snapshot.hasError) {
+                                            return Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                //Attandance Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 220, 240, 229),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Image.asset('Icon/Attandance.png'),
-                                                        SizedBox(width: 2.w,),
-                                                        Text('Pending Purchase', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Attandance.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Pending Purchase', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text('0', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
                                                       ],
-                                                    ),
+                                                    )
                                                   ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                    child: Text(jumlahpendingPurchase.toString(), style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
-                                                  ),
-                                                ],
-                                              )
-                                            ),
-                                          ),
-                                          //Late Card
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              color: const Color.fromARGB(255, 237, 198, 198),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
-                                                    child: Row(
+                                                ),
+                                                //Late Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 237, 198, 198),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Image.asset('Icon/Late.png'),
-                                                        SizedBox(width: 2.w,),
-                                                        Text('Order In Transit', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Late.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Order In Transit', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text('0', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
                                                       ],
-                                                    ),
+                                                    )
                                                   ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                    child: Text(jumlahOrderInTransit.toString(), style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
-                                                  ),
-                                                ],
-                                              )
-                                            ),
-                                          ),
-                                          //Absent Card
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              color: const Color.fromARGB(255, 240, 226, 191),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
-                                                    child: Row(
+                                                ),
+                                                //Absent Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 240, 226, 191),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Image.asset('Icon/Absent.png'),
-                                                        SizedBox(width: 2.w,),
-                                                        Text('Top Item', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Absent.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Top Item', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text('0', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
                                                       ],
-                                                    ),
+                                                    )
                                                   ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                    child: Text(jumlahOrderInTransit.toString(), style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
-                                                  ),
-                                                ],
-                                              )
-                                            ),
-                                          ),
-                                          //Leave Card
-                                          SizedBox(
-                                            width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
-                                              color: const Color.fromARGB(255, 194, 202, 242),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
-                                                    child: Row(
+                                                ),
+                                                //Leave Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 194, 202, 242),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Image.asset('Icon/Leave.png'),
-                                                        SizedBox(width: 2.w,),
-                                                        Text('Remaining Leave', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Leave.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Total Purchase', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text('0', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
                                                       ],
-                                                    ),
+                                                    )
                                                   ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5.sp, bottom: 5.sp),
-                                                    child: Text(TopItem, style: TextStyle(fontSize: 8.sp, fontWeight: FontWeight.w600),),
+                                                ),
+                                              ],
+                                            );
+                                          } else  if (snapshot.hasData){
+                                            Map<String, dynamic> apiResponse = snapshot.data!;
+                                            Map<String, dynamic> data = apiResponse['Data'];
+
+                                            PurchaseStatistic purchase = PurchaseStatistic.fromJson(data);
+
+                                            jumlahpendingPurchase = int.parse(purchase.pendingOrder);
+                                            TopItem = purchase.topItem;
+
+                                            double tempOne = double.parse(purchase.totalPurchase);
+
+                                            nominalPurchase = formatCurrency(tempOne);
+
+                                            return Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                //Attandance Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 220, 240, 229),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Attandance.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Pending Purchase', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text(jumlahpendingPurchase.toString(), style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
+                                                      ],
+                                                    )
                                                   ),
-                                                ],
-                                              )
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                                ),
+                                                //Late Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 237, 198, 198),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Late.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Order In Transit', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text(jumlahOrderInTransit.toString(), style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ),
+                                                ),
+                                                //Absent Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 240, 226, 191),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Absent.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Top Item', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text(TopItem, style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ),
+                                                ),
+                                                //Leave Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 194, 202, 242),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Leave.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Total Purchase', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text(nominalPurchase, style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          } else {
+                                            return Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                //Attandance Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 220, 240, 229),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Attandance.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Pending Purchase', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text('0', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ),
+                                                ),
+                                                //Late Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 237, 198, 198),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Late.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Order In Transit', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text('0', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ),
+                                                ),
+                                                //Absent Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 240, 226, 191),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Absent.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Top Item', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text('0', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ),
+                                                ),
+                                                //Leave Card
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context).size.width - 100.w) / 4,
+                                                  child: Card(
+                                                    color: const Color.fromARGB(255, 194, 202, 242),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 5.sp, top: 5.sp),
+                                                          child: Row(
+                                                            children: [
+                                                              Image.asset('Icon/Leave.png'),
+                                                              SizedBox(width: 2.w,),
+                                                              Text('Total Purchase', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 5.sp, left: 5.sp, bottom: 5.sp),
+                                                          child: Text('0', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600),),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                        }
+                                      )
                                     ),
                                   ],
                                 ),
                               ),
                               SizedBox(height: 15.h,),
                               Card(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(12))
-                              ),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 5.sp),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Item in Transit', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
-                                          GestureDetector(
-                                            onTap: () {
-                                              // Get.to(SeeAllSalesOrder());
-                                            },
-                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 15.h,),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: (MediaQuery.of(context).size.height - 433.h),
-                                      child: ListView.builder(
-                                        itemCount: 4,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
-                                      
-                                          return Container(
-                                            width: MediaQuery.of(context).size.width,
-                                            color: backgroundColor,
-                                            child: Padding(
-                                              padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
-                                                      SizedBox(height: 3.h,),
-                                                      Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
-                                                    ],
-                                                  ),
-                                                  ElevatedButton(
-                                                    onPressed: (){
-                                                      // Get.to(AddCustomerSettingLarge());
-                                                    }, 
-                                                    style: ElevatedButton.styleFrom(
-                                                      elevation: 0,
-                                                      alignment: Alignment.centerLeft,
-                                                      minimumSize: Size(20.w, 40.h),
-                                                      foregroundColor: Colors.white,
-                                                      backgroundColor: const Color(0xFF2A85FF),
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                                    ),
-                                                    child: Text('Detail', style: TextStyle(fontSize: 4.sp))
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          );
-                                        }
-                                      ),
-                                    )
-                                  ],
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(12))
                                 ),
-                              )
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 5.sp),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Purchase Order (Local)', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.to(ViewPurchasingLocalAllLarge());
+                                              },
+                                              child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 15.h,),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width,
+                                        height: (MediaQuery.of(context).size.height - 433.h),
+                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                          future: TOPPOLocalList,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                                return const Center(child: CircularProgressIndicator());
+                                              } else if (snapshot.hasError) {
+                                                return ListView.builder(
+                                                  itemCount: 4,
+                                                  itemBuilder: (BuildContext context, int index) {
+                                                    Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                
+                                                    return Container(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      color: backgroundColor,
+                                                      child: Padding(
+                                                        padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text('VK/--/--/----', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                                SizedBox(height: 3.h,),
+                                                                Text('Purchase date  - ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                              ],
+                                                            ),
+                                                            ElevatedButton(
+                                                              onPressed: (){
+                                                                // Get.to(AddCustomerSettingLarge());
+                                                              }, 
+                                                              style: ElevatedButton.styleFrom(
+                                                                elevation: 0,
+                                                                alignment: Alignment.centerLeft,
+                                                                minimumSize: Size(20.w, 40.h),
+                                                                foregroundColor: Colors.white,
+                                                                backgroundColor: const Color(0xFF2A85FF),
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                              ),
+                                                              child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    );
+                                                  }
+                                                );
+                                              } else if (snapshot.hasData) {
+                                                List<Map<String, dynamic>> data = snapshot.data!;
+
+                                                return ListView.builder(
+                                                  itemCount: data.length,
+                                                  itemBuilder: (BuildContext context, int index){
+                                                    Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                    // Color cardbackgroundColor = data[index]['PO_Status_Name']
+                                                    return Container(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      color: backgroundColor,
+                                                      child: Padding(
+                                                        padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text(' | ' + data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                                SizedBox(height: 3.h,),
+                                                                Text('Purchase date ' + data[index]['PODate'], style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                              ],
+                                                            ),
+                                                            ElevatedButton(
+                                                              onPressed: (){
+                                                                String poNumber = data[index]['PONumber'];
+                                                                Get.to(ViewPurchasingLocalDetailLarge(poNumber));
+                                                              }, 
+                                                              style: ElevatedButton.styleFrom(
+                                                                elevation: 0,
+                                                                alignment: Alignment.center,
+                                                                minimumSize: Size(35.w, 50.h),
+                                                                foregroundColor: Colors.white,
+                                                                backgroundColor: const Color(0xFF2A85FF),
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                              ),
+                                                              child: Text(data[index]['PO_Status_Name'], style: TextStyle(fontSize: 4.sp), textAlign: TextAlign.center,)
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    );
+                                                  }
+                                                );
+                                              } else {
+                                                return Container(
+                                                  child: Center(
+                                                    child: Text('There is no data for local purchasing'),
+                                                  ),
+                                                );
+                                              }    
+                                            }   
+                                        )
+                                      )
+                                    ],
+                                  ),
+                                )
                             ),
                             SizedBox(height: 15.h,),
                             Card(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(12))
-                              ),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 5.sp),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Item in Transit (Local)', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
-                                          GestureDetector(
-                                            onTap: () {
-                                              // Get.to(SeeAllSalesOrder());
-                                            },
-                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 15.h,),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: (MediaQuery.of(context).size.height - 433.h),
-                                      child: ListView.builder(
-                                        itemCount: 4,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
-                                      
-                                          return Container(
-                                            width: MediaQuery.of(context).size.width,
-                                            color: backgroundColor,
-                                            child: Padding(
-                                              padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('ABC Company', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
-                                                      SizedBox(height: 3.h,),
-                                                      Text('Next order 27/8/2023', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
-                                                    ],
-                                                  ),
-                                                  ElevatedButton(
-                                                    onPressed: (){
-                                                      // Get.to(AddCustomerSettingLarge());
-                                                    }, 
-                                                    style: ElevatedButton.styleFrom(
-                                                      elevation: 0,
-                                                      alignment: Alignment.centerLeft,
-                                                      minimumSize: Size(20.w, 40.h),
-                                                      foregroundColor: Colors.white,
-                                                      backgroundColor: const Color(0xFF2A85FF),
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                                    ),
-                                                    child: Text('Detail', style: TextStyle(fontSize: 4.sp))
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          );
-                                        }
-                                      ),
-                                    )
-                                  ],
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(12))
                                 ),
-                              )
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 5.sp),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 5.sp, right: 5.sp),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Purchase Order (Import)', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.to(ViewPurchasingLocalAllLarge());
+                                              },
+                                              child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 15.h,),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width,
+                                        height: (MediaQuery.of(context).size.height - 433.h),
+                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                          future: TOPPOLocalList,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                                return const Center(child: CircularProgressIndicator());
+                                              } else if (snapshot.hasError) {
+                                                return ListView.builder(
+                                                  itemCount: 4,
+                                                  itemBuilder: (BuildContext context, int index) {
+                                                    Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                
+                                                    return Container(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      color: backgroundColor,
+                                                      child: Padding(
+                                                        padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text('VK/--/--/----', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                                SizedBox(height: 3.h,),
+                                                                Text('Purchase date  - ', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                              ],
+                                                            ),
+                                                            ElevatedButton(
+                                                              onPressed: (){
+                                                                // Get.to(AddCustomerSettingLarge());
+                                                              }, 
+                                                              style: ElevatedButton.styleFrom(
+                                                                elevation: 0,
+                                                                alignment: Alignment.centerLeft,
+                                                                minimumSize: Size(20.w, 40.h),
+                                                                foregroundColor: Colors.white,
+                                                                backgroundColor: const Color(0xFF2A85FF),
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                              ),
+                                                              child: Text('Detail', style: TextStyle(fontSize: 4.sp))
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    );
+                                                  }
+                                                );
+                                              } else if (snapshot.hasData) {
+                                                List<Map<String, dynamic>> data = snapshot.data!;
+
+                                                return ListView.builder(
+                                                  itemCount: data.length,
+                                                  itemBuilder: (BuildContext context, int index){
+                                                    Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                    return Container(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      color: backgroundColor,
+                                                      child: Padding(
+                                                        padding: EdgeInsets.only(left: 5.sp, right: 5.sp, top: 3.sp, bottom: 3.sp),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text(' | ' + data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                                SizedBox(height: 3.h,),
+                                                                Text('Purchase date ' + data[index]['PODate'], style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                              ],
+                                                            ),
+                                                            ElevatedButton(
+                                                              onPressed: (){
+                                                                String poNumber = data[index]['PONumber'];
+                                                                Get.to(ViewPurchasingLocalDetailLarge(poNumber));
+                                                              }, 
+                                                              style: ElevatedButton.styleFrom(
+                                                                elevation: 0,
+                                                                alignment: Alignment.center,
+                                                                minimumSize: Size(35.w, 50.h),
+                                                                foregroundColor: Colors.white,
+                                                                backgroundColor: const Color(0xFF2A85FF),
+                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                              ),
+                                                              child: Text(data[index]['PO_Status_Name'], style: TextStyle(fontSize: 4.sp))
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    );
+                                                  }
+                                                );
+                                              } else {
+                                                return Container(
+                                                  child: Center(
+                                                    child: Text('There is no data for local purchasing'),
+                                                  ),
+                                                );
+                                              }    
+                                            }   
+                                        )
+                                      )
+                                    ],
+                                  ),
+                                )
                             ),
                             SizedBox(height: 15.h,),
                             ],
