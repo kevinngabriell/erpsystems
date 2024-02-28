@@ -710,7 +710,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                                           backgroundColor: const Color(0xFF2A85FF),
                                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                         ),
-                                                        child: Text('Update', style: TextStyle(fontSize: 4.sp),)
+                                                        child: Text('Update', style: TextStyle(fontSize: 6.sp),)
                                                       )
                                                     ],
                                                   )

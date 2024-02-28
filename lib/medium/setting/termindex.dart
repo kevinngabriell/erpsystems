@@ -1,3 +1,4 @@
+import 'package:erpsystems/medium/setting/addterm.dart';
 import 'package:erpsystems/medium/setting/settingindex.dart';
 import 'package:erpsystems/services/settings/termdataservices.dart';
 import 'package:flutter/material.dart';
@@ -434,7 +435,7 @@ class _TermIndexMediumState extends State<TermIndexMedium> {
                                           Text('Term', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              // Get.to(AddCustomerMedium());
+                                              Get.to(AddTermMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

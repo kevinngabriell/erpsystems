@@ -1,8 +1,7 @@
-import 'package:erpsystems/medium/setting/addshipping.dart';
-import 'package:erpsystems/services/settings/shipmentdataservices.dart';
-import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:erpsystems/medium/setting/settingindex.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:erpsystems/medium/analytics/analyticsindex.dart';
 import 'package:erpsystems/medium/document/documentindex.dart';
 import 'package:erpsystems/medium/finance/financeindex.dart';
@@ -13,35 +12,29 @@ import 'package:erpsystems/medium/sales/salesindex.dart';
 import 'package:erpsystems/medium/template/indextemplatemedium.dart';
 import 'package:erpsystems/medium/warehouse/warehouseindex.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
-class ShippingIndexMedium extends StatefulWidget {
-  const ShippingIndexMedium({super.key});
+class AddNewOriginMedium extends StatefulWidget {
+  const AddNewOriginMedium({super.key});
 
   @override
-  State<ShippingIndexMedium> createState() => _ShippingIndexMediumState();
+  State<AddNewOriginMedium> createState() => _AddNewOriginMediumState();
 }
 
-class _ShippingIndexMediumState extends State<ShippingIndexMedium> {
+class _AddNewOriginMediumState extends State<AddNewOriginMedium> {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
-  String companyId = '';
   String profileName = '';
   String companyName = '';
+  String companyId = '';
   bool isLoading = false;
   bool isMenu = false;
-  
-  late Future<List<Map<String, dynamic>>> shipmentList;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    shipmentList = allShipmentData();
-  }
-  
-  @override
   Widget build(BuildContext context) {
+    companyName = storage.read('companyName').toString();
+    profileName = storage.read('firstName').toString();
+    companyId = storage.read('companyId').toString();
+
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
@@ -416,79 +409,145 @@ class _ShippingIndexMediumState extends State<ShippingIndexMedium> {
                                 onTap: (){
                                   Get.back();
                                 },
-                                child: Text('Shipping settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
+                                child: Text('Origin settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
                               ),
                               SizedBox(height: 10.h,),
-                            SizedBox(
+                              SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: Card(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    //Add New Customer Information Title
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Shipping', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
-                                          ElevatedButton(
-                                            onPressed: (){
-                                              Get.to(AddNewShippingMedium());
-                                            }, 
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              alignment: Alignment.centerLeft,
-                                              minimumSize: Size(30.w, 48.h),
-                                              foregroundColor: Colors.white,
-                                              backgroundColor: const Color(0xFF2A85FF),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                            ),
-                                            child: Text('Add Shipping', style: TextStyle(fontSize: 6.sp),)
-                                          )
-                                        ],
-                                      ),
+                                      child: Text('Add New Origin', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                     ),
                                     SizedBox(height: 10.h,),
+                                    //Text Form New Customer
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
-                                        child: FutureBuilder<List<Map<String, dynamic>>>(
-                                          future: shipmentList,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState == ConnectionState.waiting) {
-                                              return const Center(child: CircularProgressIndicator());
-                                            } else if (snapshot.hasError) {
-                                              return Center(child: Text('Error: ${snapshot.error}'));
-                                            } else if (snapshot.hasData) {
-                                              return DataTable(
-                                                showCheckboxColumn: false,
-                                                columns: const <DataColumn> [
-                                                  DataColumn(label: Text('No')),
-                                                  DataColumn(label: Text('Shipment Name')),
-                                                ], 
-                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
-                                                  int index = entry.key + 1;
-                                                  Map<String, dynamic> shipping= entry.value;
-                                                  return DataRow(
-                                                    cells: <DataCell>[
-                                                      DataCell(Text('$index')),
-                                                      DataCell(Text(shipping['shipment_name']))
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  width: isMenu ? (MediaQuery.of(context).size.width - 130.w)/ 2 : (MediaQuery.of(context).size.width - 45.w)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      const Text('Country'),
+                                                      SizedBox(height: 5.h,),
+                                                      DropdownButtonFormField(
+                                                        value: '006',
+                                                        items: const [
+                                                          DropdownMenuItem(
+                                                            value: '006',
+                                                            child: Text('United States of America', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                          ),
+                                                          DropdownMenuItem(
+                                                            value: '007',
+                                                            child: Text('Japan', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                          )
+                                                        ], 
+                                                        onChanged: (value){
+                                                        
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: 'PT. AXX XXXX'
+                                                        ),
+                                                      )
                                                     ],
-                                                    onSelectChanged: (selected) {
-                                                      if (selected!) {
-                                                        // Get.to(DetailCustomerSettingLarge(customer['company_id']));
-                                                      }
-                                                    },
-                                                  );
-                                                }).toList(),
-                                              );
-                                            } else {
-                                              return const Center(child: Text('No data available'));
-                                            }
-                                          }
-                                        ),
+                                                  )
+                                                ),
+                                                SizedBox(
+                                                  width: isMenu ? (MediaQuery.of(context).size.width - 130.w)/ 2 : (MediaQuery.of(context).size.width - 45.w)/ 2,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      const Text('Is AFTA Area ?'),
+                                                      SizedBox(height: 5.h,),
+                                                      DropdownButtonFormField(
+                                                        value: '001',
+                                                        items: const [
+                                                          DropdownMenuItem(
+                                                            value: '001',
+                                                            child: Text('Yes', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                          ),
+                                                          DropdownMenuItem(
+                                                            value: '002',
+                                                            child: Text('No', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                          )
+                                                        ], 
+                                                        onChanged: (value){
+                                                        
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderSide: const BorderSide(width: 0.0),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          hintText: 'PT. AXX XXXX'
+                                                        ),
+                                                      )
+                                                      // TextFormField(
+                                                      //   // controller: txtTarget2031,
+                                                      //   decoration: InputDecoration(
+                                                      //     enabledBorder: OutlineInputBorder(
+                                                      //       borderSide: const BorderSide(width: 0.0),
+                                                      //       borderRadius: BorderRadius.circular(10.0),
+                                                      //     ),
+                                                      //     focusedBorder: OutlineInputBorder(
+                                                      //       borderSide: const BorderSide(width: 0.0),
+                                                      //       borderRadius: BorderRadius.circular(10.0),
+                                                      //     ),
+                                                      //     hintText: 'PT. AXX XXXX'
+                                                      //   ),
+                                                      // ),
+                                                    ],
+                                                  )
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 50.h,),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: (){
+                                                    // insertTermData(txtTermName.text, context);
+                                                  }, 
+                                                  style: ElevatedButton.styleFrom(
+                                                    elevation: 0,
+                                                    alignment: Alignment.centerLeft,
+                                                    minimumSize: Size(25.w, 50.h),
+                                                    foregroundColor: Colors.white,
+                                                    backgroundColor: const Color(0xFF2A85FF),
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                  ),
+                                                  child: Text('Submit', style: TextStyle(fontSize: 6.sp),)
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                        
                                       ),
                                     )
                                   ],

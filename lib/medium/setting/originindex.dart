@@ -1,3 +1,4 @@
+import 'package:erpsystems/medium/setting/addorigin.dart';
 import 'package:erpsystems/services/settings/origindataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -434,7 +435,7 @@ class _OriginIndexMediumState extends State<OriginIndexMedium> {
                                           Text('Origin', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              // Get.to(AddSupplierMedium());
+                                              Get.to(AddNewOriginMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

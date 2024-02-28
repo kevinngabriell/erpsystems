@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
+import 'package:erpsystems/medium/setting/settingindex.dart';
 import 'package:erpsystems/services/masterservices.dart';
+import 'package:erpsystems/web-settings/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -28,7 +30,13 @@ Future <void> insertTargeting(companyID, targetYear, targetValue, BuildContext c
           actions: [
             TextButton(
               onPressed: (){
-                Get.to(const SettingIndexLarge());
+                if(ResponsiveWidget.isLargeScreen(context)){
+                  Get.to(const SettingIndexLarge());
+                } else if (ResponsiveWidget.isMediumScreen(context)){
+                  Get.to(const SettingMediumIndex());
+                } else if (ResponsiveWidget.isSmallScreen(context)){
+                  // Get.to(const IndexTemplateSmall());
+                }
               }, 
               child: const Text('Oke')
             ),
@@ -81,7 +89,13 @@ Future <void> updatePermission(permissionID, username, BuildContext context) asy
           actions: [
             TextButton(
               onPressed: (){
-                Get.to(const SettingIndexLarge());
+                if(ResponsiveWidget.isLargeScreen(context)){
+                  Get.to(const SettingIndexLarge());
+                } else if (ResponsiveWidget.isMediumScreen(context)){
+                  Get.to(const SettingMediumIndex());
+                } else if (ResponsiveWidget.isSmallScreen(context)){
+                  // Get.to(const IndexTemplateSmall());
+                }
               }, 
               child: const Text('Oke')
             ),
@@ -135,7 +149,13 @@ Future<void> updateUserLimit(userLimit, refferalCode, context) async {
           actions: [
             TextButton(
               onPressed: (){
-                Get.to(const SettingIndexLarge());
+                if(ResponsiveWidget.isLargeScreen(context)){
+                  Get.to(const SettingIndexLarge());
+                } else if (ResponsiveWidget.isMediumScreen(context)){
+                  Get.to(const SettingMediumIndex());
+                } else if (ResponsiveWidget.isSmallScreen(context)){
+                  // Get.to(const IndexTemplateSmall());
+                }
               }, 
               child: const Text('Oke')
             ),

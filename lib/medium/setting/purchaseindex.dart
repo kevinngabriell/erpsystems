@@ -438,20 +438,6 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text('Purchase', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
-                                          ElevatedButton(
-                                            onPressed: (){
-                                              // Get.to(AddSupplierMedium());
-                                            }, 
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              alignment: Alignment.centerLeft,
-                                              minimumSize: Size(30.w, 48.h),
-                                              foregroundColor: Colors.white,
-                                              backgroundColor: const Color(0xFF2A85FF),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                            ),
-                                            child: Text('Add New Purchase', style: TextStyle(fontSize: 6.sp),)
-                                          )
                                         ],
                                       ),
                                     ),

@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:erpsystems/large/setting%20module/termsetting.dart';
+import 'package:erpsystems/medium/setting/termindex.dart';
 import 'package:erpsystems/services/masterservices.dart';
+import 'package:erpsystems/web-settings/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -41,7 +43,13 @@ Future <void> insertTermData(termName, BuildContext context) async {
               actions: [
                 TextButton(
                   onPressed: (){
-                    Get.to(const TermSettingLarge());
+                    if(ResponsiveWidget.isLargeScreen(context)){
+                      Get.to(const TermSettingLarge());
+                    } else if (ResponsiveWidget.isMediumScreen(context)){
+                      Get.to(const TermIndexMedium());
+                    } else if (ResponsiveWidget.isSmallScreen(context)){
+                      // Get.to(const IndexTemplateSmall());
+                    }
                   }, 
                   child: const Text('Oke')
                 ),
