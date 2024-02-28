@@ -1,3 +1,5 @@
+import 'package:erpsystems/medium/setting/addnewpurchasestatus.dart';
+import 'package:erpsystems/medium/setting/addnewpurchasetype.dart';
 import 'package:erpsystems/services/settings/purchasesettingdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -494,7 +496,7 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
                                                           Text('Purchase status setting', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600,)),
                                                           ElevatedButton(
                                                             onPressed: (){
-                                                              // Get.to(AddNewPuchaseStatusLarge());
+                                                              Get.to(AddNewPurchaseStatus());
                                                             }, 
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,
@@ -559,7 +561,7 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
                                                           Text('Purchase type setting', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600,)),
                                                           ElevatedButton(
                                                             onPressed: (){
-                                                              // Get.to(AddNewPurchaseTypeLarge());
+                                                              Get.to(AddNewPurchaseTypeMedium());
                                                             }, 
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,

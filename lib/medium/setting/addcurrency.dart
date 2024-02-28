@@ -412,7 +412,7 @@ class _AddCurrencyMediumState extends State<AddCurrencyMedium> {
                                 onTap: (){
                                   Get.back();
                                 },
-                                child: Text('Term settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
+                                child: Text('Currency settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
                               ),
                               SizedBox(height: 10.h,),
                               SizedBox(
@@ -425,7 +425,7 @@ class _AddCurrencyMediumState extends State<AddCurrencyMedium> {
                                     //Add New Customer Information Title
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
-                                      child: Text('Add New Term', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
+                                      child: Text('Add New Currency', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                     ),
                                     SizedBox(height: 10.h,),
                                     //Text Form New Customer
@@ -489,7 +489,7 @@ class _AddCurrencyMediumState extends State<AddCurrencyMedium> {
                                                     backgroundColor: const Color(0xFF2A85FF),
                                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                   ),
-                                                  child: Text('Submit', style: TextStyle(fontSize: 4.sp),)
+                                                  child: Text('Submit', style: TextStyle(fontSize: 6.sp),)
                                                 )
                                               ],
                                             )

@@ -489,7 +489,7 @@ class _AddPaymentMediumState extends State<AddPaymentMedium> {
                                                     backgroundColor: const Color(0xFF2A85FF),
                                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                   ),
-                                                  child: Text('Submit', style: TextStyle(fontSize: 4.sp),)
+                                                  child: Text('Submit', style: TextStyle(fontSize: 6.sp),)
                                                 )
                                               ],
                                             )

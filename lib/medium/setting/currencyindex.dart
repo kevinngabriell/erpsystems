@@ -1,3 +1,4 @@
+import 'package:erpsystems/medium/setting/addcurrency.dart';
 import 'package:erpsystems/services/settings/currencydataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -435,7 +436,7 @@ class _CurrencyIndexMediumState extends State<CurrencyIndexMedium> {
                                           Text('Currency', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              // Get.to(AddSupplierMedium());
+                                              Get.to(AddCurrencyMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

@@ -1,3 +1,4 @@
+import 'package:erpsystems/medium/setting/addpayment.dart';
 import 'package:erpsystems/services/settings/paymentdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -435,7 +436,7 @@ class _PaymentMediumIndexState extends State<PaymentMediumIndex> {
                                           Text('Payment', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              // Get.to(AddSupplierMedium());
+                                              Get.to(AddPaymentMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
