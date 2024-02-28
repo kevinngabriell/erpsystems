@@ -47,6 +47,26 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
   List<String> poSupplier = [];
   List<String> poShipmentDate = [];
   List<String> poPayment = [];
+  List<String> poProductName1 = [];
+  List<String> poUnitPrice1 = [];
+  List<String> poQuantity1 = [];
+  List<String> poPackagingSize1 = [];
+  List<String> poProductName2 = [];
+  List<String> poUnitPrice2 = [];
+  List<String> poQuantity2 = [];
+  List<String> poPackagingSize2 = [];
+  List<String> poProductName3 = [];
+  List<String> poUnitPrice3 = [];
+  List<String> poQuantity3 = [];
+  List<String> poPackagingSize3 = [];
+  List<String> poProductName4 = [];
+  List<String> poUnitPrice4 = [];
+  List<String> poQuantity4 = [];
+  List<String> poPackagingSize4 = [];
+  List<String> poProductName5 = [];
+  List<String> poUnitPrice5 = [];
+  List<String> poQuantity5 = [];
+  List<String> poPackagingSize5 = [];
 
   @override
   void initState() {
@@ -620,7 +640,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                     width: MediaQuery.of(context).size.width / 9,
                                     child: ElevatedButton(
                                       onPressed: (){
-                                        createExcelLocal(poNumbers, poDate, poStatus, poSupplier, poShipmentDate, poPayment);
+                                        createExcelLocal(poNumbers, poDate, poStatus, poSupplier, poShipmentDate, poPayment, poProductName1, poQuantity1, poPackagingSize1, poUnitPrice1, poProductName2, poQuantity2, poPackagingSize2, poUnitPrice2, poProductName3, poQuantity3, poPackagingSize3, poUnitPrice3, poProductName4, poQuantity4, poPackagingSize4, poUnitPrice4, poProductName5, poQuantity5, poPackagingSize5, poUnitPrice5);
                                       }, 
                                       style: ElevatedButton.styleFrom(
                                         elevation: 0,
@@ -707,6 +727,26 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                             poStatus.add(data[index]['PO_Status_Name']);
                                             poShipmentDate.add(data[index]['shipment_name']);
                                             poPayment.add(data[index]['payment_name']);
+                                            poProductName1.add(data[index]['ProductName1'] ?? '');
+                                            poUnitPrice1.add(data[index]['UnitPrice1'] ?? '');
+                                            poQuantity1.add(data[index]['Quantity1'] ?? '');
+                                            poPackagingSize1.add(data[index]['PackagingSize1'] ?? '');
+                                            poProductName2.add(data[index]['ProductName2'] ?? '');
+                                            poUnitPrice2.add(data[index]['UnitPrice2'] ?? '');
+                                            poQuantity2.add(data[index]['Quantity2'] ?? '');
+                                            poPackagingSize2.add(data[index]['PackagingSize2'] ?? '');
+                                            poProductName3.add(data[index]['ProductName3'] ?? '');
+                                            poUnitPrice3.add(data[index]['UnitPrice3'] ?? '');
+                                            poQuantity3.add(data[index]['Quantity3'] ?? '');
+                                            poPackagingSize3.add(data[index]['PackagingSize3'] ?? '');
+                                            poProductName4.add(data[index]['ProductName4'] ?? '');
+                                            poUnitPrice4.add(data[index]['UnitPrice4'] ?? '');
+                                            poQuantity4.add(data[index]['Quantity4'] ?? '');
+                                            poPackagingSize4.add(data[index]['PackagingSize4'] ?? '');
+                                            poProductName5.add(data[index]['ProductName5'] ?? '');
+                                            poUnitPrice5.add(data[index]['UnitPrice5'] ?? '');
+                                            poQuantity5.add(data[index]['Quantity5'] ?? '');
+                                            poPackagingSize5.add(data[index]['PackagingSize5'] ?? '');
                                             return Container(
                                               width: MediaQuery.of(context).size.width,
                                               color: backgroundColor,

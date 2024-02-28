@@ -16,7 +16,18 @@ import 'dart:typed_data' show Uint8List;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-Future<void> createExcelLocal(List<String> poNumbers, List<String> poDate, List<String> poStatus, List<String> poSupplier, List<String> poShipmentDate, List<String> poPayment) async {
+Future<void> createExcelLocal(
+  List<String> poNumbers, List<String> poDate, List<String> poStatus, List<String> poSupplier, 
+  List<String> poShipmentDate, List<String> poPayment, List<String> poProductName1, List<String> poQuantity1, 
+  List<String> poPackagingSize1, List<String> poUnitPrice1, 
+  List<String> poProductName2, List<String> poQuantity2, 
+  List<String> poPackagingSize2, List<String> poUnitPrice2,
+  List<String> poProductName3, List<String> poQuantity3, 
+  List<String> poPackagingSize3, List<String> poUnitPrice3,
+  List<String> poProductName4, List<String> poQuantity4, 
+  List<String> poPackagingSize4, List<String> poUnitPrice4,
+  List<String> poProductName5, List<String> poQuantity5, 
+  List<String> poPackagingSize5, List<String> poUnitPrice5,) async {
   // Create an Excel workbook
   var excel = Excel.createExcel();
 
@@ -59,6 +70,26 @@ Future<void> createExcelLocal(List<String> poNumbers, List<String> poDate, List<
       TextCellValue(poShipmentDate[i]),
       TextCellValue(poPayment[i]),
       TextCellValue(poStatus[i]),
+      TextCellValue(poProductName1[i]),
+      TextCellValue(poQuantity1[i]),
+      TextCellValue(poPackagingSize1[i]),
+      TextCellValue(poUnitPrice1[i]),
+      TextCellValue(poProductName2[i]),
+      TextCellValue(poQuantity2[i]),
+      TextCellValue(poPackagingSize2[i]),
+      TextCellValue(poUnitPrice2[i]),
+      TextCellValue(poProductName3[i]),
+      TextCellValue(poQuantity3[i]),
+      TextCellValue(poPackagingSize3[i]),
+      TextCellValue(poUnitPrice3[i]),
+      TextCellValue(poProductName4[i]),
+      TextCellValue(poQuantity4[i]),
+      TextCellValue(poPackagingSize4[i]),
+      TextCellValue(poUnitPrice4[i]),
+      TextCellValue(poProductName5[i]),
+      TextCellValue(poQuantity5[i]),
+      TextCellValue(poPackagingSize5[i]),
+      TextCellValue(poUnitPrice5[i]),
     ]);
 
     
