@@ -30,20 +30,6 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
   String profileName = '';
   String companyName = '';
   String companyId = '';
-  TextEditingController txtPhoneNumber = TextEditingController();
-  TextEditingController txtWebsite = TextEditingController();
-  TextEditingController txtEmail = TextEditingController();
-  TextEditingController txtAddress = TextEditingController();
-  TextEditingController txtIndustry = TextEditingController();
-
-  TextEditingController txtTarget2024 = TextEditingController();
-  TextEditingController txtTarget2025 = TextEditingController();
-  TextEditingController txtTarget2026 = TextEditingController();
-  TextEditingController txtTarget2027 = TextEditingController();
-  TextEditingController txtTarget2028 = TextEditingController();
-  TextEditingController txtTarget2029 = TextEditingController();
-  TextEditingController txtTarget2030 = TextEditingController();
-  TextEditingController txtTarget2031 = TextEditingController();
 
   late Future<List<Map<String, dynamic>>> customerList;
 

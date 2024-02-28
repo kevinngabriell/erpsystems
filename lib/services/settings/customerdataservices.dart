@@ -2,7 +2,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:erpsystems/large/setting%20module/customersettings.dart';
+import 'package:erpsystems/medium/setting/customerindex.dart';
 import 'package:erpsystems/services/masterservices.dart';
+import 'package:erpsystems/web-settings/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -105,7 +107,14 @@ Future <void> insertCustomerData(customerName, customerAddress, customerPhone, c
               actions: [
                 TextButton(
                   onPressed: (){
-                    Get.to(const CustomerSettingLarge());
+                    if(ResponsiveWidget.isLargeScreen(context)){
+                      Get.to(CustomerSettingLarge());
+                    } else if (ResponsiveWidget.isMediumScreen(context)){
+                      Get.to(const CustomerMediumIndex());
+                    } else if (ResponsiveWidget.isSmallScreen(context)){
+                      // Get.to(const IndexTemplateSmall());
+                    }
+                    // Get.to(const CustomerSettingLarge());
                   }, 
                   child: const Text('Oke')
                 ),

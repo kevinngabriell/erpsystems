@@ -28,16 +28,16 @@ class _LoginMediumState extends State<LoginMedium> {
                 children: [
                    //Login Title
                   Center(
-                    child: Text('Login', style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.w600,),)
+                    child: Text('Login', style: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.w600,),)
                   ),
                   Center(
-                    child: Text('Login to access ERP Systems', style: TextStyle(fontSize: 10.sp,fontWeight: FontWeight.w500, color: const Color.fromRGBO(129, 131, 133, 1)),)
+                    child: Text('Login to access ERP Systems', style: TextStyle(fontSize: 7.sp,fontWeight: FontWeight.w500, color: const Color.fromRGBO(129, 131, 133, 1)),)
                   ),
                   SizedBox(height: 20.h,),
                   //Username Input
                   Center(
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.3,
+                      width: MediaQuery.of(context).size.width / 2,
                       child: TextFormField(
                         controller: txtUsername,
                         decoration: InputDecoration(
@@ -59,7 +59,7 @@ class _LoginMediumState extends State<LoginMedium> {
                   //Password Input
                   Center(
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.3,
+                      width: MediaQuery.of(context).size.width / 2,
                       child: TextFormField(
                         controller: txtPassword,
                         obscureText: true,
@@ -82,8 +82,8 @@ class _LoginMediumState extends State<LoginMedium> {
                   //Forgot Password
                   Center(
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.3,
-                      child: Text('Forgot Password?', style: TextStyle(fontSize: 7.sp,fontWeight: FontWeight.w500, color: const Color.fromRGBO(167, 128, 255, 1)),)
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Text('Forgot Password?', style: TextStyle(fontSize: 5.sp,fontWeight: FontWeight.w500, color: const Color.fromRGBO(167, 128, 255, 1)),)
                     ),
                   ),
                   SizedBox(height: 25.h,),
@@ -116,11 +116,11 @@ class _LoginMediumState extends State<LoginMedium> {
                           children: [
                             TextSpan(
                               text: "Don't have an account? ",
-                              style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(111, 118, 126, 1))
+                              style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(111, 118, 126, 1))
                             ),
                             TextSpan(
                               text: "Create Account",
-                              style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(110, 46, 253, 1))
+                              style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600, color: const Color.fromRGBO(110, 46, 253, 1))
                             )
                           ]
                         )
