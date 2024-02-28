@@ -5,7 +5,15 @@ import 'package:erpsystems/medium/hr/hrindex.dart';
 import 'package:erpsystems/medium/login.dart';
 import 'package:erpsystems/medium/purchase/purchaseindex.dart';
 import 'package:erpsystems/medium/sales/salesindex.dart';
+import 'package:erpsystems/medium/setting/currencyindex.dart';
 import 'package:erpsystems/medium/setting/customerindex.dart';
+import 'package:erpsystems/medium/setting/internalindex.dart';
+import 'package:erpsystems/medium/setting/originindex.dart';
+import 'package:erpsystems/medium/setting/paymentindex.dart';
+import 'package:erpsystems/medium/setting/purchaseindex.dart';
+import 'package:erpsystems/medium/setting/shippingindex.dart';
+import 'package:erpsystems/medium/setting/supplierindex.dart';
+import 'package:erpsystems/medium/setting/termindex.dart';
 import 'package:erpsystems/medium/template/indextemplatemedium.dart';
 import 'package:erpsystems/medium/warehouse/warehouseindex.dart';
 import 'package:flutter/material.dart';
@@ -391,7 +399,9 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                     //Content
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height, // Set the minimal height
+                      ),
                       decoration: const BoxDecoration(
                         color: Color(0xFFF4F4F4)
                       ),
@@ -439,7 +449,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Supplier Card
                                         GestureDetector(
                                           onTap: () {
-                                            // Get.to(SupplierSettingLarge());
+                                            Get.to(SupplierIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -459,7 +469,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Term Card
                                         GestureDetector(
                                           onTap: () {
-                                            // Get.to(TermSettingLarge());
+                                            Get.to(TermIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -479,7 +489,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Packaging Card
                                         GestureDetector(
                                           onTap: () {
-                                            // Get.to(ShippingIndexLarge());
+                                            Get.to(ShippingIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -508,7 +518,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Origin Card
                                         GestureDetector(
                                           onTap: () {
-                                            // Get.to(OriginSettingLarge());
+                                            Get.to(OriginIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -528,7 +538,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Internal Card
                                         GestureDetector(
                                           onTap: () {
-                                            // Get.to(InternalSettingLarge());
+                                            Get.to(InternalMediumIndex());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -548,7 +558,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Product Card
                                         GestureDetector(
                                           onTap: () {
-                                            // Get.to(PaymentSettingLarge());
+                                            Get.to(PaymentMediumIndex());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -568,7 +578,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Packaging Card
                                         GestureDetector(
                                           onTap: () {
-                                            // Get.to(CurrencyIndexLarge());
+                                            Get.to(CurrencyIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -596,7 +606,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Purchase Card
                                         GestureDetector(
                                           onTap: () {
-                                            // Get.to(PurchaseSettingLarge());
+                                            Get.to(PurchaseIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,

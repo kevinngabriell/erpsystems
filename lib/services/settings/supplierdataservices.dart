@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:erpsystems/large/setting%20module/suppliersettingslarge.dart';
+import 'package:erpsystems/medium/setting/supplierindex.dart';
+import 'package:erpsystems/web-settings/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -185,7 +187,13 @@ Future <void> updateSupplier(supplierId, supplierName, supplierPhone, supplierAd
               actions: [
                 TextButton(
                   onPressed: (){
-                    Get.to(const SupplierSettingLarge());
+                    if(ResponsiveWidget.isLargeScreen(context)){
+                      Get.to(SupplierSettingLarge());
+                    } else if (ResponsiveWidget.isMediumScreen(context)){
+                      Get.to(const SupplierIndexMedium());
+                    } else if (ResponsiveWidget.isSmallScreen(context)){
+                      // Get.to(const IndexTemplateSmall());
+                    }
                   }, 
                   child: const Text('Oke')
                 ),
@@ -389,7 +397,13 @@ Future <void> insertSupplier(supplierName, supplierOrigin, supplierAddress, supp
               actions: [
                 TextButton(
                   onPressed: (){
-                    Get.to(const SupplierSettingLarge());
+                    if(ResponsiveWidget.isLargeScreen(context)){
+                      Get.to(SupplierSettingLarge());
+                    } else if (ResponsiveWidget.isMediumScreen(context)){
+                      Get.to(const SupplierIndexMedium());
+                    } else if (ResponsiveWidget.isSmallScreen(context)){
+                      // Get.to(const IndexTemplateSmall());
+                    }
                   }, 
                   child: const Text('Oke')
                 ),

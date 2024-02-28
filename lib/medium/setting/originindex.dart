@@ -1,7 +1,4 @@
-import 'package:erpsystems/medium/setting/addcustomer.dart';
-import 'package:erpsystems/medium/setting/customerdetail.dart';
-import 'package:erpsystems/medium/setting/settingindex.dart';
-import 'package:erpsystems/services/settings/customerdataservices.dart';
+import 'package:erpsystems/services/settings/origindataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -15,15 +12,16 @@ import 'package:erpsystems/medium/purchase/purchaseindex.dart';
 import 'package:erpsystems/medium/sales/salesindex.dart';
 import 'package:erpsystems/medium/template/indextemplatemedium.dart';
 import 'package:erpsystems/medium/warehouse/warehouseindex.dart';
+import 'package:erpsystems/medium/setting/settingindex.dart';
 
-class CustomerMediumIndex extends StatefulWidget {
-  const CustomerMediumIndex({super.key});
+class OriginIndexMedium extends StatefulWidget {
+  const OriginIndexMedium({super.key});
 
   @override
-  State<CustomerMediumIndex> createState() => _CustomerMediumIndexState();
+  State<OriginIndexMedium> createState() => _OriginIndexMediumState();
 }
 
-class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
+class _OriginIndexMediumState extends State<OriginIndexMedium> {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
   String companyId = '';
@@ -32,13 +30,12 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
   bool isLoading = false;
   bool isMenu = false;
 
-  late Future<List<Map<String, dynamic>>> customerList;
+  late Future<List<Map<String, dynamic>>> originList;
 
-  @override
+ @override
   void initState() {
     super.initState();
-    companyId = storage.read('companyId').toString();
-    customerList = allCustomerDataService(companyId);
+    originList = allOriginDataService();
   }
 
   @override
@@ -419,7 +416,7 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                 onTap: (){
                                   Get.back();
                                 },
-                                child: Text('Customer settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
+                                child: Text('Origin settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
                               ),
                               SizedBox(height: 10.h,),
                             SizedBox(
@@ -434,10 +431,10 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Customer', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
+                                          Text('Origin', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddCustomerMedium());
+                                              // Get.to(AddSupplierMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
@@ -447,7 +444,7 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                               backgroundColor: const Color(0xFF2A85FF),
                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                             ),
-                                            child: Text('Add Customer', style: TextStyle(fontSize: 6.sp),)
+                                            child: Text('Add New Origin', style: TextStyle(fontSize: 6.sp),)
                                           )
                                         ],
                                       ),
@@ -458,7 +455,7 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
                                         child: FutureBuilder<List<Map<String, dynamic>>>(
-                                          future: customerList,
+                                          future: originList,
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState == ConnectionState.waiting) {
                                               return const Center(child: CircularProgressIndicator());
@@ -469,30 +466,28 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                                 showCheckboxColumn: false,
                                                 columns: const <DataColumn> [
                                                   DataColumn(label: Text('No')),
-                                                  DataColumn(label: Text('Name')),
-                                                  DataColumn(label: Text('Address')),
-                                                  DataColumn(label: Text('Phone number')),
+                                                  DataColumn(label: Text('Origin')),
+                                                  DataColumn(label: Text('AFTA Area')),
                                                 ], 
                                                 rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
                                                   int index = entry.key + 1;
-                                                  Map<String, dynamic> customer = entry.value;
+                                                  Map<String, dynamic> origin = entry.value;
                                                   return DataRow(
                                                     cells: <DataCell>[
                                                       DataCell(Text('$index')),
-                                                      DataCell(Text(customer['company_name'])),
-                                                      DataCell(Text(customer['company_address'])),
-                                                      DataCell(Text(customer['company_phone'])),
+                                                      DataCell(Text(origin['origin_name'])),
+                                                      DataCell(Text(convertToYesNo(origin['origin_is_free_trade'])))
                                                     ],
                                                     onSelectChanged: (selected) {
                                                       if (selected!) {
-                                                        Get.to(CustomerDetailMedium(customer['company_id']));
+                                                        // Get.to(DetailOriginSettingLarge(origin['origin_id']));
                                                       }
                                                     },
                                                   );
-                                                }).toList(),
+                                                }).toList()
                                               );
                                             } else {
-                                              return const Center(child: Text('No data available'));
+                                               return const Center(child: Text('No data available'));
                                             }
                                           }
                                         ),
@@ -514,5 +509,9 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
         )
       ),
     );
+  }
+
+  String convertToYesNo(String value) {
+    return value == '1' ? 'Yes' : 'No';
   }
 }

@@ -197,7 +197,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
                                 child: Image.asset('Icon/PurchasingInactive.png'),
                               ),
                               SizedBox(width: 3.w),
-                              Text('Purchasing Module', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w400),)
+                              Text('Purchasing\nModule', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w400),)
                             ],
                           )
                         ),
@@ -249,7 +249,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
                               child: Image.asset('Icon/WarehouseInactive.png'),
                             ),
                             SizedBox(width: 3.w),
-                            Text('Warehouse Module', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w400),)
+                            Text('Warehouse\nModule', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w400),)
                           ],
                         )
                       ),
@@ -327,7 +327,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
                                 child: Image.asset('Icon/DocumentInactive.png'),
                               ),
                               SizedBox(width: 3.w),
-                              Text('Document Module', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w400),)
+                              Text('Document\nModule', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w400),)
                             ],
                           )
                         ),
@@ -492,7 +492,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
                                         children: [
                                           Text('Overview', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600),),
                                           SizedBox(
-                                            width: MediaQuery.of(context).size.width / 7,
+                                            width: MediaQuery.of(context).size.width / 5,
                                             child: DropdownButtonFormField(
                                               value: '001',
                                               items: const [
@@ -539,7 +539,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
                                                       children: [
                                                         Image.asset('Icon/Attandance.png'),
                                                         SizedBox(width: 2.w,),
-                                                        Text(isMenu ? 'Attandance\n ' : 'Attandance', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                                                        Text(isMenu ? 'Sales\n ' : 'Sales', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
                                                       ],
                                                     ),
                                                   ),
@@ -617,7 +617,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
                                                       children: [
                                                         Image.asset('Icon/Leave.png'),
                                                         SizedBox(width: 2.w,),
-                                                        Text(isMenu ? 'Remaining\nLeave' : 'Remaining Leave', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
+                                                        Text(isMenu ? 'Remaining\nLeave' : 'Remaining\nLeave', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600),),
                                                       ],
                                                     ),
                                                   ),

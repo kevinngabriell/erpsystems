@@ -302,7 +302,13 @@ Future <void> updateCustomerData(customerId, customerName, customerAddress, cust
               actions: [
                 TextButton(
                   onPressed: (){
-                    Get.to(const CustomerSettingLarge());
+                    if(ResponsiveWidget.isLargeScreen(context)){
+                      Get.to(CustomerSettingLarge());
+                    } else if (ResponsiveWidget.isMediumScreen(context)){
+                      Get.to(const CustomerMediumIndex());
+                    } else if (ResponsiveWidget.isSmallScreen(context)){
+                      // Get.to(const IndexTemplateSmall());
+                    }
                   }, 
                   child: const Text('Oke')
                 ),

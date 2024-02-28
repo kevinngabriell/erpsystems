@@ -1,7 +1,4 @@
-import 'package:erpsystems/medium/setting/addcustomer.dart';
-import 'package:erpsystems/medium/setting/customerdetail.dart';
-import 'package:erpsystems/medium/setting/settingindex.dart';
-import 'package:erpsystems/services/settings/customerdataservices.dart';
+import 'package:erpsystems/services/settings/purchasesettingdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -15,15 +12,16 @@ import 'package:erpsystems/medium/purchase/purchaseindex.dart';
 import 'package:erpsystems/medium/sales/salesindex.dart';
 import 'package:erpsystems/medium/template/indextemplatemedium.dart';
 import 'package:erpsystems/medium/warehouse/warehouseindex.dart';
+import 'package:erpsystems/medium/setting/settingindex.dart';
 
-class CustomerMediumIndex extends StatefulWidget {
-  const CustomerMediumIndex({super.key});
+class PurchaseIndexMedium extends StatefulWidget {
+  const PurchaseIndexMedium({super.key});
 
   @override
-  State<CustomerMediumIndex> createState() => _CustomerMediumIndexState();
+  State<PurchaseIndexMedium> createState() => _PurchaseIndexMediumState();
 }
 
-class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
+class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerProviderStateMixin {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
   String companyId = '';
@@ -32,13 +30,18 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
   bool isLoading = false;
   bool isMenu = false;
 
-  late Future<List<Map<String, dynamic>>> customerList;
+  late TabController tabController;
+
+  late Future<List<Map<String, dynamic>>> purchaseTypeList;
+  late Future<List<Map<String, dynamic>>> purchaseStatusList;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    companyId = storage.read('companyId').toString();
-    customerList = allCustomerDataService(companyId);
+    tabController = TabController(length: 2, vsync: this);
+    purchaseStatusList = allPurchaseStatus();
+    purchaseTypeList = allPurchaseType();
   }
 
   @override
@@ -419,7 +422,7 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                 onTap: (){
                                   Get.back();
                                 },
-                                child: Text('Customer settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
+                                child: Text('Purchase settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
                               ),
                               SizedBox(height: 10.h,),
                             SizedBox(
@@ -434,10 +437,10 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Customer', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
+                                          Text('Purchase', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddCustomerMedium());
+                                              // Get.to(AddSupplierMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
@@ -447,57 +450,189 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                               backgroundColor: const Color(0xFF2A85FF),
                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                             ),
-                                            child: Text('Add Customer', style: TextStyle(fontSize: 6.sp),)
+                                            child: Text('Add New Purchase', style: TextStyle(fontSize: 6.sp),)
                                           )
                                         ],
                                       ),
                                     ),
                                     SizedBox(height: 10.h,),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
-                                      child: SizedBox(
-                                        width: MediaQuery.of(context).size.width,
-                                        child: FutureBuilder<List<Map<String, dynamic>>>(
-                                          future: customerList,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState == ConnectionState.waiting) {
-                                              return const Center(child: CircularProgressIndicator());
-                                            } else if (snapshot.hasError) {
-                                              return Center(child: Text('Error: ${snapshot.error}'));
-                                            } else if (snapshot.hasData) {
-                                              return DataTable(
-                                                showCheckboxColumn: false,
-                                                columns: const <DataColumn> [
-                                                  DataColumn(label: Text('No')),
-                                                  DataColumn(label: Text('Name')),
-                                                  DataColumn(label: Text('Address')),
-                                                  DataColumn(label: Text('Phone number')),
-                                                ], 
-                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
-                                                  int index = entry.key + 1;
-                                                  Map<String, dynamic> customer = entry.value;
-                                                  return DataRow(
-                                                    cells: <DataCell>[
-                                                      DataCell(Text('$index')),
-                                                      DataCell(Text(customer['company_name'])),
-                                                      DataCell(Text(customer['company_address'])),
-                                                      DataCell(Text(customer['company_phone'])),
-                                                    ],
-                                                    onSelectChanged: (selected) {
-                                                      if (selected!) {
-                                                        Get.to(CustomerDetailMedium(customer['company_id']));
-                                                      }
-                                                    },
-                                                  );
-                                                }).toList(),
-                                              );
-                                            } else {
-                                              return const Center(child: Text('No data available'));
-                                            }
-                                          }
-                                        ),
-                                      ),
-                                    )
+                                    SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Card(
+                                child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          TabBar(
+                                            isScrollable: false,
+                                            controller: tabController,
+                                            labelColor: const Color.fromRGBO(78, 195, 252, 1),
+                                            unselectedLabelColor: Colors.black,
+                                            tabs: [
+                                              Tab( 
+                                                child: Text(
+                                                  'Purchase status', 
+                                                  style: TextStyle(
+                                                    fontSize: 7.sp, 
+                                                    fontWeight: FontWeight.w400,
+                                                    //color: tabController.index == 0 ? Color.fromRGBO(78, 195, 252, 1) : Colors.black
+                                                  ),
+                                                ),
+                                              ),
+                                              Tab( 
+                                                child: Text(
+                                                  'Purchase type', 
+                                                  style: TextStyle(
+                                                    fontSize: 7.sp, 
+                                                    fontWeight: FontWeight.w400,
+                                                    //color: tabController.index == 0 ? Color.fromRGBO(78, 195, 252, 1) : Colors.black
+                                                  ),
+                                                ),
+                                              ),
+                                            ]
+                                          ),
+                                           SizedBox(
+                                            height: MediaQuery.of(context).size.height,
+                                            child: TabBarView(
+                                              controller: tabController,
+                                              children: [
+                                                //Purchase status content
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text('Purchase status setting', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600,)),
+                                                          ElevatedButton(
+                                                            onPressed: (){
+                                                              // Get.to(AddNewPuchaseStatusLarge());
+                                                            }, 
+                                                            style: ElevatedButton.styleFrom(
+                                                              elevation: 0,
+                                                              alignment: Alignment.centerLeft,
+                                                              minimumSize: Size(30.w, 55.h),
+                                                              foregroundColor: Colors.white,
+                                                              backgroundColor: const Color(0xFF2A85FF),
+                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                            ),
+                                                            child: Text('Add new purchase status', style: TextStyle(fontSize: 6.sp),)
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
+                                                      child: SizedBox(
+                                                        width: MediaQuery.of(context).size.width,
+                                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                                          future: purchaseStatusList,
+                                                          builder: (context, snapshot) {
+                                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                                              return const Center(child: CircularProgressIndicator());
+                                                            } else if (snapshot.hasError) {
+                                                              return Center(child: Text('Error: ${snapshot.error}'));
+                                                            } else if (snapshot.hasData) {                                                     
+                                                              return DataTable(
+                                                                showCheckboxColumn: false,
+                                                                columns: const <DataColumn> [
+                                                                  DataColumn(label: Text('No')),
+                                                                  DataColumn(label: Text('Purchase Status'))
+                                                                ], 
+                                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
+                                                                  int index = entry.key + 1;
+                                                                  Map<String, dynamic> users = entry.value;
+                                                                  return DataRow(
+                                                                    cells: <DataCell>[
+                                                                      DataCell(Text('$index')),
+                                                                      DataCell(Text(users['PO_Status_Name'])),
+                                                                    ],
+                                                                  );
+                                                                }).toList(),
+                                                              );
+                                                            } else {
+                                                              return const Center(child: Text('No data available'));
+                                                            }
+                                                          }
+                                                        ),
+                                                      )
+                                                    )
+                                                  ]
+                                                ),
+                                                //Purchase type content
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp, bottom: 10.sp),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text('Purchase type setting', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600,)),
+                                                          ElevatedButton(
+                                                            onPressed: (){
+                                                              // Get.to(AddNewPurchaseTypeLarge());
+                                                            }, 
+                                                            style: ElevatedButton.styleFrom(
+                                                              elevation: 0,
+                                                              alignment: Alignment.centerLeft,
+                                                              minimumSize: Size(30.w, 55.h),
+                                                              foregroundColor: Colors.white,
+                                                              backgroundColor: const Color(0xFF2A85FF),
+                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                            ),
+                                                            child: Text('Add new purchase type', style: TextStyle(fontSize: 6.sp),)
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
+                                                      child: SizedBox(
+                                                        width: MediaQuery.of(context).size.width,
+                                                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                                                          future: purchaseTypeList,
+                                                          builder: (context, snapshot) {
+                                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                                              return const Center(child: CircularProgressIndicator());
+                                                            } else if (snapshot.hasError) {
+                                                              return Center(child: Text('Error: ${snapshot.error}'));
+                                                            } else if (snapshot.hasData) {                                                     
+                                                              return DataTable(
+                                                                showCheckboxColumn: false,
+                                                                columns: const <DataColumn> [
+                                                                  DataColumn(label: Text('No')),
+                                                                  DataColumn(label: Text('Purchase Type'))
+                                                                ], 
+                                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
+                                                                  int index = entry.key + 1;
+                                                                  Map<String, dynamic> users = entry.value;
+                                                                  return DataRow(
+                                                                    cells: <DataCell>[
+                                                                      DataCell(Text('$index')),
+                                                                      DataCell(Text(users['PO_Type_Name'])),
+                                                                    ],
+                                                                  );
+                                                                }).toList(),
+                                                              );
+                                                            } else {
+                                                              return const Center(child: Text('No data available'));
+                                                            }
+                                                          }
+                                                        ),
+                                                      )
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                           )
+                                        ],
+                                      )
+                              )
+                            )
                                   ],
                                 ),
                               ),

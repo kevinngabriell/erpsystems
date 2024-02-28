@@ -1,10 +1,7 @@
-import 'package:erpsystems/medium/setting/addcustomer.dart';
-import 'package:erpsystems/medium/setting/customerdetail.dart';
 import 'package:erpsystems/medium/setting/settingindex.dart';
 import 'package:erpsystems/services/settings/customerdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:erpsystems/medium/analytics/analyticsindex.dart';
 import 'package:erpsystems/medium/document/documentindex.dart';
@@ -15,36 +12,37 @@ import 'package:erpsystems/medium/purchase/purchaseindex.dart';
 import 'package:erpsystems/medium/sales/salesindex.dart';
 import 'package:erpsystems/medium/template/indextemplatemedium.dart';
 import 'package:erpsystems/medium/warehouse/warehouseindex.dart';
+import 'package:get/get.dart';
 
-class CustomerMediumIndex extends StatefulWidget {
-  const CustomerMediumIndex({super.key});
+class CustomerDetailMedium extends StatefulWidget {
+  final String customerId;
+  const CustomerDetailMedium(this.customerId);
 
   @override
-  State<CustomerMediumIndex> createState() => _CustomerMediumIndexState();
+  State<CustomerDetailMedium> createState() => _CustomerDetailMediumState();
 }
 
-class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
+class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
-  String companyId = '';
   String profileName = '';
   String companyName = '';
+  String customerID = '';
   bool isLoading = false;
   bool isMenu = false;
 
-  late Future<List<Map<String, dynamic>>> customerList;
-
-  @override
-  void initState() {
-    super.initState();
-    companyId = storage.read('companyId').toString();
-    customerList = allCustomerDataService(companyId);
-  }
-
+  TextEditingController txtCustomerName = TextEditingController();
+  TextEditingController txtCustomerAddress = TextEditingController();
+  TextEditingController txtCustomerPhoneNumber = TextEditingController();
+  TextEditingController txtCustomerPICName = TextEditingController();
+  TextEditingController txtCustomerPICContact = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
+    //Read session
+    companyName = storage.read('companyName').toString();
     profileName = storage.read('firstName').toString();
-    
+
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
@@ -422,83 +420,222 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                 child: Text('Customer settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
                               ),
                               SizedBox(height: 10.h,),
-                            SizedBox(
+                              SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: Card(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                child: FutureBuilder<Map<String, dynamic>>(
+                                  future: getDetailCustomerData(widget.customerId),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    } else if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    } else {
+                                      Map<String, dynamic> apiResponse = snapshot.data!;
+                                      List<dynamic> data = apiResponse['Data'];
+                                      CustomerData customer = CustomerData.fromJson(data[0]);
+                                      
+                                      txtCustomerName.text = customer.customerName;
+                                      txtCustomerAddress.text = customer.companyAddress;
+                                      txtCustomerPhoneNumber.text = customer.companyPhone;
+                                      txtCustomerPICName.text = customer.companyPicName;
+                                      txtCustomerPICContact.text = customer.companyPicContact;
+                                      customerID = customer.customerID;
+
+                                      return Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('Customer', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
-                                          ElevatedButton(
-                                            onPressed: (){
-                                              Get.to(AddCustomerMedium());
-                                            }, 
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              alignment: Alignment.centerLeft,
-                                              minimumSize: Size(30.w, 48.h),
-                                              foregroundColor: Colors.white,
-                                              backgroundColor: const Color(0xFF2A85FF),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                          //Customer Information Title
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 5.sp, top: 5.sp, right: 5.sp),
+                                            child: Text('Customer Information', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
+                                          ),
+                                          SizedBox(height: 10.h,),
+                                          //Text Form Customer
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
+                                            child: SizedBox(
+                                              width: MediaQuery.of(context).size.width,
+                                              child: Column(
+                                                children: [
+                                                  //Customer Name & Address
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      //Customer Name
+                                                      SizedBox(
+                                                        width: isMenu ? (MediaQuery.of(context).size.width - 130.w)/ 2 : (MediaQuery.of(context).size.width - 45.w)/ 2,
+                                                        child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('Customer Name'),
+                                                            SizedBox(height: 5.h,),
+                                                            TextFormField(
+                                                              controller: txtCustomerName,
+                                                              decoration: InputDecoration(
+                                                                enabledBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                hintText: 'PT. AXX XXXX'
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ),
+                                                      //Customer Address
+                                                      SizedBox(
+                                                        width: isMenu ? (MediaQuery.of(context).size.width - 130.w)/ 2 : (MediaQuery.of(context).size.width - 45.w)/ 2,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('Customer Address'),
+                                                            SizedBox(height: 5.h,),
+                                                            TextFormField(
+                                                              controller: txtCustomerAddress,
+                                                              maxLines: 3,
+                                                              decoration: InputDecoration(
+                                                                enabledBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                hintText: 'Jl. XXXXXX XXXXX, DKI Jakarta'
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 20.h,),
+                                                  //Customer Phone & PIC Name
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      //Customer Phone                                                      
+                                                      SizedBox(
+                                                        width: isMenu ? (MediaQuery.of(context).size.width - 130.w)/ 2 : (MediaQuery.of(context).size.width - 45.w)/ 2,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('Customer Phone Number'),
+                                                            SizedBox(height: 5.h,),
+                                                            TextFormField(
+                                                              controller: txtCustomerPhoneNumber,
+                                                              decoration: InputDecoration(
+                                                                enabledBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                hintText: '021 5978 08932'
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ),
+                                                      //Customer PIC Name
+                                                      SizedBox(
+                                                        width: isMenu ? (MediaQuery.of(context).size.width - 130.w)/ 2 : (MediaQuery.of(context).size.width - 45.w)/ 2,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('Customer PIC Name'),
+                                                            SizedBox(height: 5.h,),
+                                                            TextFormField(
+                                                              controller: txtCustomerPICName,
+                                                              decoration: InputDecoration(
+                                                                enabledBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                hintText: 'PIC Name'
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 20.h,),
+                                                  //Customer PIC Contact
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      //Customer Phone                                                      
+                                                      SizedBox(
+                                                        width: isMenu ? (MediaQuery.of(context).size.width - 130.w)/ 2 : (MediaQuery.of(context).size.width - 45.w)/ 2,
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text('Customer PIC Contact'),
+                                                            SizedBox(height: 5.h,),
+                                                            TextFormField(
+                                                              controller: txtCustomerPICContact,
+                                                              decoration: InputDecoration(
+                                                                enabledBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide: const BorderSide(width: 0.0),
+                                                                  borderRadius: BorderRadius.circular(10.0),
+                                                                ),
+                                                                hintText: '08xx xxxx xxxx'
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 50.h,),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: (){
+                                                          updateCustomerData(widget.customerId, txtCustomerName.text, txtCustomerAddress.text, txtCustomerPhoneNumber.text, txtCustomerPICName.text, txtCustomerPICContact.text, context);
+                                                        }, 
+                                                        style: ElevatedButton.styleFrom(
+                                                          elevation: 0,
+                                                          alignment: Alignment.centerLeft,
+                                                          minimumSize: Size(25.w, 50.h),
+                                                          foregroundColor: Colors.white,
+                                                          backgroundColor: const Color(0xFF2A85FF),
+                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                        ),
+                                                        child: Text('Update', style: TextStyle(fontSize: 6.sp),)
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              )
+                                              
                                             ),
-                                            child: Text('Add Customer', style: TextStyle(fontSize: 6.sp),)
                                           )
                                         ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.h,),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 10.sp),
-                                      child: SizedBox(
-                                        width: MediaQuery.of(context).size.width,
-                                        child: FutureBuilder<List<Map<String, dynamic>>>(
-                                          future: customerList,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState == ConnectionState.waiting) {
-                                              return const Center(child: CircularProgressIndicator());
-                                            } else if (snapshot.hasError) {
-                                              return Center(child: Text('Error: ${snapshot.error}'));
-                                            } else if (snapshot.hasData) {
-                                              return DataTable(
-                                                showCheckboxColumn: false,
-                                                columns: const <DataColumn> [
-                                                  DataColumn(label: Text('No')),
-                                                  DataColumn(label: Text('Name')),
-                                                  DataColumn(label: Text('Address')),
-                                                  DataColumn(label: Text('Phone number')),
-                                                ], 
-                                                rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
-                                                  int index = entry.key + 1;
-                                                  Map<String, dynamic> customer = entry.value;
-                                                  return DataRow(
-                                                    cells: <DataCell>[
-                                                      DataCell(Text('$index')),
-                                                      DataCell(Text(customer['company_name'])),
-                                                      DataCell(Text(customer['company_address'])),
-                                                      DataCell(Text(customer['company_phone'])),
-                                                    ],
-                                                    onSelectChanged: (selected) {
-                                                      if (selected!) {
-                                                        Get.to(CustomerDetailMedium(customer['company_id']));
-                                                      }
-                                                    },
-                                                  );
-                                                }).toList(),
-                                              );
-                                            } else {
-                                              return const Center(child: Text('No data available'));
-                                            }
-                                          }
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                                      );
+                                    }
+                                  }
                                 ),
                               ),
                             )

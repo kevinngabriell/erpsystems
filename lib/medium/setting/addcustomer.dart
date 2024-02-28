@@ -400,7 +400,9 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                       //Content
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
+                        constraints: BoxConstraints(
+                          minHeight: MediaQuery.of(context).size.height, // Set the minimal height
+                        ),
                         decoration: const BoxDecoration(
                           color: Color(0xFFF4F4F4)
                         ),

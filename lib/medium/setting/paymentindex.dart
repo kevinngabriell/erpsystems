@@ -1,7 +1,4 @@
-import 'package:erpsystems/medium/setting/addcustomer.dart';
-import 'package:erpsystems/medium/setting/customerdetail.dart';
-import 'package:erpsystems/medium/setting/settingindex.dart';
-import 'package:erpsystems/services/settings/customerdataservices.dart';
+import 'package:erpsystems/services/settings/paymentdataservices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -15,15 +12,16 @@ import 'package:erpsystems/medium/purchase/purchaseindex.dart';
 import 'package:erpsystems/medium/sales/salesindex.dart';
 import 'package:erpsystems/medium/template/indextemplatemedium.dart';
 import 'package:erpsystems/medium/warehouse/warehouseindex.dart';
+import 'package:erpsystems/medium/setting/settingindex.dart';
 
-class CustomerMediumIndex extends StatefulWidget {
-  const CustomerMediumIndex({super.key});
+class PaymentMediumIndex extends StatefulWidget {
+  const PaymentMediumIndex({super.key});
 
   @override
-  State<CustomerMediumIndex> createState() => _CustomerMediumIndexState();
+  State<PaymentMediumIndex> createState() => _PaymentMediumIndexState();
 }
 
-class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
+class _PaymentMediumIndexState extends State<PaymentMediumIndex> {
   TextEditingController txtSearchText = TextEditingController();
   final storage = GetStorage();
   String companyId = '';
@@ -32,13 +30,13 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
   bool isLoading = false;
   bool isMenu = false;
 
-  late Future<List<Map<String, dynamic>>> customerList;
+  late Future<List<Map<String, dynamic>>> paymentList;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    companyId = storage.read('companyId').toString();
-    customerList = allCustomerDataService(companyId);
+    paymentList = allPaymentData();
   }
 
   @override
@@ -419,7 +417,7 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                 onTap: (){
                                   Get.back();
                                 },
-                                child: Text('Customer settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
+                                child: Text('Payment settings', style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w600),)
                               ),
                               SizedBox(height: 10.h,),
                             SizedBox(
@@ -434,10 +432,10 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Customer', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
+                                          Text('Payment', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddCustomerMedium());
+                                              // Get.to(AddSupplierMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
@@ -447,7 +445,7 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                               backgroundColor: const Color(0xFF2A85FF),
                                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                             ),
-                                            child: Text('Add Customer', style: TextStyle(fontSize: 6.sp),)
+                                            child: Text('Add New Payment', style: TextStyle(fontSize: 6.sp),)
                                           )
                                         ],
                                       ),
@@ -458,7 +456,7 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                       child: SizedBox(
                                         width: MediaQuery.of(context).size.width,
                                         child: FutureBuilder<List<Map<String, dynamic>>>(
-                                          future: customerList,
+                                          future: paymentList,
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState == ConnectionState.waiting) {
                                               return const Center(child: CircularProgressIndicator());
@@ -469,23 +467,19 @@ class _CustomerMediumIndexState extends State<CustomerMediumIndex> {
                                                 showCheckboxColumn: false,
                                                 columns: const <DataColumn> [
                                                   DataColumn(label: Text('No')),
-                                                  DataColumn(label: Text('Name')),
-                                                  DataColumn(label: Text('Address')),
-                                                  DataColumn(label: Text('Phone number')),
+                                                  DataColumn(label: Text('Payment Name')),
                                                 ], 
                                                 rows: snapshot.data!.asMap().entries.map<DataRow>((entry) {
                                                   int index = entry.key + 1;
-                                                  Map<String, dynamic> customer = entry.value;
+                                                  Map<String, dynamic> payment= entry.value;
                                                   return DataRow(
                                                     cells: <DataCell>[
                                                       DataCell(Text('$index')),
-                                                      DataCell(Text(customer['company_name'])),
-                                                      DataCell(Text(customer['company_address'])),
-                                                      DataCell(Text(customer['company_phone'])),
+                                                      DataCell(Text(payment['payment_name']))
                                                     ],
                                                     onSelectChanged: (selected) {
                                                       if (selected!) {
-                                                        Get.to(CustomerDetailMedium(customer['company_id']));
+                                                        // Get.to(DetailCustomerSettingLarge(customer['company_id']));
                                                       }
                                                     },
                                                   );
