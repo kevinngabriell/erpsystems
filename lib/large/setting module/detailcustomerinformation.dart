@@ -1,4 +1,6 @@
 
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
@@ -403,7 +405,7 @@ class _DetailCustomerSettingLargeState extends State<DetailCustomerSettingLarge>
                                   future: getDetailCustomerData(widget.customerId),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting) {
-                                      return CircularProgressIndicator();
+                                      return const CircularProgressIndicator();
                                     } else if (snapshot.hasError) {
                                       return Text('Error: ${snapshot.error}');
                                     } else {
@@ -447,7 +449,7 @@ class _DetailCustomerSettingLargeState extends State<DetailCustomerSettingLarge>
                                                           mainAxisAlignment: MainAxisAlignment.start,
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer Name'),
+                                                            const Text('Customer Name'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerName,
@@ -472,7 +474,7 @@ class _DetailCustomerSettingLargeState extends State<DetailCustomerSettingLarge>
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer Address'),
+                                                            const Text('Customer Address'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerAddress,
@@ -505,7 +507,7 @@ class _DetailCustomerSettingLargeState extends State<DetailCustomerSettingLarge>
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer Phone Number'),
+                                                            const Text('Customer Phone Number'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerPhoneNumber,
@@ -530,7 +532,7 @@ class _DetailCustomerSettingLargeState extends State<DetailCustomerSettingLarge>
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer PIC Name'),
+                                                            const Text('Customer PIC Name'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerPICName,
@@ -562,7 +564,7 @@ class _DetailCustomerSettingLargeState extends State<DetailCustomerSettingLarge>
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer PIC Contact'),
+                                                            const Text('Customer PIC Contact'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerPICContact,
@@ -644,7 +646,7 @@ class _DetailCustomerSettingLargeState extends State<DetailCustomerSettingLarge>
                                           ],  
                                           rows: <DataRow>[
                                             DataRow(
-                                              cells: <DataCell> [
+                                              cells: const <DataCell> [
                                                 DataCell(Text('1')),
                                                 DataCell(Text('PT. AXXX XXXX XXXX')),
                                                 DataCell(Text('1')),

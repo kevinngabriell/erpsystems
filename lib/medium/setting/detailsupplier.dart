@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_key_in_widget_constructors, prefer_typing_uninitialized_variables
+
 import 'package:erpsystems/services/masterservices.dart';
 import 'package:erpsystems/services/settings/supplierdataservices.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +86,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +104,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -339,7 +341,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -387,7 +389,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                   }
                                 });
                               },
-                              child: Text('Menu')
+                              child: const Text('Menu')
                             ),
                             //Search Box
                             SizedBox(
@@ -463,7 +465,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                   future: getDetailSupplier(widget.supplierId),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting) {
-                                      return CircularProgressIndicator();
+                                      return const CircularProgressIndicator();
                                     } else if (snapshot.hasError) {
                                       return Text('Error: ${snapshot.error}');
                                     } else {
@@ -505,7 +507,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Supplier Name'),
+                                                            const Text('Supplier Name'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtSupplierName,
@@ -529,7 +531,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Supplier Phone'),
+                                                            const Text('Supplier Phone'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtSupplierPhone,
@@ -560,7 +562,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Supplier Address'),
+                                                            const Text('Supplier Address'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               maxLines: 3,
@@ -585,7 +587,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Supplier PIC Name'),
+                                                            const Text('Supplier PIC Name'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtSupplierPICName,
@@ -616,7 +618,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Supplier PIC Contact'),
+                                                            const Text('Supplier PIC Contact'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtSupplierPICContact,
@@ -640,11 +642,11 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Supplier Country'),
+                                                            const Text('Supplier Country'),
                                                             SizedBox(height: 5.h,),
                                                             DropdownButtonFormField<String>(
                                                               value: selectedCountry,
-                                                              hint: Text('Choose country'),
+                                                              hint: const Text('Choose country'),
                                                               onChanged: (String? newValue) {
                                                                 selectedCountry = newValue!;
                                                               },
@@ -672,7 +674,7 @@ class _DetailSupplierMediumState extends State<DetailSupplierMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Is Free Trade Area ?'),
+                                                            const Text('Is Free Trade Area ?'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               readOnly: true,

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print
+
 import 'dart:convert';
 
 import 'package:erpsystems/large/index.dart';
@@ -67,10 +69,16 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
   List<String> poUnitPrice5 = [];
   List<String> poQuantity5 = [];
   List<String> poPackagingSize5 = [];
+  List<double> Total1 = [];
+  List<double> Total2 = [];
+  List<double> Total3 = [];
+  List<double> Total4 = [];
+  List<double> Total5 = [];
+  List<double> VAT = [];
+  List<double> TotalPrice = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     AllPOLocalList = allPurchaseLocal();
     getMonth();
@@ -518,7 +526,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text('Month'),
+                                            const Text('Month'),
                                             SizedBox(height: 10.h,),
                                             SizedBox(
                                               width: (MediaQuery.of(context).size.width - 250.w) / 3,
@@ -555,7 +563,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text('Year'),
+                                            const Text('Year'),
                                             SizedBox(height: 10.h,),
                                             SizedBox(
                                               width: (MediaQuery.of(context).size.width - 250.w) / 3,
@@ -592,7 +600,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text('Purchase Order Number'),
+                                            const Text('Purchase Order Number'),
                                             SizedBox(height: 10.h,),
                                             SizedBox(
                                               width: (MediaQuery.of(context).size.width - 250.w) / 2,
@@ -626,7 +634,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                             alignment: Alignment.centerLeft,
                                             minimumSize: Size(20.w, 55.h),
                                             foregroundColor: Colors.white,
-                                            backgroundColor: Color(0xFF2A85FF),
+                                            backgroundColor: const Color(0xFF2A85FF),
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(8)
                                             ),
@@ -640,18 +648,18 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                     width: MediaQuery.of(context).size.width / 9,
                                     child: ElevatedButton(
                                       onPressed: (){
-                                        createExcelLocal(poNumbers, poDate, poStatus, poSupplier, poShipmentDate, poPayment, poProductName1, poQuantity1, poPackagingSize1, poUnitPrice1, poProductName2, poQuantity2, poPackagingSize2, poUnitPrice2, poProductName3, poQuantity3, poPackagingSize3, poUnitPrice3, poProductName4, poQuantity4, poPackagingSize4, poUnitPrice4, poProductName5, poQuantity5, poPackagingSize5, poUnitPrice5);
+                                        createExcelLocal(poNumbers, poDate, poStatus, poSupplier, poShipmentDate, poPayment, poProductName1, poQuantity1, poPackagingSize1, poUnitPrice1, Total1, poProductName2, poQuantity2, poPackagingSize2, poUnitPrice2, Total2 ,poProductName3, poQuantity3, poPackagingSize3, poUnitPrice3, Total3 ,poProductName4, poQuantity4, poPackagingSize4, poUnitPrice4, Total4,  poProductName5, poQuantity5, poPackagingSize5, poUnitPrice5, Total5, VAT, TotalPrice);
                                       }, 
                                       style: ElevatedButton.styleFrom(
                                         elevation: 0,
                                         alignment: Alignment.centerLeft,
                                         minimumSize: Size(20.w, 55.h),
-                                        foregroundColor: Color(0xFF1F9F61),
+                                        foregroundColor: const Color(0xFF1F9F61),
                                         backgroundColor: Colors.transparent,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(8)
                                         ),
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                           color: Color(0xFF1F9F61), // Choose your desired border color
                                           width: 1.0, // Choose the border width
                                         ),
@@ -663,7 +671,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                               ),
                               SizedBox(height: 45.h,),
                               if(isSearch == true)
-                                Text('ble'),
+                                const Text('ble'),
                               if(isSearch == false)
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width,
@@ -677,7 +685,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                         return ListView.builder(
                                           itemCount: 4,
                                           itemBuilder: (BuildContext context, int index) {
-                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                          Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                                 
                                           return Container(
                                             width: MediaQuery.of(context).size.width,
@@ -720,7 +728,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                         return ListView.builder(
                                           itemCount: data.length,
                                             itemBuilder: (BuildContext context, int index){
-                                            Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                            Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                             poNumbers.add(data[index]['PONumber']);
                                             poDate.add(data[index]['PODate']);
                                             poSupplier.add(data[index]['supplier_name']);
@@ -732,21 +740,30 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                             poQuantity1.add(data[index]['Quantity1'] ?? '');
                                             poPackagingSize1.add(data[index]['PackagingSize1'] ?? '');
                                             poProductName2.add(data[index]['ProductName2'] ?? '');
-                                            poUnitPrice2.add(data[index]['UnitPrice2'] ?? '');
-                                            poQuantity2.add(data[index]['Quantity2'] ?? '');
+                                            poUnitPrice2.add(data[index]['UnitPrice2'] ?? '0');
+                                            poQuantity2.add(data[index]['Quantity2'] ?? '0');
                                             poPackagingSize2.add(data[index]['PackagingSize2'] ?? '');
                                             poProductName3.add(data[index]['ProductName3'] ?? '');
-                                            poUnitPrice3.add(data[index]['UnitPrice3'] ?? '');
-                                            poQuantity3.add(data[index]['Quantity3'] ?? '');
+                                            poUnitPrice3.add(data[index]['UnitPrice3'] ?? '0');
+                                            poQuantity3.add(data[index]['Quantity3'] ?? '0');
                                             poPackagingSize3.add(data[index]['PackagingSize3'] ?? '');
                                             poProductName4.add(data[index]['ProductName4'] ?? '');
-                                            poUnitPrice4.add(data[index]['UnitPrice4'] ?? '');
-                                            poQuantity4.add(data[index]['Quantity4'] ?? '');
+                                            poUnitPrice4.add(data[index]['UnitPrice4'] ?? '0');
+                                            poQuantity4.add(data[index]['Quantity4'] ?? '0');
                                             poPackagingSize4.add(data[index]['PackagingSize4'] ?? '');
                                             poProductName5.add(data[index]['ProductName5'] ?? '');
-                                            poUnitPrice5.add(data[index]['UnitPrice5'] ?? '');
-                                            poQuantity5.add(data[index]['Quantity5'] ?? '');
+                                            poUnitPrice5.add(data[index]['UnitPrice5'] ?? '0');
+                                            poQuantity5.add(data[index]['Quantity5'] ?? '0');
                                             poPackagingSize5.add(data[index]['PackagingSize5'] ?? '');
+                                            Total1.add(double.parse(data[index]['Quantity1']) * double.parse(data[index]['UnitPrice1']));
+                                            Total2.add((double.parse(data[index]['Quantity2'] ?? '0') * double.parse(data[index]['UnitPrice2'] ?? '0')));
+                                            Total3.add(double.parse(data[index]['Quantity3'] ?? '0') * double.parse(data[index]['UnitPrice3'] ?? '0'));
+                                            Total4.add(double.parse(data[index]['Quantity4'] ?? '0') * double.parse(data[index]['UnitPrice4'] ?? '0'));
+                                            Total5.add(double.parse(data[index]['Quantity5'] ?? '0') * double.parse(data[index]['UnitPrice5'] ?? '0'));
+                                            double itemVAT = (Total1[index] + Total2[index] + Total3[index] + Total4[index] + Total5[index]) * 0.11;
+                                            VAT.add(itemVAT);
+                                            double total = Total1[index] + Total2[index] + Total3[index] + Total4[index] + Total5[index] + VAT[index];
+                                            TotalPrice.add(total);
                                             return Container(
                                               width: MediaQuery.of(context).size.width,
                                               color: backgroundColor,
@@ -758,8 +775,9 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                                     Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Text(data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                        Text(data[index]['ProductName1'] + ' | ' + data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
                                                         SizedBox(height: 3.h,),
+                                                        // ignore: prefer_interpolation_to_compose_strings
                                                         Text('Purchase date ' + data[index]['PODate'], style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
                                                       ],
                                                     ),
@@ -783,10 +801,8 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                             );}
                                           );
                                       } else {
-                                        return Container(
-                                          child: Center(
-                                            child: Text('There is no data for local purchasing'),
-                                          ),
+                                        return const Center(
+                                          child: Text('There is no data for local purchasing'),
                                         );
                                       }    
                                     }   

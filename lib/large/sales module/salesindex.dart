@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/newprofit.dart';
@@ -390,13 +392,13 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                 Container(
                                   width: MediaQuery.of(context).size.width / 8,
                                   decoration: BoxDecoration(
-                                    color: Color(0xFF2A85FF),
+                                    color: const Color(0xFF2A85FF),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: DropdownButtonFormField(
                                     dropdownColor: Colors.white,
                                     value: null,
-                                    hint: Text('Create New', style: TextStyle(color: Colors.white),),
+                                    hint: const Text('Create New', style: TextStyle(color: Colors.white),),
                                     items: const [
                                       DropdownMenuItem(
                                         value: 'NEW-SO-002',
@@ -419,14 +421,14 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                       border: InputBorder.none,
                                       contentPadding: EdgeInsets.all(3.sp)
                                     ),
-                                    icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                                    icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
                                     onChanged: (value){
                                       if(value == 'NEW-SO-002'){
-                                        Get.to(NewSalesIndexLarge());
+                                        Get.to(const NewSalesIndexLarge());
                                       } else if (value == 'NEW-SO-003'){
-                                        Get.to(NewSPPBLarge());
+                                        Get.to(const NewSPPBLarge());
                                       } else if (value == 'NEW-SO-004'){
-                                        Get.to(NewProfitLarge());
+                                        Get.to(const NewProfitLarge());
                                       }
                                     }
                                   ),
@@ -618,9 +620,9 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                                 Text('Repeat Order Reminder', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                                 GestureDetector(
                                                   onTap: () {
-                                                    Get.to(SeeAllRepeatOrderLarge());
+                                                    Get.to(const SeeAllRepeatOrderLarge());
                                                   },
-                                                  child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                                  child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: const Color(0xFF2A85FF)))
                                                 ),
                                               ],
                                             ),
@@ -632,7 +634,7 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                             child: ListView.builder(
                                               itemCount: 4,
                                               itemBuilder: (BuildContext context, int index) {
-                                                Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                             
                                                 return Container(
                                                   width: MediaQuery.of(context).size.width,
@@ -696,9 +698,9 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                                 Text('Under Negotiation List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                                 GestureDetector(
                                                   onTap: () {
-                                                    Get.to(SeeAllUnderNego());
+                                                    Get.to(const SeeAllUnderNego());
                                                   },
-                                                  child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                                  child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: const Color(0xFF2A85FF)))
                                                 ),
                                               ],
                                             ),
@@ -710,7 +712,7 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                             child: ListView.builder(
                                               itemCount: 4,
                                               itemBuilder: (BuildContext context, int index) {
-                                                Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                             
                                                 return Container(
                                                   width: MediaQuery.of(context).size.width,
@@ -775,9 +777,9 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                           Text('Sales Order List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                           GestureDetector(
                                             onTap: () {
-                                              Get.to(SeeAllSalesOrder());
+                                              Get.to(const SeeAllSalesOrder());
                                             },
-                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: const Color(0xFF2A85FF)))
                                           ),
                                         ],
                                       ),
@@ -789,7 +791,7 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                       child: ListView.builder(
                                         itemCount: 4,
                                         itemBuilder: (BuildContext context, int index) {
-                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                          Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                       
                                           return Container(
                                             width: MediaQuery.of(context).size.width,
@@ -851,9 +853,9 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                           Text('SPPB List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                           GestureDetector(
                                             onTap: () {
-                                              Get.to(SeeAllSPPBLarge());
+                                              Get.to(const SeeAllSPPBLarge());
                                             },
-                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: const Color(0xFF2A85FF)))
                                           ),
                                         ],
                                       ),
@@ -865,7 +867,7 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                       child: ListView.builder(
                                         itemCount: 4,
                                         itemBuilder: (BuildContext context, int index) {
-                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                          Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                       
                                           return Container(
                                             width: MediaQuery.of(context).size.width,
@@ -927,9 +929,9 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                           Text('Profit List', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                           GestureDetector(
                                             onTap: () {
-                                              Get.to(SeeAllProfitLarge());
+                                              Get.to(const SeeAllProfitLarge());
                                             },
-                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                            child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: const Color(0xFF2A85FF)))
                                           ),
                                         ],
                                       ),
@@ -941,7 +943,7 @@ class _SalesIndexLargeState extends State<SalesIndexLarge> {
                                       child: ListView.builder(
                                         itemCount: 4,
                                         itemBuilder: (BuildContext context, int index) {
-                                          Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                          Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                       
                                           return Container(
                                             width: MediaQuery.of(context).size.width,

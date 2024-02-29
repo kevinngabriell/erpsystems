@@ -62,10 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
       String profileName = storage.read('firstName').toString();
       String companyName = storage.read('companyName').toString();
 
-      print(profileName);
-
       if(profileName.isEmpty || profileName == 'null'){
-        Get.to(LoginLarge());
+        Get.to(const LoginLarge());
       } else {
         Get.to(IndexLarge(companyName));
       }
@@ -77,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // }
       
     } else {
-      Get.to(LoginMedium());
+      Get.to(const LoginMedium());
     }
       
     

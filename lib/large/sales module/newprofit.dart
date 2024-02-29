@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
@@ -34,7 +36,6 @@ class _NewProfitLargeState extends State<NewProfitLarge> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -443,7 +444,6 @@ class _NewProfitLargeState extends State<NewProfitLarge> {
                                                 ),
                                                 onChanged: (value){
                                                   SONumberSelected = value.toString();
-                                                  print(SONumberSelected);
                                                 }
                                               ),
                                             ],
@@ -497,7 +497,7 @@ class _NewProfitLargeState extends State<NewProfitLarge> {
                                     child: SizedBox(
                                       width: (MediaQuery.of(context).size.width) ,
                                       child: DataTable(
-                                        columns: [
+                                        columns: const [
                                           DataColumn(label: Text('No')),
                                           DataColumn(label: Text('Nama Barang')),
                                           DataColumn(label: Text('QTY')),

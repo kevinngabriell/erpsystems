@@ -35,7 +35,6 @@ class _ShippingIndexMediumState extends State<ShippingIndexMedium> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     shipmentList = allShipmentData();
   }
@@ -45,7 +44,7 @@ class _ShippingIndexMediumState extends State<ShippingIndexMedium> {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +62,7 @@ class _ShippingIndexMediumState extends State<ShippingIndexMedium> {
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -300,7 +299,7 @@ class _ShippingIndexMediumState extends State<ShippingIndexMedium> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -348,7 +347,7 @@ class _ShippingIndexMediumState extends State<ShippingIndexMedium> {
                                   }
                                 });
                               },
-                              child: Text('Menu')
+                              child: const Text('Menu')
                             ),
                             //Search Box
                             SizedBox(
@@ -434,7 +433,7 @@ class _ShippingIndexMediumState extends State<ShippingIndexMedium> {
                                           Text('Shipping', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddNewShippingMedium());
+                                              Get.to(const AddNewShippingMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

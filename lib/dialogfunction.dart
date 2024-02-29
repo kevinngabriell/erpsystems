@@ -93,7 +93,7 @@ void showWeightConverterDialog({
                 ],
               ),
               SizedBox(height: 15.h),
-              Divider(),
+              const Divider(),
               SizedBox(height: 15.h),
               Row(
                 children: [
@@ -137,7 +137,7 @@ void showWeightConverterDialog({
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Ok'),
+            child: const Text('Ok'),
           ),
         ],
       );

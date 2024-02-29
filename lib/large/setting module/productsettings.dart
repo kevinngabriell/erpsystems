@@ -397,7 +397,7 @@ class _ProductSettingLargeState extends State<ProductSettingLarge> {
                                           Text('Product', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddProductSettingLarge());
+                                              Get.to(const AddProductSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
@@ -427,7 +427,7 @@ class _ProductSettingLargeState extends State<ProductSettingLarge> {
                                             DataColumn(label: Text('Packaging Size')),
                                             DataColumn(label: Text('Origin')),
                                           ], 
-                                          rows: <DataRow>[
+                                          rows: const <DataRow>[
                                             DataRow(
                                               cells: <DataCell> [
                                                 DataCell(Text('1')),

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_interpolation_to_compose_strings, non_constant_identifier_names
 
 import 'package:erpsystems/large/login.dart';
 import 'package:erpsystems/large/purchasing%20module/newpurchasingimport.dart';
@@ -41,7 +41,6 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     TOPPOLocalList = topPurchaseLocal();
   }
@@ -102,7 +101,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                       //Sales Module Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.to(SalesIndexLarge());
+                          Get.to(const SalesIndexLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -304,7 +303,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                       //Logout Button
                       ElevatedButton(
                         onPressed: (){
-                          Get.off(LoginLarge());
+                          Get.off(const LoginLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -408,13 +407,13 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                   Container(
                                     width: MediaQuery.of(context).size.width / 8,
                                     decoration: BoxDecoration(
-                                      color: Color(0xFF2A85FF),
+                                      color: const Color(0xFF2A85FF),
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     child: DropdownButtonFormField(
                                       dropdownColor: Colors.white,
                                       value: null,
-                                      hint: Text('Create New', style: TextStyle(color: Colors.white),),
+                                      hint: const Text('Create New', style: TextStyle(color: Colors.white),),
                                       items: const [
                                         DropdownMenuItem(
                                           value: 'NEW-PO-002',
@@ -429,12 +428,12 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                         border: InputBorder.none,
                                         contentPadding: EdgeInsets.all(3.sp)
                                       ),
-                                      icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                                      icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
                                       onChanged: (value){
                                         if(value == 'NEW-PO-002'){
-                                          Get.to(NewPurchasingImportLarge());
+                                          Get.to(const NewPurchasingImportLarge());
                                         } else if (value == 'NEW-PO-003'){
-                                          Get.to(NewPurchasingLocalLarge());
+                                          Get.to(const NewPurchasingLocalLarge());
                                         }
                                       }
                                     ),
@@ -861,9 +860,9 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                             Text('Purchase Order (Local)', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                             GestureDetector(
                                               onTap: () {
-                                                Get.to(ViewPurchasingLocalAllLarge());
+                                                Get.to(const ViewPurchasingLocalAllLarge());
                                               },
-                                              child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                              child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: const Color(0xFF2A85FF)))
                                             ),
                                           ],
                                         ),
@@ -881,7 +880,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                 return ListView.builder(
                                                   itemCount: 4,
                                                   itemBuilder: (BuildContext context, int index) {
-                                                    Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                    Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                                 
                                                     return Container(
                                                       width: MediaQuery.of(context).size.width,
@@ -925,7 +924,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                 return ListView.builder(
                                                   itemCount: data.length,
                                                   itemBuilder: (BuildContext context, int index){
-                                                    Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                    Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                                     // Color cardbackgroundColor = data[index]['PO_Status_Name']
                                                     return Container(
                                                       width: MediaQuery.of(context).size.width,
@@ -938,7 +937,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                             Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text(' | ' + data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                                Text(data[index]['ProductName1'] + ' | ' + data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
                                                                 SizedBox(height: 3.h,),
                                                                 Text('Purchase date ' + data[index]['PODate'], style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
                                                               ],
@@ -965,10 +964,8 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                   }
                                                 );
                                               } else {
-                                                return Container(
-                                                  child: Center(
-                                                    child: Text('There is no data for local purchasing'),
-                                                  ),
+                                                return const Center(
+                                                  child: Text('There is no data for local purchasing'),
                                                 );
                                               }    
                                             }   
@@ -997,9 +994,9 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                             Text('Purchase Order (Import)', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                             GestureDetector(
                                               onTap: () {
-                                                Get.to(ViewPurchasingLocalAllLarge());
+                                                Get.to(const ViewPurchasingLocalAllLarge());
                                               },
-                                              child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: Color(0xFF2A85FF)))
+                                              child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: const Color(0xFF2A85FF)))
                                             ),
                                           ],
                                         ),
@@ -1017,7 +1014,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                 return ListView.builder(
                                                   itemCount: 4,
                                                   itemBuilder: (BuildContext context, int index) {
-                                                    Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                    Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                                 
                                                     return Container(
                                                       width: MediaQuery.of(context).size.width,
@@ -1061,7 +1058,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                 return ListView.builder(
                                                   itemCount: data.length,
                                                   itemBuilder: (BuildContext context, int index){
-                                                    Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                                    Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                                     return Container(
                                                       width: MediaQuery.of(context).size.width,
                                                       color: backgroundColor,
@@ -1100,10 +1097,8 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                   }
                                                 );
                                               } else {
-                                                return Container(
-                                                  child: Center(
-                                                    child: Text('There is no data for local purchasing'),
-                                                  ),
+                                                return const Center(
+                                                  child: Text('There is no data for local purchasing'),
                                                 );
                                               }    
                                             }   

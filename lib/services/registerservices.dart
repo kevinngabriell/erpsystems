@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:erpsystems/large/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,14 +13,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('First name must be filled. Please try again !!'),
+          title: const Text('Error'),
+          content: const Text('First name must be filled. Please try again !!'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Oke')
+              child: const Text('Oke')
             )
           ],
         );
@@ -29,14 +31,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('Last name must be filled. Please try again !!'),
+          title: const Text('Error'),
+          content: const Text('Last name must be filled. Please try again !!'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Oke')
+              child: const Text('Oke')
             )
           ],
         );
@@ -47,14 +49,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('Username must be filled. Please try again !!'),
+          title: const Text('Error'),
+          content: const Text('Username must be filled. Please try again !!'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Oke')
+              child: const Text('Oke')
             )
           ],
         );
@@ -65,14 +67,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('Password must be filled. Please try again !!'),
+          title: const Text('Error'),
+          content: const Text('Password must be filled. Please try again !!'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Oke')
+              child: const Text('Oke')
             )
           ],
         );
@@ -83,14 +85,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('Confirm password must be filled. Please try again !!'),
+          title: const Text('Error'),
+          content: const Text('Confirm password must be filled. Please try again !!'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Oke')
+              child: const Text('Oke')
             )
           ],
         );
@@ -101,14 +103,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('Refferal code must be filled. Please try again !!'),
+          title: const Text('Error'),
+          content: const Text('Refferal code must be filled. Please try again !!'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Oke')
+              child: const Text('Oke')
             )
           ],
         );
@@ -119,14 +121,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('Your password is not match. Please try again'),
+          title: const Text('Error'),
+          content: const Text('Your password is not match. Please try again'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Oke')
+              child: const Text('Oke')
             )
           ],
         );
@@ -155,14 +157,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
           context: context, 
           builder: (_){
             return AlertDialog(
-              title: Text('Success'),
-              content: Text('Your account has been registered. Please login to proceed'),
+              title: const Text('Success'),
+              content: const Text('Your account has been registered. Please login to proceed'),
               actions: [
                 TextButton(
                   onPressed: (){
-                    Get.to(LoginLarge());
+                    Get.to(const LoginLarge());
                   }, 
-                  child: Text('Login')
+                  child: const Text('Login')
                 )
               ],
             );
@@ -174,14 +176,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
           context: context, 
           builder: (_){
             return AlertDialog(
-              title: Text('Error'),
-              content: Text('Username is already exist. Please use another username'),
+              title: const Text('Error'),
+              content: const Text('Username is already exist. Please use another username'),
               actions: [
                 TextButton(
                   onPressed: (){
                     Get.back();
                   }, 
-                  child: Text('Ok')
+                  child: const Text('Ok')
                 )
               ],
             );
@@ -193,14 +195,14 @@ Future <void> registerServices(String firstName, String lastName, String usernam
           context: context, 
           builder: (_){
             return AlertDialog(
-              title: Text('Error'),
-              content: Text('Please check your refferal code. Your refferal code might be wrong or user has reached limit. Please contact IT Support for help'),
+              title: const Text('Error'),
+              content: const Text('Please check your refferal code. Your refferal code might be wrong or user has reached limit. Please contact IT Support for help'),
               actions: [
                 TextButton(
                   onPressed: (){
                     Get.back();
                   }, 
-                  child: Text('Ok')
+                  child: const Text('Ok')
                 )
               ],
             );
@@ -213,7 +215,7 @@ Future <void> registerServices(String firstName, String lastName, String usernam
         context: context, 
         builder: (_){
           return AlertDialog(
-            title: Text('Error'),
+            title: const Text('Error'),
             content: Text(e.toString()),
           );
         }

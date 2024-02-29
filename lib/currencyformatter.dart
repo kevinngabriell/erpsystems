@@ -69,7 +69,7 @@ class ThousandsSeparatorInputFormatter extends TextInputFormatter {
 
     // Format the double value as currency without the symbol
     String formattedText = NumberFormat.currency(locale: 'en_US', decimalDigits: 2, symbol: '').format(value);
-    print(formattedText.length);
+
     return TextEditingValue(
       text: formattedText,
       selection: TextSelection.collapsed(offset: formattedText.length + 2),

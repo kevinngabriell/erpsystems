@@ -1,4 +1,6 @@
 
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables
+
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/large/template/purchasingtemplatelarge.dart';
@@ -409,7 +411,7 @@ class _DetailOriginSettingLargeState extends State<DetailOriginSettingLarge> {
                                           future: getDetailOrigin(widget.originId),
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState == ConnectionState.waiting) {
-                                              return CircularProgressIndicator();
+                                              return const CircularProgressIndicator();
                                             } else if (snapshot.hasError) {
                                               return Text('Error: ${snapshot.error}');
                                             } else {
@@ -431,7 +433,7 @@ class _DetailOriginSettingLargeState extends State<DetailOriginSettingLarge> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Country'),
+                                                            const Text('Country'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCountryName,
@@ -456,7 +458,7 @@ class _DetailOriginSettingLargeState extends State<DetailOriginSettingLarge> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Is AFTA Area ?'),
+                                                            const Text('Is AFTA Area ?'),
                                                             SizedBox(height: 5.h,),
                                                             DropdownButtonFormField(
                                                               value: isAFTA,
@@ -550,7 +552,7 @@ class _DetailOriginSettingLargeState extends State<DetailOriginSettingLarge> {
                                           ],  
                                           rows: <DataRow>[
                                             DataRow(
-                                              cells: <DataCell> [
+                                              cells: const <DataCell> [
                                                 DataCell(Text('Kopi Luwak')),
                                                 DataCell(Text('120 KG')),
                                                 DataCell(Text('180 KG')),

@@ -422,7 +422,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer Name'),
+                                                      const Text('Customer Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtCompanyName,
@@ -447,7 +447,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer Address'),
+                                                      const Text('Customer Address'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         maxLines: 3,
@@ -480,7 +480,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer Phone Number'),
+                                                      const Text('Customer Phone Number'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtCompanyPhone,
@@ -505,7 +505,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer PIC Name'),
+                                                      const Text('Customer PIC Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtCompanyPICName,
@@ -537,7 +537,7 @@ class _AddCustomerSettingLargeState extends State<AddCustomerSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer PIC Contact'),
+                                                      const Text('Customer PIC Contact'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtCompanyPICContact,

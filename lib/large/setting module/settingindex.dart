@@ -399,7 +399,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Customer Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(CustomerSettingLarge());
+                                            Get.to(const CustomerSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -409,7 +409,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Customer.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Customer', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Customer', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -419,7 +419,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Supplier Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(SupplierSettingLarge());
+                                            Get.to(const SupplierSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -429,7 +429,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Shipping.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Supplier', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Supplier', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -439,7 +439,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Term Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(TermSettingLarge());
+                                            Get.to(const TermSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -449,7 +449,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Payment.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Term', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Term', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -459,7 +459,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Packaging Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(ShippingIndexLarge());
+                                            Get.to(const ShippingIndexLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -469,7 +469,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Term.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Shipping', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Shipping', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -488,7 +488,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Origin Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(OriginSettingLarge());
+                                            Get.to(const OriginSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -498,7 +498,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Flag.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Origin', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Origin', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -508,7 +508,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Internal Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(InternalSettingLarge());
+                                            Get.to(const InternalSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -518,7 +518,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Settings.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Internal', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Internal', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -528,7 +528,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Product Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(PaymentSettingLarge());
+                                            Get.to(const PaymentSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -538,7 +538,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Product.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Payment', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Payment', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -548,7 +548,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Packaging Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(CurrencyIndexLarge());
+                                            Get.to(const CurrencyIndexLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -558,7 +558,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Packaging.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Currency', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Currency', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -576,7 +576,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                         //Purchase Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(PurchaseSettingLarge());
+                                            Get.to(const PurchaseSettingLarge());
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
@@ -586,7 +586,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Flag.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Purchase', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Purchase', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 5.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -600,7 +600,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
+                                            child: const Card(
                                               child: Column(
                                                 children: [
                                                   // SizedBox(height: 15.h,),
@@ -620,7 +620,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
+                                            child: const Card(
                                               child: Column(
                                                 children: [
                                                   // SizedBox(height: 15.h,),
@@ -640,7 +640,7 @@ class _SettingIndexLargeState extends State<SettingIndexLarge> {
                                           },
                                           child: SizedBox(
                                             width: (MediaQuery.of(context).size.width - 100.w) / 4,
-                                            child: Card(
+                                            child: const Card(
                                               child: Column(
                                                 children: [
                                                   // SizedBox(height: 15.h,),

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, empty_catches
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/medium/setting/settingindex.dart';
 import 'package:erpsystems/services/masterservices.dart';
@@ -129,8 +129,7 @@ Future <void> updatePermission(permissionID, username, BuildContext context) asy
 Future<void> updateUserLimit(userLimit, refferalCode, context) async {
   try{
     String updateUserLimit = '${ApiEndpoints.baseUrl}company/permission/updateuserlimit.php';
-    print(userLimit);
-    print(refferalCode);
+
     final response = await http.post(
       Uri.parse(updateUserLimit),
       body: {

@@ -32,7 +32,6 @@ class _PaymentSettingLargeState extends State<PaymentSettingLarge> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     paymentList = allPaymentData();
   }
@@ -407,7 +406,7 @@ class _PaymentSettingLargeState extends State<PaymentSettingLarge> {
                                           Text('Payment', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddPaymentSettingLarge());
+                                              Get.to(const AddPaymentSettingLarge());
                                               // Get.to(AddShippingSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(

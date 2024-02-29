@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_types_as_parameter_names, non_constant_identifier_names, avoid_print
+
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
@@ -58,7 +60,6 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchCustomerList();
   }
@@ -549,7 +550,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                               SizedBox(height: 5.h,),
                                               DropdownButtonFormField<String>(
                                                 value: selectedCustomers,
-                                                hint: Text('Select your customer'),
+                                                hint: const Text('Select your customer'),
                                                 onChanged: (String? newValue) {
                                                   setState(() {
                                                     selectedCustomers = newValue!;
@@ -650,7 +651,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                                     showSuggestions = true; // Open suggestions when the TextField is tapped
                                                   });
                                                 },
-                                                decoration: InputDecoration(
+                                                decoration: const InputDecoration(
                                                   border: OutlineInputBorder(),
                                                   labelText: 'Browse Product',
                                                 )
@@ -658,7 +659,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                             },
                                             suggestionsCallback: (String search) async {
                                               if (showSuggestions) {
-                                                await Future.delayed(Duration(milliseconds: 300));
+                                                await Future.delayed(const Duration(milliseconds: 300));
                                                 return items
                                                     .where((item) =>
                                                         item.name.toLowerCase().contains(search.toLowerCase()))
@@ -688,7 +689,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                     child: SizedBox(
                                       width: (MediaQuery.of(context).size.width),
                                       child: DataTable(
-                                        columns: [
+                                        columns: const [
                                           DataColumn(label: Text('No')),
                                           DataColumn(label: Text('Product Name')),
                                           DataColumn(label: Text('QTY')),
@@ -721,8 +722,8 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                                   readOnly: true,
                                                 ),
                                               ),
-                                              DataCell(Text('')), // Placeholder for 'SAT'
-                                              DataCell(Text('')), // Placeholder for 'Curr'
+                                              const DataCell(Text('')), // Placeholder for 'SAT'
+                                              const DataCell(Text('')), // Placeholder for 'Curr'
                                               DataCell(
                                                 TextField(
                                                   controller: hargaController,
@@ -744,8 +745,8 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                                   onChanged: (value) {},
                                                 ),
                                               ),
-                                              DataCell(Text('')), // Placeholder for 'Kurs'
-                                              DataCell(Text('')), // Placeholder for 'DPP'
+                                              const DataCell(Text('')), // Placeholder for 'Kurs'
+                                              const DataCell(Text('')), // Placeholder for 'DPP'
                                               DataCell(
                                                 TextField(
                                                   controller: txtDataTablePPN,
@@ -758,21 +759,21 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
 
                                           // Add an extra row for totals
                                           DataRow(cells: [
-                                            DataCell(Text('Total:')),
-                                            DataCell(Text('')),
+                                            const DataCell(Text('Total:')),
+                                            const DataCell(Text('')),
                                             DataCell(
                                               Text(selectedItems.fold<int>(0, (sum, item) => sum + item.quantity).toString()),
                                             ),
-                                            DataCell(Text('')), // Placeholder for 'SAT'
-                                            DataCell(Text('')), // Placeholder for 'Curr'
+                                            const DataCell(Text('')), // Placeholder for 'SAT'
+                                            const DataCell(Text('')), // Placeholder for 'Curr'
                                             DataCell(
                                               Text(selectedItems.fold<int>(0, (sum, item) => sum + (item.harga * item.quantity)).toString()),
                                             ),
                                             DataCell(
                                               Text(selectedItems.fold<int>(0, (sum, item) => sum + (item.harga * item.quantity)).toString()),
                                             ),
-                                            DataCell(Text('')), // Placeholder for 'Kurs'
-                                            DataCell(Text('')), // Placeholder for 'DPP'
+                                            const DataCell(Text('')), // Placeholder for 'Kurs'
+                                            const DataCell(Text('')), // Placeholder for 'DPP'
                                             DataCell(
                                               Text(selectedItems.fold<double>(0.0, (sum, item) => sum + (item.harga * item.quantity * 0.01)).toString()),
                                             ),
@@ -835,7 +836,7 @@ class _NewSalesIndexLargeState extends State<NewSalesIndexLarge> {
                                         ),
                                         SizedBox(
                                           width: (MediaQuery.of(context).size.width - 150.w) / 3,
-                                          child: Column(
+                                          child: const Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               // Text('PO Number', style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w400,)),

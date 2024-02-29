@@ -1,4 +1,6 @@
 
+// ignore_for_file: avoid_print
+
 import 'package:erpsystems/currencyformatter.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
@@ -75,7 +77,6 @@ class _InternalSettingLargeState extends State<InternalSettingLarge>  with Ticke
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     userManagementList = allUserService();

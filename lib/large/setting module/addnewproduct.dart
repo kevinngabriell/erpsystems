@@ -410,7 +410,7 @@ class _AddProductSettingLargeState extends State<AddProductSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Product Name'),
+                                                      const Text('Product Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         // controller: txtTarget2031,
@@ -434,7 +434,7 @@ class _AddProductSettingLargeState extends State<AddProductSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('SKU Number'),
+                                                      const Text('SKU Number'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         // controller: txtTarget2031,
@@ -464,7 +464,7 @@ class _AddProductSettingLargeState extends State<AddProductSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Purchase Currency'),
+                                                      const Text('Purchase Currency'),
                                                       SizedBox(height: 5.h,),
                                                       DropdownButtonFormField(
                                                         value: '006',
@@ -501,7 +501,7 @@ class _AddProductSettingLargeState extends State<AddProductSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Purchase Price'),
+                                                      const Text('Purchase Price'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         // controller: txtTarget2031,
@@ -531,7 +531,7 @@ class _AddProductSettingLargeState extends State<AddProductSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Weight measurement'),
+                                                      const Text('Weight measurement'),
                                                       SizedBox(height: 5.h,),
                                                       DropdownButtonFormField(
                                                         value: '006',
@@ -568,7 +568,7 @@ class _AddProductSettingLargeState extends State<AddProductSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Origin'),
+                                                      const Text('Origin'),
                                                       SizedBox(height: 5.h,),
                                                       DropdownButtonFormField(
                                                         value: '006',

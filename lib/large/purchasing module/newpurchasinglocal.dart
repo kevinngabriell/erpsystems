@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print
+
 import 'dart:convert';
 
 import 'package:date_time_picker/date_time_picker.dart';
@@ -127,7 +129,6 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSupplier();
     getPayment();
@@ -3637,7 +3638,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
-                                                return AlertDialog(
+                                                return const AlertDialog(
                                                   title: Text('Error'),
                                                   content: Text('This item is not submitted yet and this action is not allowed at this moment'),
                                                 );
@@ -3647,7 +3648,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
-                                                return AlertDialog(
+                                                return const AlertDialog(
                                                   title: Text('Error'),
                                                   content: Text('You have no access to this feature. Please contact your administrator'),
                                                 );
@@ -3667,7 +3668,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                           ),
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                         ),
-                                        child: Text('Export to PDF')
+                                        child: const Text('Export to PDF')
                                       ),
                                       ElevatedButton(
                                         onPressed: (){
@@ -3675,7 +3676,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
-                                                return AlertDialog(
+                                                return const AlertDialog(
                                                   title: Text('Error'),
                                                   content: Text('This item is not submitted yet and this action is not allowed at this moment'),
                                                 );
@@ -3685,7 +3686,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
-                                                return AlertDialog(
+                                                return const AlertDialog(
                                                   title: Text('Error'),
                                                   content: Text('You have no access to this feature. Please contact your administrator'),
                                                 );
@@ -3705,7 +3706,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                           ),
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                         ),
-                                        child: Center(
+                                        child: const Center(
                                           child: Text('Approve')
                                         )
                                       ),
@@ -3715,7 +3716,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
-                                                return AlertDialog(
+                                                return const AlertDialog(
                                                   title: Text('Error'),
                                                   content: Text('This item is not submitted yet and this action is not allowed at this moment'),
                                                 );
@@ -3725,7 +3726,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
-                                                return AlertDialog(
+                                                return const AlertDialog(
                                                   title: Text('Error'),
                                                   content: Text('You have no access to this feature. Please contact your administrator'),
                                                 );
@@ -3745,7 +3746,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                           ),
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                         ),
-                                        child: Center(
+                                        child: const Center(
                                           child: Text('Reject')
                                         )
                                       ),
@@ -3757,7 +3758,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                             showDialog(
                                               context: context, 
                                               builder: (_){
-                                                return AlertDialog(
+                                                return const AlertDialog(
                                                   title: Text('Error'),
                                                   content: Text('You have no access to this feature. Please contact your administrator'),
                                                 );
@@ -3773,7 +3774,7 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                           backgroundColor: const Color(0xFF2A85FF),
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                         ),
-                                        child: Center(
+                                        child: const Center(
                                           child: Text('Submit')
                                         )
                                       )

@@ -48,7 +48,7 @@ class _SupplierIndexMediumState extends State<SupplierIndexMedium> {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +66,7 @@ class _SupplierIndexMediumState extends State<SupplierIndexMedium> {
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -303,7 +303,7 @@ class _SupplierIndexMediumState extends State<SupplierIndexMedium> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -351,7 +351,7 @@ class _SupplierIndexMediumState extends State<SupplierIndexMedium> {
                                   }
                                 });
                               },
-                              child: Text('Menu')
+                              child: const Text('Menu')
                             ),
                             //Search Box
                             SizedBox(
@@ -437,7 +437,7 @@ class _SupplierIndexMediumState extends State<SupplierIndexMedium> {
                                           Text('Supplier', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddSupplierMedium());
+                                              Get.to(const AddSupplierMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

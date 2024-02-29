@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors
+
 import 'dart:convert';
 
 import 'package:date_time_picker/date_time_picker.dart';
@@ -24,7 +26,7 @@ import 'package:intl/intl.dart';
 
 class ViewPurchasingLocalDetailLarge extends StatefulWidget {
   final PONumber;
-  ViewPurchasingLocalDetailLarge(this.PONumber);
+  const ViewPurchasingLocalDetailLarge(this.PONumber);
 
   @override
   State<ViewPurchasingLocalDetailLarge> createState() => _ViewPurchasingLocalDetailLargeState();
@@ -125,7 +127,6 @@ class _ViewPurchasingLocalDetailLargeState extends State<ViewPurchasingLocalDeta
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSupplier();
     getPayment();
@@ -3475,7 +3476,7 @@ class _ViewPurchasingLocalDetailLargeState extends State<ViewPurchasingLocalDeta
                                                         showDialog(
                                                           context: context, 
                                                           builder: (_){
-                                                            return AlertDialog(
+                                                            return const AlertDialog(
                                                               title: Text('Error'),
                                                               content: Text('You have no access to this feature. Please contact your administrator'),
                                                             );
@@ -3495,112 +3496,168 @@ class _ViewPurchasingLocalDetailLargeState extends State<ViewPurchasingLocalDeta
                                                       ),
                                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                     ),
-                                                    child: Text('Export to PDF')
+                                                    child: const Text('Export to PDF')
                                                   ),
-                                                  ElevatedButton(
-                                                    onPressed: (){
-                                                      if(permissionAccess == 'Full access'){
-                                                        if(statusPO == 'Draft'){
-                                                          approvePurchase(PONumber, username, context);
+                                                  if(statusPO == 'Approved')
+                                                    ElevatedButton(
+                                                      onPressed: (){
+                                                        if(permissionAccess == 'Full access'){
+                                                          if(statusPO == 'Approved'){
+                                                            approvePurchase(PONumber, username, context);
+                                                          } else {
+                                                            showDialog(
+                                                              context: context, 
+                                                              builder: (_){
+                                                                return AlertDialog(
+                                                                  title: const Text('Error'),
+                                                                  content: const Text('This PO cannot be set on delivery !!'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: (){
+                                                                        Get.back();
+                                                                      }, 
+                                                                      child: const Text('Oke')
+                                                                    )
+                                                                  ],
+                                                                );
+                                                              }
+                                                            );
+                                                          }
                                                         } else {
                                                           showDialog(
                                                             context: context, 
                                                             builder: (_){
-                                                              return AlertDialog(
+                                                              return const AlertDialog(
                                                                 title: Text('Error'),
-                                                                content: Text('This PO cannot be approve !!'),
-                                                                actions: [
-                                                                  TextButton(
-                                                                    onPressed: (){
-                                                                      Get.back();
-                                                                    }, 
-                                                                    child: Text('Oke')
-                                                                  )
-                                                                ],
+                                                                content: Text('You have no access to this feature. Please contact your administrator'),
                                                               );
                                                             }
                                                           );
                                                         }
-                                                      } else {
-                                                        showDialog(
-                                                          context: context, 
-                                                          builder: (_){
-                                                            return AlertDialog(
-                                                              title: Text('Error'),
-                                                              content: Text('You have no access to this feature. Please contact your administrator'),
+                                                      }, 
+                                                      style: ElevatedButton.styleFrom(
+                                                        elevation: 0,
+                                                        alignment: Alignment.center,
+                                                        minimumSize: Size(60.w, 55.h),
+                                                        foregroundColor: const Color(0xFF1F9F61),
+                                                        backgroundColor: Colors.transparent,
+                                                        side: const BorderSide(
+                                                          color: Color(0xFF1F9F61), // Choose your desired border color
+                                                          width: 1.0, // Choose the border width
+                                                        ),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text('On Delivery')
+                                                      )
+                                                    ),
+                                                  if(statusPO == 'Draft')
+                                                    ElevatedButton(
+                                                      onPressed: (){
+                                                        if(permissionAccess == 'Full access'){
+                                                          if(statusPO == 'Draft'){
+                                                            approvePurchase(PONumber, username, context);
+                                                          } else {
+                                                            showDialog(
+                                                              context: context, 
+                                                              builder: (_){
+                                                                return AlertDialog(
+                                                                  title: const Text('Error'),
+                                                                  content: const Text('This PO cannot be approve !!'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: (){
+                                                                        Get.back();
+                                                                      }, 
+                                                                      child: const Text('Oke')
+                                                                    )
+                                                                  ],
+                                                                );
+                                                              }
                                                             );
                                                           }
-                                                        );
-                                                      }
-                                                    }, 
-                                                    style: ElevatedButton.styleFrom(
-                                                      elevation: 0,
-                                                      alignment: Alignment.center,
-                                                      minimumSize: Size(60.w, 55.h),
-                                                      foregroundColor: const Color(0xFF1F9F61),
-                                                      backgroundColor: Colors.transparent,
-                                                      side: const BorderSide(
-                                                        color: Color(0xFF1F9F61), // Choose your desired border color
-                                                        width: 1.0, // Choose the border width
-                                                      ),
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text('Approve')
-                                                    )
-                                                  ),
-                                                  ElevatedButton(
-                                                    onPressed: (){
-                                                      if(permissionAccess == 'Full access'){
-                                                        if(statusPO == 'Draft'){
-                                                          rejectPurchase(PONumber, username, context);
                                                         } else {
                                                           showDialog(
                                                             context: context, 
                                                             builder: (_){
-                                                              return AlertDialog(
+                                                              return const AlertDialog(
                                                                 title: Text('Error'),
-                                                                content: Text('This PO cannot be reject !!'),
-                                                                actions: [
-                                                                  TextButton(
-                                                                    onPressed: (){
-                                                                      Get.back();
-                                                                    }, 
-                                                                    child: Text('Oke')
-                                                                  )
-                                                                ],
+                                                                content: Text('You have no access to this feature. Please contact your administrator'),
                                                               );
                                                             }
                                                           );
                                                         }
-                                                      } else {
-                                                        showDialog(
-                                                          context: context, 
-                                                          builder: (_){
-                                                            return AlertDialog(
-                                                              title: Text('Error'),
-                                                              content: Text('You have no access to this feature. Please contact your administrator'),
+                                                      }, 
+                                                      style: ElevatedButton.styleFrom(
+                                                        elevation: 0,
+                                                        alignment: Alignment.center,
+                                                        minimumSize: Size(60.w, 55.h),
+                                                        foregroundColor: const Color(0xFF1F9F61),
+                                                        backgroundColor: Colors.transparent,
+                                                        side: const BorderSide(
+                                                          color: Color(0xFF1F9F61), // Choose your desired border color
+                                                          width: 1.0, // Choose the border width
+                                                        ),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text('Approve')
+                                                      )
+                                                    ),
+                                                  
+                                                  if(statusPO == 'Draft')
+                                                    ElevatedButton(
+                                                      onPressed: (){
+                                                        if(permissionAccess == 'Full access'){
+                                                          if(statusPO == 'Draft'){
+                                                            rejectPurchase(PONumber, username, context);
+                                                          } else {
+                                                            showDialog(
+                                                              context: context, 
+                                                              builder: (_){
+                                                                return AlertDialog(
+                                                                  title: const Text('Error'),
+                                                                  content: const Text('This PO cannot be reject !!'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: (){
+                                                                        Get.back();
+                                                                      }, 
+                                                                      child: const Text('Oke')
+                                                                    )
+                                                                  ],
+                                                                );
+                                                              }
                                                             );
                                                           }
-                                                        );
-                                                      }
-                                                    }, 
-                                                    style: ElevatedButton.styleFrom(
-                                                      elevation: 0,
-                                                      alignment: Alignment.center,
-                                                      minimumSize: Size(60.w, 55.h),
-                                                      foregroundColor: const Color(0xFFE47E7E),
-                                                      backgroundColor: Colors.transparent,
-                                                      side: const BorderSide(
-                                                        color: Color(0xFFE47E7E), // Choose your desired border color
-                                                        width: 1.0, // Choose the border width
+                                                        } else {
+                                                          showDialog(
+                                                            context: context, 
+                                                            builder: (_){
+                                                              return const AlertDialog(
+                                                                title: Text('Error'),
+                                                                content: Text('You have no access to this feature. Please contact your administrator'),
+                                                              );
+                                                            }
+                                                          );
+                                                        }
+                                                      }, 
+                                                      style: ElevatedButton.styleFrom(
+                                                        elevation: 0,
+                                                        alignment: Alignment.center,
+                                                        minimumSize: Size(60.w, 55.h),
+                                                        foregroundColor: const Color(0xFFE47E7E),
+                                                        backgroundColor: Colors.transparent,
+                                                        side: const BorderSide(
+                                                          color: Color(0xFFE47E7E), // Choose your desired border color
+                                                          width: 1.0, // Choose the border width
+                                                        ),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                       ),
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      child: const Center(
+                                                        child: Text('Reject')
+                                                      )
                                                     ),
-                                                    child: Center(
-                                                      child: Text('Reject')
-                                                    )
-                                                  ),
                                                   ElevatedButton(
                                                     onPressed: (){
                                                       if(permissionAccess == 'Full access'){
@@ -3609,7 +3666,7 @@ class _ViewPurchasingLocalDetailLargeState extends State<ViewPurchasingLocalDeta
                                                         showDialog(
                                                           context: context, 
                                                           builder: (_){
-                                                            return AlertDialog(
+                                                            return const AlertDialog(
                                                               title: Text('Error'),
                                                               content: Text('You have no access to this feature. Please contact your administrator'),
                                                             );
@@ -3625,7 +3682,7 @@ class _ViewPurchasingLocalDetailLargeState extends State<ViewPurchasingLocalDeta
                                                       backgroundColor: const Color(0xFF2A85FF),
                                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                     ),
-                                                    child: Center(
+                                                    child: const Center(
                                                       child: Text('Update')
                                                     )
                                                   )

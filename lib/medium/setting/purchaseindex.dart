@@ -39,7 +39,6 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     tabController = TabController(length: 2, vsync: this);
     purchaseStatusList = allPurchaseStatus();
@@ -53,7 +52,7 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +70,7 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -308,7 +307,7 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -356,7 +355,7 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
                                   }
                                 });
                               },
-                              child: Text('Menu')
+                              child: const Text('Menu')
                             ),
                             //Search Box
                             SizedBox(
@@ -496,7 +495,7 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
                                                           Text('Purchase status setting', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600,)),
                                                           ElevatedButton(
                                                             onPressed: (){
-                                                              Get.to(AddNewPurchaseStatus());
+                                                              Get.to(const AddNewPurchaseStatus());
                                                             }, 
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,
@@ -561,7 +560,7 @@ class _PurchaseIndexMediumState extends State<PurchaseIndexMedium> with TickerPr
                                                           Text('Purchase type setting', style: TextStyle(fontSize: 6.sp, fontWeight: FontWeight.w600,)),
                                                           ElevatedButton(
                                                             onPressed: (){
-                                                              Get.to(AddNewPurchaseTypeMedium());
+                                                              Get.to(const AddNewPurchaseTypeMedium());
                                                             }, 
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,

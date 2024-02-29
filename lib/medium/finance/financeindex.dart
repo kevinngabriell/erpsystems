@@ -33,7 +33,7 @@ class _FinanceMediumIndexState extends State<FinanceMediumIndex> {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class _FinanceMediumIndexState extends State<FinanceMediumIndex> {
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -288,7 +288,7 @@ class _FinanceMediumIndexState extends State<FinanceMediumIndex> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -336,7 +336,7 @@ class _FinanceMediumIndexState extends State<FinanceMediumIndex> {
                                 }
                               });
                             },
-                            child: Text('Menu')
+                            child: const Text('Menu')
                           ),
                           //Search Box
                           SizedBox(

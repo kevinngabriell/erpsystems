@@ -410,7 +410,7 @@ class _CustomerSettingLargeState extends State<CustomerSettingLarge> {
                                           Text('Customer', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddCustomerSettingLarge());
+                                              Get.to(const AddCustomerSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

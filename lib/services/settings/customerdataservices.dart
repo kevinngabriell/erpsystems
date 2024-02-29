@@ -1,5 +1,5 @@
 
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
 import 'package:erpsystems/large/setting%20module/customersettings.dart';
 import 'package:erpsystems/medium/setting/customerindex.dart';
@@ -108,7 +108,7 @@ Future <void> insertCustomerData(customerName, customerAddress, customerPhone, c
                 TextButton(
                   onPressed: (){
                     if(ResponsiveWidget.isLargeScreen(context)){
-                      Get.to(CustomerSettingLarge());
+                      Get.to(const CustomerSettingLarge());
                     } else if (ResponsiveWidget.isMediumScreen(context)){
                       Get.to(const CustomerMediumIndex());
                     } else if (ResponsiveWidget.isSmallScreen(context)){
@@ -303,7 +303,7 @@ Future <void> updateCustomerData(customerId, customerName, customerAddress, cust
                 TextButton(
                   onPressed: (){
                     if(ResponsiveWidget.isLargeScreen(context)){
-                      Get.to(CustomerSettingLarge());
+                      Get.to(const CustomerSettingLarge());
                     } else if (ResponsiveWidget.isMediumScreen(context)){
                       Get.to(const CustomerMediumIndex());
                     } else if (ResponsiveWidget.isSmallScreen(context)){

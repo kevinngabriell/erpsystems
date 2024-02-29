@@ -31,7 +31,6 @@ class _ShippingIndexLargeState extends State<ShippingIndexLarge> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     shipmentList = allShipmentData();
   }
@@ -406,7 +405,7 @@ class _ShippingIndexLargeState extends State<ShippingIndexLarge> {
                                           Text('Shipping', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddNewShippingLarge());
+                                              Get.to(const AddNewShippingLarge());
                                               // Get.to(AddShippingSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(

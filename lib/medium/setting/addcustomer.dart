@@ -45,7 +45,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -300,7 +300,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -348,7 +348,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                                   }
                                 });
                               },
-                              child: Text('Menu')
+                              child: const Text('Menu')
                             ),
                             //Search Box
                             SizedBox(
@@ -450,7 +450,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer Name'),
+                                                      const Text('Customer Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtCompanyName,
@@ -475,7 +475,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer Address'),
+                                                      const Text('Customer Address'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         maxLines: 3,
@@ -508,7 +508,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer Phone Number'),
+                                                      const Text('Customer Phone Number'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtCompanyPhone,
@@ -533,7 +533,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer PIC Name'),
+                                                      const Text('Customer PIC Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtCompanyPICName,
@@ -565,7 +565,7 @@ class _AddCustomerMediumState extends State<AddCustomerMedium> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Customer PIC Contact'),
+                                                      const Text('Customer PIC Contact'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtCompanyPICContact,

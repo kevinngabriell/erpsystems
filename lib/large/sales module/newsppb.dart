@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names
+
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:erpsystems/large/index.dart';
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
@@ -32,9 +34,9 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
   late DateTime tomorrow;
 
   List<Item> items = [
-    Item(salesOrderNumber: 'SO/123/12/123/12', poCustomer: 'PO/123/12/123/12', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(Duration(days: 1)), namaBarang: 'A', Qty: 1, SAT: 'KG', Keterangan: ''),
-    Item(salesOrderNumber: 'SO/123/12/123/13', poCustomer: 'PO/123/12/123/13', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(Duration(days: 1)), namaBarang: 'B', Qty: 2, SAT: 'KG', Keterangan: ''),
-    Item(salesOrderNumber: 'SO/123/12/123/14', poCustomer: 'PO/123/12/123/14', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(Duration(days: 1)), namaBarang: 'C', Qty: 3, SAT: 'KG', Keterangan: ''),
+    Item(salesOrderNumber: 'SO/123/12/123/12', poCustomer: 'PO/123/12/123/12', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(const Duration(days: 1)), namaBarang: 'A', Qty: 1, SAT: 'KG', Keterangan: ''),
+    Item(salesOrderNumber: 'SO/123/12/123/13', poCustomer: 'PO/123/12/123/13', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(const Duration(days: 1)), namaBarang: 'B', Qty: 2, SAT: 'KG', Keterangan: ''),
+    Item(salesOrderNumber: 'SO/123/12/123/14', poCustomer: 'PO/123/12/123/14', dikirimKe: DateTime.now(), tanggalKirim: DateTime.now().add(const Duration(days: 1)), namaBarang: 'C', Qty: 3, SAT: 'KG', Keterangan: ''),
     // Add more items as needed
   ];
 
@@ -42,11 +44,10 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
   
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
       
     today = DateTime.now();
-    tomorrow = today.add(Duration(days: 1));
+    tomorrow = today.add(const Duration(days: 1));
   }
 
   @override
@@ -514,7 +515,7 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                                                     showSuggestions = true; // Open suggestions when the TextField is tapped
                                                   });
                                                 },
-                                                decoration: InputDecoration(
+                                                decoration: const InputDecoration(
                                                   border: OutlineInputBorder(),
                                                   labelText: 'Browse Product',
                                                 )
@@ -522,7 +523,7 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                                             },
                                             suggestionsCallback: (String search) async {
                                               if (showSuggestions) {
-                                                await Future.delayed(Duration(milliseconds: 300));
+                                                await Future.delayed(const Duration(milliseconds: 300));
                                                 return items
                                                     .where((item) =>
                                                         item.salesOrderNumber.toLowerCase().contains(search.toLowerCase()))
@@ -552,7 +553,7 @@ class _NewSPPBLargeState extends State<NewSPPBLarge> {
                                     child: SizedBox(
                                       width: (MediaQuery.of(context).size.width) ,
                                       child: DataTable(
-                                        columns: [
+                                        columns: const [
                                           DataColumn(label: Text('No')),
                                           DataColumn(label: Text('PO Customer')),
                                           DataColumn(label: Text('Dikirim Ke')),

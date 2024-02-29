@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:erpsystems/large/index.dart';
@@ -15,14 +17,14 @@ Future <void> loginService(String username, String password, BuildContext contex
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('Username cannot be blank. Please input your username !!'),
+          title: const Text('Error'),
+          content: const Text('Username cannot be blank. Please input your username !!'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Ok')
+              child: const Text('Ok')
             )
           ],
         );
@@ -33,14 +35,14 @@ Future <void> loginService(String username, String password, BuildContext contex
       context: context, 
       builder: (_){
         return AlertDialog(
-          title: Text('Error'),
-          content: Text('Password cannot be blank. Please input your password !!'),
+          title: const Text('Error'),
+          content: const Text('Password cannot be blank. Please input your password !!'),
           actions: [
             TextButton(
               onPressed: (){
                 Get.back();
               }, 
-              child: Text('Ok')
+              child: const Text('Ok')
             )
           ],
         );
@@ -64,14 +66,14 @@ Future <void> loginService(String username, String password, BuildContext contex
           context: context, 
           builder: (_){
             return AlertDialog(
-              title: Text('Invalid username'),
-              content: Text('Username is not found. Please check again your username'),
+              title: const Text('Invalid username'),
+              content: const Text('Username is not found. Please check again your username'),
               actions: [
                 TextButton(
                   onPressed: (){
                     Get.back();
                   }, 
-                  child: Text('Ok')
+                  child: const Text('Ok')
                 )
               ],
             );
@@ -82,14 +84,14 @@ Future <void> loginService(String username, String password, BuildContext contex
           context: context, 
           builder: (_){
             return AlertDialog(
-              title: Text('Invalid password'),
-              content: Text('Your password is not valid. Please check again your password !!'),
+              title: const Text('Invalid password'),
+              content: const Text('Your password is not valid. Please check again your password !!'),
               actions: [
                 TextButton(
                   onPressed: (){
                     Get.back();
                   }, 
-                  child: Text('Ok')
+                  child: const Text('Ok')
                 )
               ],
             );
@@ -118,7 +120,7 @@ Future <void> loginService(String username, String password, BuildContext contex
         context: context, 
         builder: (_){
           return AlertDialog(
-            title: Text('Error'),
+            title: const Text('Error'),
             content: Text(e.toString()),
           );
         }

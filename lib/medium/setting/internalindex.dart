@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:erpsystems/currencyformatter.dart';
 import 'package:erpsystems/services/settings/internaldataservices.dart';
@@ -75,7 +77,6 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     userManagementList = allUserService();
@@ -182,7 +183,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +201,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -437,7 +438,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -485,7 +486,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                                   }
                                 });
                               },
-                              child: Text('Menu')
+                              child: const Text('Menu')
                             ),
                             //Search Box
                             SizedBox(
@@ -644,7 +645,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                                                             child: Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text('Company name'),
+                                                                const Text('Company name'),
                                                                 SizedBox(height: 15.h,),
                                                                 SizedBox(
                                                                   width: MediaQuery.of(context).size.width,
@@ -674,7 +675,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                                                             child: Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text('Company phone number'),
+                                                                const Text('Company phone number'),
                                                                 SizedBox(height: 15.h,),
                                                                 SizedBox(
                                                                   width: MediaQuery.of(context).size.width,
@@ -712,7 +713,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                                                             child: Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text('Company website'),
+                                                                const Text('Company website'),
                                                                 SizedBox(height: 15.h,),
                                                                 SizedBox(
                                                                   width: MediaQuery.of(context).size.width,
@@ -742,7 +743,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                                                             child: Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text('Company email'),
+                                                                const Text('Company email'),
                                                                 SizedBox(height: 15.h,),
                                                                 SizedBox(
                                                                   width: MediaQuery.of(context).size.width,
@@ -782,7 +783,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                                                               mainAxisAlignment: MainAxisAlignment.start,
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text('Company address'),
+                                                                const Text('Company address'),
                                                                 SizedBox(height: 15.h,),
                                                                 SizedBox(
                                                                   width: MediaQuery.of(context).size.width,
@@ -813,7 +814,7 @@ class _InternalMediumIndexState extends State<InternalMediumIndex> with TickerPr
                                                             child: Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text('Company industry'),
+                                                                const Text('Company industry'),
                                                                 SizedBox(height: 15.h,),
                                                                 SizedBox(
                                                                   width: MediaQuery.of(context).size.width,

@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:erpsystems/large/login.dart';
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
@@ -37,7 +39,6 @@ class _IndexLargeState extends State<IndexLarge> {
     companyName = storage.read('companyName').toString();
     profileName = storage.read('firstName').toString();
 
-    print(txtSearchText.text);
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
@@ -286,7 +287,7 @@ class _IndexLargeState extends State<IndexLarge> {
                       ElevatedButton(
                         onPressed: (){
                           // GetStorage().
-                          Get.off(LoginLarge());
+                          Get.off(const LoginLarge());
                         }, 
                         style: ElevatedButton.styleFrom(
                           elevation: 0,

@@ -35,7 +35,6 @@ class _PaymentMediumIndexState extends State<PaymentMediumIndex> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     paymentList = allPaymentData();
   }
@@ -47,7 +46,7 @@ class _PaymentMediumIndexState extends State<PaymentMediumIndex> {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +64,7 @@ class _PaymentMediumIndexState extends State<PaymentMediumIndex> {
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -302,7 +301,7 @@ class _PaymentMediumIndexState extends State<PaymentMediumIndex> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -350,7 +349,7 @@ class _PaymentMediumIndexState extends State<PaymentMediumIndex> {
                                   }
                                 });
                               },
-                              child: Text('Menu')
+                              child: const Text('Menu')
                             ),
                             //Search Box
                             SizedBox(
@@ -436,7 +435,7 @@ class _PaymentMediumIndexState extends State<PaymentMediumIndex> {
                                           Text('Payment', style: TextStyle(fontSize: 7.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddPaymentMedium());
+                                              Get.to(const AddPaymentMedium());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

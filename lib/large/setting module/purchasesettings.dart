@@ -6,7 +6,6 @@ import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/services/settings/companydataservices.dart';
 import 'package:erpsystems/services/settings/purchasesettingdataservices.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -37,7 +36,6 @@ class _PurchaseSettingLargeState extends State<PurchaseSettingLarge> with Ticker
 
     @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     tabController = TabController(length: 2, vsync: this);
     purchaseStatusList = allPurchaseStatus();
@@ -451,7 +449,7 @@ class _PurchaseSettingLargeState extends State<PurchaseSettingLarge> with Ticker
                                                           Text('Purchase status setting', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                                           ElevatedButton(
                                                             onPressed: (){
-                                                              Get.to(AddNewPuchaseStatusLarge());
+                                                              Get.to(const AddNewPuchaseStatusLarge());
                                                             }, 
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,
@@ -516,7 +514,7 @@ class _PurchaseSettingLargeState extends State<PurchaseSettingLarge> with Ticker
                                                           Text('Purchase type setting', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                                           ElevatedButton(
                                                             onPressed: (){
-                                                              Get.to(AddNewPurchaseTypeLarge());
+                                                              Get.to(const AddNewPurchaseTypeLarge());
                                                             }, 
                                                             style: ElevatedButton.styleFrom(
                                                               elevation: 0,

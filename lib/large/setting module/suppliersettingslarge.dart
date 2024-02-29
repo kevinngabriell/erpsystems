@@ -408,7 +408,7 @@ class _SupplierSettingLargeState extends State<SupplierSettingLarge> {
                                           Text('Supplier', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddSupplierSettingLarge());
+                                              Get.to(const AddSupplierSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

@@ -32,7 +32,6 @@ class _TermSettingLargeState extends State<TermSettingLarge> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     termList = allTermData();
   }
@@ -407,7 +406,7 @@ class _TermSettingLargeState extends State<TermSettingLarge> {
                                           Text('Term', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddNewTermLarge());
+                                              Get.to(const AddNewTermLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

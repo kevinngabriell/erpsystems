@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:erpsystems/medium/analytics/analyticsindex.dart';
@@ -56,7 +58,6 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getTargeting();
   }
@@ -108,7 +109,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
     return MaterialApp(
       title: 'Venken ERP Systems',
        home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,7 +364,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -411,7 +412,7 @@ class _IndexTemplateMediumState extends State<IndexTemplateMedium> {
                                 }
                               });
                             },
-                            child: Text('Menu')
+                            child: const Text('Menu')
                           ),
                           //Search Box
                           SizedBox(

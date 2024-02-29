@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:erpsystems/medium/setting/settingindex.dart';
 import 'package:erpsystems/services/settings/customerdataservices.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +66,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -301,7 +303,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -349,7 +351,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                                   }
                                 });
                               },
-                              child: Text('Menu')
+                              child: const Text('Menu')
                             ),
                             //Search Box
                             SizedBox(
@@ -427,7 +429,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                                   future: getDetailCustomerData(widget.customerId),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting) {
-                                      return CircularProgressIndicator();
+                                      return const CircularProgressIndicator();
                                     } else if (snapshot.hasError) {
                                       return Text('Error: ${snapshot.error}');
                                     } else {
@@ -471,7 +473,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                                                           mainAxisAlignment: MainAxisAlignment.start,
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer Name'),
+                                                            const Text('Customer Name'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerName,
@@ -496,7 +498,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer Address'),
+                                                            const Text('Customer Address'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerAddress,
@@ -529,7 +531,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer Phone Number'),
+                                                            const Text('Customer Phone Number'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerPhoneNumber,
@@ -554,7 +556,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer PIC Name'),
+                                                            const Text('Customer PIC Name'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerPICName,
@@ -586,7 +588,7 @@ class _CustomerDetailMediumState extends State<CustomerDetailMedium> {
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
-                                                            Text('Customer PIC Contact'),
+                                                            const Text('Customer PIC Contact'),
                                                             SizedBox(height: 5.h,),
                                                             TextFormField(
                                                               controller: txtCustomerPICContact,

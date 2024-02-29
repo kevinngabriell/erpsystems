@@ -44,7 +44,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +62,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                         //Dashboard Button
                         ElevatedButton(
                           onPressed: (){
-                            Get.to(IndexTemplateMedium());
+                            Get.to(const IndexTemplateMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -299,7 +299,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                         ElevatedButton(
                           onPressed: (){
                             // GetStorage().
-                            Get.off(LoginMedium());
+                            Get.off(const LoginMedium());
                           }, 
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -347,7 +347,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                 }
                               });
                             },
-                            child: Text('Menu')
+                            child: const Text('Menu')
                           ),
                           //Search Box
                           SizedBox(
@@ -429,7 +429,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Customer Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(CustomerMediumIndex());
+                                            Get.to(const CustomerMediumIndex());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -439,7 +439,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Customer.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Customer', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Customer', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -449,7 +449,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Supplier Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(SupplierIndexMedium());
+                                            Get.to(const SupplierIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -459,7 +459,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Shipping.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Supplier', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Supplier', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -469,7 +469,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Term Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(TermIndexMedium());
+                                            Get.to(const TermIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -479,7 +479,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Payment.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Term', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Term', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -489,7 +489,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Packaging Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(ShippingIndexMedium());
+                                            Get.to(const ShippingIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -499,7 +499,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Term.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Shipping', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Shipping', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -518,7 +518,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Origin Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(OriginIndexMedium());
+                                            Get.to(const OriginIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -528,7 +528,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Flag.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Origin', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Origin', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -538,7 +538,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Internal Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(InternalMediumIndex());
+                                            Get.to(const InternalMediumIndex());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -548,7 +548,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Settings.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Internal', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Internal', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -558,7 +558,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Product Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(PaymentMediumIndex());
+                                            Get.to(const PaymentMediumIndex());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -568,7 +568,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Product.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Payment', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Payment', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -578,7 +578,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Packaging Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(CurrencyIndexMedium());
+                                            Get.to(const CurrencyIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -588,7 +588,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Packaging.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Currency', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Currency', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -606,7 +606,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                         //Purchase Card
                                         GestureDetector(
                                           onTap: () {
-                                            Get.to(PurchaseIndexMedium());
+                                            Get.to(const PurchaseIndexMedium());
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
@@ -616,7 +616,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                                   SizedBox(height: 15.h,),
                                                   Image.asset('Icon/Flag.png'),
                                                   SizedBox(height: 10.h,),
-                                                  Text('Purchase', style: TextStyle(color: Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
+                                                  Text('Purchase', style: TextStyle(color: const Color(0xFF2A85FF), fontSize: 7.sp, fontWeight: FontWeight.w400),),
                                                   SizedBox(height: 15.h,),
                                                 ],
                                               ),
@@ -630,7 +630,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
-                                            child: Card(
+                                            child: const Card(
                                               child: Column(
                                                 children: [
                                                   // SizedBox(height: 15.h,),
@@ -650,7 +650,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
-                                            child: Card(
+                                            child: const Card(
                                               child: Column(
                                                 children: [
                                                   // SizedBox(height: 15.h,),
@@ -670,7 +670,7 @@ class _SettingMediumIndexState extends State<SettingMediumIndex> {
                                           },
                                           child: SizedBox(
                                             width: isMenu ? (MediaQuery.of(context).size.width - 125.w) / 4 : (MediaQuery.of(context).size.width - 40.w) / 4,
-                                            child: Card(
+                                            child: const Card(
                                               child: Column(
                                                 children: [
                                                   // SizedBox(height: 15.h,),

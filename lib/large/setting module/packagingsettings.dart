@@ -425,7 +425,7 @@ class _PackagingSettingLargeState extends State<PackagingSettingLarge> {
                                           ], 
                                           rows: <DataRow>[
                                             DataRow(
-                                              cells: <DataCell> [
+                                              cells: const <DataCell> [
                                                 DataCell(Text('1')),
                                                 DataCell(Text('Indonesia')),
                                                 DataCell(Text('Yes')),
@@ -436,7 +436,7 @@ class _PackagingSettingLargeState extends State<PackagingSettingLarge> {
                                                 }
                                               },
                                             ),
-                                            DataRow(
+                                            const DataRow(
                                               cells: <DataCell> [
                                                 DataCell(Text('2')),
                                                 DataCell(Text('Singapore')),

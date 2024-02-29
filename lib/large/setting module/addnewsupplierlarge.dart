@@ -1,4 +1,6 @@
 
+// ignore_for_file: avoid_print
+
 import 'package:erpsystems/large/purchasing%20module/purchasingindex.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
@@ -456,7 +458,7 @@ class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Supplier Name'),
+                                                      const Text('Supplier Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtSupplierName,
@@ -480,7 +482,7 @@ class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Supplier Phone'),
+                                                      const Text('Supplier Phone'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtSupplierPhone,
@@ -511,7 +513,7 @@ class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Supplier Address'),
+                                                      const Text('Supplier Address'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         maxLines: 3,
@@ -536,7 +538,7 @@ class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Supplier PIC Name'),
+                                                      const Text('Supplier PIC Name'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtSupplierPICName,
@@ -566,7 +568,7 @@ class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Supplier PIC Contact'),
+                                                      const Text('Supplier PIC Contact'),
                                                       SizedBox(height: 5.h,),
                                                       TextFormField(
                                                         controller: txtSupplierPICContact,
@@ -590,11 +592,11 @@ class _AddSupplierSettingLargeState extends State<AddSupplierSettingLarge> {
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text('Supplier Country'),
+                                                      const Text('Supplier Country'),
                                                       SizedBox(height: 5.h,),
                                                       DropdownButtonFormField<String>(
                                                         value: selectedCountry,
-                                                        hint: Text('Choose country'),
+                                                        hint: const Text('Choose country'),
                                                         onChanged: (String? newValue) {
                                                           selectedCountry = newValue!;
                                                         },

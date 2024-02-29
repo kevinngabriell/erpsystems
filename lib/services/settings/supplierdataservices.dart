@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
 import 'package:erpsystems/large/setting%20module/suppliersettingslarge.dart';
 import 'package:erpsystems/medium/setting/supplierindex.dart';
@@ -188,7 +188,7 @@ Future <void> updateSupplier(supplierId, supplierName, supplierPhone, supplierAd
                 TextButton(
                   onPressed: (){
                     if(ResponsiveWidget.isLargeScreen(context)){
-                      Get.to(SupplierSettingLarge());
+                      Get.to(const SupplierSettingLarge());
                     } else if (ResponsiveWidget.isMediumScreen(context)){
                       Get.to(const SupplierIndexMedium());
                     } else if (ResponsiveWidget.isSmallScreen(context)){
@@ -398,7 +398,7 @@ Future <void> insertSupplier(supplierName, supplierOrigin, supplierAddress, supp
                 TextButton(
                   onPressed: (){
                     if(ResponsiveWidget.isLargeScreen(context)){
-                      Get.to(SupplierSettingLarge());
+                      Get.to(const SupplierSettingLarge());
                     } else if (ResponsiveWidget.isMediumScreen(context)){
                       Get.to(const SupplierIndexMedium());
                     } else if (ResponsiveWidget.isSmallScreen(context)){

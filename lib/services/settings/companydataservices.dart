@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
 import 'package:erpsystems/large/setting%20module/settingindex.dart';
 import 'package:erpsystems/medium/setting/settingindex.dart';

@@ -398,7 +398,7 @@ class _SeeAllUnderNegoState extends State<SeeAllUnderNego> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('Month'),
+                                          const Text('Month'),
                                           SizedBox(height: 10.h,),
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 250.w) / 3,
@@ -433,7 +433,7 @@ class _SeeAllUnderNegoState extends State<SeeAllUnderNego> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('Year'),
+                                          const Text('Year'),
                                           SizedBox(height: 10.h,),
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 250.w) / 3,
@@ -468,7 +468,7 @@ class _SeeAllUnderNegoState extends State<SeeAllUnderNego> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('Sales Order Number'),
+                                          const Text('Sales Order Number'),
                                           SizedBox(height: 10.h,),
                                           SizedBox(
                                             width: (MediaQuery.of(context).size.width - 250.w) / 2,
@@ -500,7 +500,7 @@ class _SeeAllUnderNegoState extends State<SeeAllUnderNego> {
                                           alignment: Alignment.centerLeft,
                                           minimumSize: Size(20.w, 55.h),
                                           foregroundColor: Colors.white,
-                                          backgroundColor: Color(0xFF2A85FF),
+                                          backgroundColor: const Color(0xFF2A85FF),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(8)
                                           ),
@@ -520,12 +520,12 @@ class _SeeAllUnderNegoState extends State<SeeAllUnderNego> {
                                       elevation: 0,
                                       alignment: Alignment.centerLeft,
                                       minimumSize: Size(20.w, 55.h),
-                                      foregroundColor: Color(0xFF1F9F61),
+                                      foregroundColor: const Color(0xFF1F9F61),
                                       backgroundColor: Colors.transparent,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8)
                                       ),
-                                      side: BorderSide(
+                                      side: const BorderSide(
                                         color: Color(0xFF1F9F61), // Choose your desired border color
                                         width: 1.0, // Choose the border width
                                       ),
@@ -542,7 +542,7 @@ class _SeeAllUnderNegoState extends State<SeeAllUnderNego> {
                               child: ListView.builder(
                                 itemCount: 14,
                                 itemBuilder: (BuildContext context, int index) {
-                                Color backgroundColor = index.isOdd ? Color(0xFFF8F8F8) : Color(0xFFF7F6FA);
+                                Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                   return Container(
                                     width: MediaQuery.of(context).size.width,
                                     color: backgroundColor,

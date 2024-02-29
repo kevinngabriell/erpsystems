@@ -407,7 +407,7 @@ class _OriginSettingLargeState extends State<OriginSettingLarge> {
                                           Text('Origin', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddOriginSettingLarge());
+                                              Get.to(const AddOriginSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,

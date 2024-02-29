@@ -31,7 +31,6 @@ class _CurrencyIndexLargeState extends State<CurrencyIndexLarge> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currencyList = allCurrencyData();
   }
@@ -406,7 +405,7 @@ class _CurrencyIndexLargeState extends State<CurrencyIndexLarge> {
                                           Text('Currency', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600,)),
                                           ElevatedButton(
                                             onPressed: (){
-                                              Get.to(AddCurrencySettingLarge());
+                                              Get.to(const AddCurrencySettingLarge());
                                               // Get.to(AddShippingSettingLarge());
                                             }, 
                                             style: ElevatedButton.styleFrom(

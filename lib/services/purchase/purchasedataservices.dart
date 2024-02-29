@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, unused_local_variable, unused_import
+// ignore_for_file: non_constant_identifier_names, unused_local_variable, unused_import, avoid_web_libraries_in_flutter, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:typed_data';
@@ -19,15 +19,15 @@ import 'package:path_provider/path_provider.dart';
 Future<void> createExcelLocal(
   List<String> poNumbers, List<String> poDate, List<String> poStatus, List<String> poSupplier, 
   List<String> poShipmentDate, List<String> poPayment, List<String> poProductName1, List<String> poQuantity1, 
-  List<String> poPackagingSize1, List<String> poUnitPrice1, 
+  List<String> poPackagingSize1, List<String> poUnitPrice1, List<double> Total1,
   List<String> poProductName2, List<String> poQuantity2, 
-  List<String> poPackagingSize2, List<String> poUnitPrice2,
+  List<String> poPackagingSize2, List<String> poUnitPrice2, List<double> Total2,
   List<String> poProductName3, List<String> poQuantity3, 
-  List<String> poPackagingSize3, List<String> poUnitPrice3,
+  List<String> poPackagingSize3, List<String> poUnitPrice3, List<double> Total3,
   List<String> poProductName4, List<String> poQuantity4, 
-  List<String> poPackagingSize4, List<String> poUnitPrice4,
+  List<String> poPackagingSize4, List<String> poUnitPrice4, List<double> Total4,
   List<String> poProductName5, List<String> poQuantity5, 
-  List<String> poPackagingSize5, List<String> poUnitPrice5,) async {
+  List<String> poPackagingSize5, List<String> poUnitPrice5, List<double> Total5, List<double> VAT, List<double> TotalPrice) async {
   // Create an Excel workbook
   var excel = Excel.createExcel();
 
@@ -39,12 +39,12 @@ Future<void> createExcelLocal(
     customValue: const TextCellValue('Laporan PO Local'),
   );
 
-  sheet.appendRow([TextCellValue('Nomor PO'), TextCellValue('Tanggal PO'), TextCellValue('Supplier'), TextCellValue('Shipment'), TextCellValue('Payment'), TextCellValue('Status'),
-   TextCellValue('Product Name'), TextCellValue('Product Quantity'), TextCellValue('Packaging Size'), TextCellValue('Unit Price'), TextCellValue('Total Price'), 
-   TextCellValue('Product Name'), TextCellValue('Product Quantity'), TextCellValue('Packaging Size'), TextCellValue('Unit Price'), TextCellValue('Total Price'), 
-   TextCellValue('Product Name'), TextCellValue('Product Quantity'), TextCellValue('Packaging Size'), TextCellValue('Unit Price'), TextCellValue('Total Price'), 
-   TextCellValue('Product Name'), TextCellValue('Product Quantity'), TextCellValue('Packaging Size'), TextCellValue('Unit Price'), TextCellValue('Total Price'),
-   TextCellValue('Product Name'), TextCellValue('Product Quantity'), TextCellValue('Packaging Size'), TextCellValue('Unit Price'), TextCellValue('Total Price'), TextCellValue('VAT'), TextCellValue('Total Price'),]);
+  sheet.appendRow([const TextCellValue('Nomor PO'), const TextCellValue('Tanggal PO'), const TextCellValue('Supplier'), const TextCellValue('Shipment'), const TextCellValue('Payment'), const TextCellValue('Status'),
+   const TextCellValue('Product Name'), const TextCellValue('Product Quantity'), const TextCellValue('Packaging Size'), const TextCellValue('Unit Price'), const TextCellValue('Total Price'), 
+   const TextCellValue('Product Name'), const TextCellValue('Product Quantity'), const TextCellValue('Packaging Size'), const TextCellValue('Unit Price'), const TextCellValue('Total Price'), 
+   const TextCellValue('Product Name'), const TextCellValue('Product Quantity'), const TextCellValue('Packaging Size'), const TextCellValue('Unit Price'), const TextCellValue('Total Price'), 
+   const TextCellValue('Product Name'), const TextCellValue('Product Quantity'), const TextCellValue('Packaging Size'), const TextCellValue('Unit Price'), const TextCellValue('Total Price'),
+   const TextCellValue('Product Name'), const TextCellValue('Product Quantity'), const TextCellValue('Packaging Size'), const TextCellValue('Unit Price'), const TextCellValue('Total Price'), const TextCellValue('VAT'), const TextCellValue('Total Price'),]);
   
 
   List<Future<Map<String, dynamic>>> fetchFutures = [];
@@ -60,9 +60,9 @@ Future<void> createExcelLocal(
 
   // Wait for all fetchDetailPurchase to complete
   List<Map<String, dynamic>> results = await Future.wait(fetchFutures);
-  print(results);
 
   for (int i = 0; i < poNumbers.length; i++) {
+
     sheet.appendRow([
       TextCellValue(poNumbers[i]),
       TextCellValue(poDate[i]),
@@ -74,23 +74,31 @@ Future<void> createExcelLocal(
       TextCellValue(poQuantity1[i]),
       TextCellValue(poPackagingSize1[i]),
       TextCellValue(poUnitPrice1[i]),
+      TextCellValue(Total1[i].toString()),
       TextCellValue(poProductName2[i]),
       TextCellValue(poQuantity2[i]),
       TextCellValue(poPackagingSize2[i]),
       TextCellValue(poUnitPrice2[i]),
+      TextCellValue(Total2[i].toString()),
       TextCellValue(poProductName3[i]),
       TextCellValue(poQuantity3[i]),
       TextCellValue(poPackagingSize3[i]),
       TextCellValue(poUnitPrice3[i]),
+      TextCellValue(Total3[i].toString()),
       TextCellValue(poProductName4[i]),
       TextCellValue(poQuantity4[i]),
       TextCellValue(poPackagingSize4[i]),
       TextCellValue(poUnitPrice4[i]),
+      TextCellValue(Total4[i].toString()),
       TextCellValue(poProductName5[i]),
       TextCellValue(poQuantity5[i]),
       TextCellValue(poPackagingSize5[i]),
       TextCellValue(poUnitPrice5[i]),
+      TextCellValue(Total5[i].toString()),
+      TextCellValue(VAT[i].toString()),
+      TextCellValue(TotalPrice[i].toString()),
     ]);
+
 
     
     
