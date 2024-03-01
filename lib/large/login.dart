@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:erpsystems/large/createaccount.dart';
-import 'package:erpsystems/services/loginservices.dart';
+import 'package:erpsystems/large/index.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class LoginLarge extends StatefulWidget {
   const LoginLarge({super.key});
@@ -14,13 +18,146 @@ class LoginLarge extends StatefulWidget {
 class _LoginLargeState extends State<LoginLarge> {
   TextEditingController txtUsername = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
+  bool isLoading = false;
+
+  Future <void> loginService(String username, String password, BuildContext context) async {
+    
+    setState(() {
+      isLoading = true;
+    });
+
+    if(username.isEmpty){
+      showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Username cannot be blank. Please input your username !!'),
+            actions: [
+              TextButton(
+                onPressed: (){
+                  Get.back();
+                }, 
+                child: const Text('Ok')
+              )
+            ],
+          );
+        }
+      );
+    } else if (password.isEmpty){
+      showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Password cannot be blank. Please input your password !!'),
+            actions: [
+              TextButton(
+                onPressed: (){
+                  Get.back();
+                }, 
+                child: const Text('Ok')
+              )
+            ],
+          );
+        }
+      );
+    } else {
+      
+      try{
+        String apiLogin = "https://kevinngabriell.com/erpAPI-v.1.0/user/login.php";
+
+        final response = await http.post(
+          Uri.parse(apiLogin),
+          body: {
+            "username" : username,
+            "password" : password, 
+          }
+        );
+
+        if(response.statusCode == 203){
+          setState(() {
+            isLoading = false;
+          });
+          showDialog(
+            context: context, 
+            builder: (_){
+              return AlertDialog(
+                title: const Text('Invalid username'),
+                content: const Text('Username is not found. Please check again your username'),
+                actions: [
+                  TextButton(
+                    onPressed: (){
+                      Get.back();
+                    }, 
+                    child: const Text('Ok')
+                  )
+                ],
+              );
+            }
+          );
+        } else if (response.statusCode == 204){
+          setState(() {
+            isLoading = false;
+          });
+          showDialog(
+            context: context, 
+            builder: (_){
+              return AlertDialog(
+                title: const Text('Invalid password'),
+                content: const Text('Your password is not valid. Please check again your password !!'),
+                actions: [
+                  TextButton(
+                    onPressed: (){
+                      Get.back();
+                    }, 
+                    child: const Text('Ok')
+                  )
+                ],
+              );
+            }
+          );
+        } else if (response.statusCode == 200){
+          var result = json.decode(response.body);
+          GetStorage().write('username', result['username']);
+          GetStorage().write('permissionAccess', result['permissionAccess']);
+          GetStorage().write('companyId', result['companyId']);
+          GetStorage().write('companyName', result['companyNameString']);
+          GetStorage().write('firstName', result['firstName']);
+
+          String companyName = result['companyNameString'];
+          setState(() {
+            isLoading = false;
+          });
+
+          Get.to(IndexLarge(companyName));
+        }
+      } catch (e){
+        setState(() {
+          isLoading = false;
+        });
+        showDialog(
+          context: context, 
+          builder: (_){
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text(e.toString()),
+            );
+          }
+        );
+      }
+
+    }
+    
+    
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Venken ERP Systems',
       home: Scaffold(
-        body: Row(
+        body: isLoading ? const Center(child: CircularProgressIndicator(),) : Row(
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width / 2,

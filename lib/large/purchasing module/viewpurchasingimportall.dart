@@ -1,4 +1,3 @@
-// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'dart:convert';
 
@@ -22,14 +21,14 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-class ViewPurchasingLocalAllLarge extends StatefulWidget {
-  const ViewPurchasingLocalAllLarge({super.key});
+class ViewPurchasingImportAllLarge extends StatefulWidget {
+  const ViewPurchasingImportAllLarge({super.key});
 
   @override
-  State<ViewPurchasingLocalAllLarge> createState() => _ViewPurchasingLocalAllLargeState();
+  State<ViewPurchasingImportAllLarge> createState() => _ViewPurchasingImportAllLargeState();
 }
 
-class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarge> {
+class _ViewPurchasingImportAllLargeState extends State<ViewPurchasingImportAllLarge> {
   final storage = GetStorage();
   String profileName = '';
   String companyName = '';
@@ -39,7 +38,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
   TextEditingController txtPONumber = TextEditingController();
   bool isSearch = false;
 
-  late Future<List<Map<String, dynamic>>> AllPOLocalList;
+  late Future<List<Map<String, dynamic>>> AllPOImportList;
   late Future<List<Map<String, dynamic>>> SearchPOLocalListbyNumber;
   List<Map<String, String>> listMonths = [];
   List<Map<String, String>> listYears = [];
@@ -85,7 +84,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
   @override
   void initState() {
     super.initState();
-    AllPOLocalList = allPurchaseLocal();
+    AllPOImportList = allPurchaseImport();
     getMonth();
     getYear();
   }
@@ -799,7 +798,7 @@ class _ViewPurchasingLocalAllLargeState extends State<ViewPurchasingLocalAllLarg
                                   width: MediaQuery.of(context).size.width,
                                   height: (MediaQuery.of(context).size.height - 433.h),
                                   child: FutureBuilder<List<Map<String, dynamic>>>(
-                                    future: AllPOLocalList,
+                                    future: AllPOImportList,
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState == ConnectionState.waiting) {
                                         return const Center(child: CircularProgressIndicator());

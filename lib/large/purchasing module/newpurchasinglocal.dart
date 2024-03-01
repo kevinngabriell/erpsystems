@@ -3753,7 +3753,13 @@ class _NewPurchasingLocalLargeState extends State<NewPurchasingLocalLarge> {
                                       ElevatedButton(
                                         onPressed: (){
                                           if(permissionAccess == 'Full access'){
-                                            insertPurchaseLocal(PONumber, PurchaseDate.toString(), selectedSupplier, selectedShipment, selectedPayment, selectedCurrency, username, txtProductNameOne.text, txtQuantityOne.text, txtPackagingSizeOne.text, txtUnitPriceOne.text, txtProductNameTwo.text, txtQuantityTwo.text, txtPackagingSizeTwo.text, txtUnitPriceTwo.text, txtProductNameThree.text, txtQuantityThree.text, txtPackagingSizeThree.text, txtUnitPriceThree.text, txtProductNameFour.text, txtQuantityFour.text, txtPackagingSizeFour.text, txtUnitPriceFour.text, txtProductNameFive.text, txtQuantityFive.text, txtPackagingSizeFive.text, txtUnitPriceFive.text, context);
+                                            insertPurchaseLocal(PONumber, PurchaseDate.toString(), selectedSupplier, selectedShipment, 
+                                            selectedPayment, selectedCurrency, username, txtProductNameOne.text, txtQuantityOne.text, 
+                                            txtPackagingSizeOne.text, txtUnitPriceOne.text, txtProductNameTwo.text, txtQuantityTwo.text, 
+                                            txtPackagingSizeTwo.text, txtUnitPriceTwo.text, txtProductNameThree.text, txtQuantityThree.text, 
+                                            txtPackagingSizeThree.text, txtUnitPriceThree.text, txtProductNameFour.text, txtQuantityFour.text, 
+                                            txtPackagingSizeFour.text, txtUnitPriceFour.text, txtProductNameFive.text, txtQuantityFive.text, 
+                                            txtPackagingSizeFive.text, txtUnitPriceFive.text, context);
                                           } else {
                                             showDialog(
                                               context: context, 

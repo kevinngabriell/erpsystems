@@ -450,8 +450,52 @@ Future <List<Map<String, dynamic>>> allPurchaseLocal() async{
   }
 }
 
+Future <List<Map<String, dynamic>>> allPurchaseImport() async{
+ final response = await http.get(Uri.parse('${ApiEndpoints.baseUrl}purchase/getallpurchaseimport.php'));
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body)['Data'];
+    return List<Map<String, dynamic>>.from(data);
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
+Future <List<Map<String, dynamic>>> searchLocalAllParams(month, year, poNumber) async{
+  final response = await http.get(Uri.parse('${ApiEndpoints.baseUrl}purchase/searchlocalallparams.php?month=$month&year=$year&PONumber=$poNumber'));
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body)['Data'];
+    return List<Map<String, dynamic>>.from(data);
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
+Future <List<Map<String, dynamic>>> searchLocalByDate(month, year) async{
+  final response = await http.get(Uri.parse('${ApiEndpoints.baseUrl}purchase/searchlocalbydate.php?month=$month&year=$year'));
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body)['Data'];
+    return List<Map<String, dynamic>>.from(data);
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
 Future <List<Map<String, dynamic>>> topPurchaseLocal() async{
  final response = await http.get(Uri.parse('${ApiEndpoints.baseUrl}purchase/gettoppurchaselocal.php'));
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body)['Data'];
+    return List<Map<String, dynamic>>.from(data);
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
+Future <List<Map<String, dynamic>>> topPurchaseImport() async{
+ final response = await http.get(Uri.parse('${ApiEndpoints.baseUrl}purchase/gettoppurchaseimport.php'));
 
   if (response.statusCode == 200) {
     final data = json.decode(response.body)['Data'];
@@ -596,6 +640,190 @@ Future<void> approvePurchase(purchaseOrderNumber, username, BuildContext context
     }
 }
 
+Future<void> onDeliveryPurchase(purchaseOrderNumber, username, BuildContext context) async {
+  try{
+      String apiUpdatePurchase = "${ApiEndpoints.baseUrl}purchase/ondeliverypurchase.php";
+
+      final response = await http.post(
+        Uri.parse(apiUpdatePurchase),
+        body: {
+          "purchase_order_number" : purchaseOrderNumber,
+          "purchase_order_status" : "e9fbf211-d640-11ee-9",
+          "update_by" : username
+        }
+      );
+
+      if(response.statusCode == 200){
+        showDialog(
+          context: context, 
+          builder: (_){
+            return AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Your purchase order has been set to on delivery'),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    Get.to(const PurchasingIndexLarge());
+                  }, 
+                  child: const Text('Oke')
+                ),
+              ],
+            );
+          }
+        );
+      }
+
+    } catch (e){
+      showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+          );
+        }
+      );
+    }
+}
+
+Future<void> arriveOnPort(purchaseOrderNumber, username, BuildContext context) async {
+  try{
+      String apiUpdatePurchase = "${ApiEndpoints.baseUrl}purchase/arrivalonportpurchase.php";
+
+      final response = await http.post(
+        Uri.parse(apiUpdatePurchase),
+        body: {
+          "purchase_order_number" : purchaseOrderNumber,
+          "purchase_order_status" : "5cda9f70-d6aa-11ee-9",
+          "update_by" : username
+        }
+      );
+
+      if(response.statusCode == 200){
+        showDialog(
+          context: context, 
+          builder: (_){
+            return AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Your purchase order has been set to arrival on port'),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    Get.to(const PurchasingIndexLarge());
+                  }, 
+                  child: const Text('Oke')
+                ),
+              ],
+            );
+          }
+        );
+      }
+
+    } catch (e){
+      showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+          );
+        }
+      );
+    }
+}
+
+Future<void> delivertoWarehouse(purchaseOrderNumber, username, BuildContext context) async {
+  try{
+      String apiUpdatePurchase = "${ApiEndpoints.baseUrl}purchase/deliverwarehouse.php";
+
+      final response = await http.post(
+        Uri.parse(apiUpdatePurchase),
+        body: {
+          "purchase_order_number" : purchaseOrderNumber,
+          "purchase_order_status" : "66abe6ff-d6aa-11ee-9",
+          "update_by" : username
+        }
+      );
+
+      if(response.statusCode == 200){
+        showDialog(
+          context: context, 
+          builder: (_){
+            return AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Your purchase order has been set delivered to warehouse'),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    Get.to(const PurchasingIndexLarge());
+                  }, 
+                  child: const Text('Oke')
+                ),
+              ],
+            );
+          }
+        );
+      }
+
+    } catch (e){
+      showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+          );
+        }
+      );
+    }
+}
+
+Future<void> delivertoCustomer(purchaseOrderNumber, username, BuildContext context) async {
+  try{
+      String apiUpdatePurchase = "${ApiEndpoints.baseUrl}purchase/delivertocustomer.php";
+
+      final response = await http.post(
+        Uri.parse(apiUpdatePurchase),
+        body: {
+          "purchase_order_number" : purchaseOrderNumber,
+          "purchase_order_status" : "6cd72a96-d6aa-11ee-9",
+          "update_by" : username
+        }
+      );
+
+      if(response.statusCode == 200){
+        showDialog(
+          context: context, 
+          builder: (_){
+            return AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Your purchase order has been set delivered to customer'),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    Get.to(const PurchasingIndexLarge());
+                  }, 
+                  child: const Text('Oke')
+                ),
+              ],
+            );
+          }
+        );
+      }
+
+    } catch (e){
+      showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+          );
+        }
+      );
+    }
+}
+
 Future <void>  updatePurchaseLocal(purchaseOrderNumber, purchaseOrderDate, purchaseOrderSupplier, purchaseOrderShipment, purchaseOrderPayment, purchaseOrderCurrency, username, 
 productNameOne, productQuantityOne, productPackagingOne, productUnitPriceOne, productNameTwo, productQuantityTwo, productPackagingTwo, productUnitPriceTwo, 
 productNameThree, productQuantityThree, productPackagingThree, productUnitPriceThree, productNameFour, productQuantityFour, productPackagingFour, productUnitPriceFour, 
@@ -674,6 +902,259 @@ productNameThree, productQuantityThree, productPackagingThree, productUnitPriceT
 
       if(response.statusCode == 200){
         insertPurchaseLocalHistory(purchaseOrderNumber, username, context);
+      }
+
+  } catch (e){
+    showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+          );
+        }
+      );
+  }
+
+}
+
+Future <void> insertPurchaseImport(purchaseOrderNumber, purchaseOrderDate, purchaseOrderSupplier, purchaseOrderShipment, purchaseOrderPayment, purchaseOrderCurrency, username, 
+productNameOne, productQuantityOne, productPackagingOne, productUnitPriceOne, productNameTwo, productQuantityTwo, productPackagingTwo, productUnitPriceTwo, 
+productNameThree, productQuantityThree, productPackagingThree, productUnitPriceThree, productNameFour, productQuantityFour, productPackagingFour, productUnitPriceFour,
+ productNameFive, productQuantityFive, productPackagingFive, productUnitPriceFive, origin, term, shippingRemarks, remarks, BuildContext context) async {
+
+  if(purchaseOrderNumber.isEmpty || purchaseOrderNumber == ''){
+    showDialog(
+      context: context, 
+      builder: (_){
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Purchase order number cannot be blank. Please input purchase order number !!'),
+          actions: [
+            TextButton(
+              onPressed: (){
+                Get.back();
+              }, 
+              child: const Text('Ok')
+            )
+          ],
+        );
+      }
+    );
+  } else if (purchaseOrderDate.isEmpty || purchaseOrderDate == ''){
+    showDialog(
+      context: context, 
+      builder: (_){
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Purchase order date cannot be blank. Please input purchase order date !!'),
+          actions: [
+            TextButton(
+              onPressed: (){
+                Get.back();
+              }, 
+              child: const Text('Ok')
+            )
+          ],
+        );
+      }
+    );
+  } else if (purchaseOrderSupplier.isEmpty || purchaseOrderSupplier == ''){
+    showDialog(
+      context: context, 
+      builder: (_){
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Purchase order supplier cannot be blank. Please input purchase order supplier !!'),
+          actions: [
+            TextButton(
+              onPressed: (){
+                Get.back();
+              }, 
+              child: const Text('Ok')
+            )
+          ],
+        );
+      }
+    );
+  } else if (purchaseOrderShipment.isEmpty || purchaseOrderShipment == ''){ 
+    showDialog(
+      context: context, 
+      builder: (_){
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Purchase order shipment cannot be blank. Please input purchase order shipment !!'),
+          actions: [
+            TextButton(
+              onPressed: (){
+                Get.back();
+              }, 
+              child: const Text('Ok')
+            )
+          ],
+        );
+      }
+    );
+  } else if (purchaseOrderPayment.isEmpty || purchaseOrderPayment == ''){
+    showDialog(
+      context: context, 
+      builder: (_){
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Purchase order payment cannot be blank. Please input purchase order payment !!'),
+          actions: [
+            TextButton(
+              onPressed: (){
+                Get.back();
+              }, 
+              child: const Text('Ok')
+            )
+          ],
+        );
+      }
+    );
+  } else if (productNameOne.isEmpty || productNameOne == '' || productQuantityOne.isEmpty || productQuantityOne == '' || productPackagingOne.isEmpty || productPackagingOne == '' || productUnitPriceOne.isEmpty || productUnitPriceOne == '' ){
+    showDialog(
+      context: context, 
+      builder: (_){
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('First product cannot be null and must be filled !!'),
+          actions: [
+            TextButton(
+              onPressed: (){
+                Get.back();
+              }, 
+              child: const Text('Ok')
+            )
+          ],
+        );
+      }
+    );
+  } else {
+    try{
+      String apiInsertPurchase = "${ApiEndpoints.baseUrl}purchase/insertpurchaseimport.php";
+
+      final response = await http.post(
+        Uri.parse(apiInsertPurchase),
+        body: {
+          "purchase_order_number" : purchaseOrderNumber,
+          "purchase_order_date" : purchaseOrderDate, 
+          "purchase_order_supplier" : purchaseOrderSupplier,
+          "purchase_order_shipment" : purchaseOrderShipment,
+          "purchase_order_term": term,
+          "purchase_order_payment" : purchaseOrderPayment,
+          "purchase_order_origin" : origin,
+          "purchase_order_shippingmarks" : shippingRemarks,
+          "purchase_order_remarks" : remarks,
+          "purchase_order_status" : "d7ab6134-d157-11ee-8",
+          "purchase_order_type" : "705da1d4-d157-11ee-8",
+          "purchase_order_currency" : purchaseOrderCurrency,
+          "insert_by" : username
+        }
+      );
+
+      if(response.statusCode == 200){
+        insertPurchaseImportItem(purchaseOrderNumber, productNameOne, productQuantityOne, productPackagingOne, productUnitPriceOne, productNameTwo, productQuantityTwo, productPackagingTwo, productUnitPriceTwo, productNameThree, productQuantityThree, productPackagingThree, productUnitPriceThree, productNameFour, productQuantityFour, productPackagingFour, productUnitPriceFour, productNameFive, productQuantityFive, productPackagingFive, productUnitPriceFive, username, context);
+      }
+
+    } catch (e){
+      showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+          );
+        }
+      );
+    }
+  }
+}
+
+Future <void> insertPurchaseImportItem(purchaseOrderNumber, productNameOne, productQuantityOne, productPackagingOne, productUnitPriceOne, productNameTwo, productQuantityTwo, productPackagingTwo, productUnitPriceTwo, 
+productNameThree, productQuantityThree, productPackagingThree, productUnitPriceThree, productNameFour, productQuantityFour, productPackagingFour, productUnitPriceFour,
+ productNameFive, productQuantityFive, productPackagingFive, productUnitPriceFive,  username, context) async {
+
+  try{
+    String apiInsertPurchaseItem = "${ApiEndpoints.baseUrl}purchase/insertpurchaseimportitem.php";
+
+    final response = await http.post(
+        Uri.parse(apiInsertPurchaseItem),
+        body: {
+          "purchase_order_number" : purchaseOrderNumber,
+          "purchase_order_product_name_1" : productNameOne,
+          "purchase_order_product_quantity_1" : productQuantityOne, 
+          "purchase_order_product_packaging_size_1" : productPackagingOne,
+          "purchase_order_product_unit_price_1" : productUnitPriceOne,
+          "purchase_order_product_name_2" : productNameTwo,
+          "purchase_order_product_quantity_2"  : productQuantityTwo,
+          "purchase_order_product_packaging_size_2" : productPackagingTwo,
+          "purchase_order_product_unit_price_2" : productUnitPriceTwo,
+          "purchase_order_product_name_3" : productNameThree,
+          "purchase_order_product_quantity_3" : productQuantityThree, 
+          "purchase_order_product_packaging_size_3" : productPackagingThree,
+          "purchase_order_product_unit_price_3" : productUnitPriceThree,
+          "purchase_order_product_name_4" : productNameFour,
+          "purchase_order_product_quantity_4"  : productQuantityFour,
+          "purchase_order_product_packaging_size_4" : productPackagingFour,
+          "purchase_order_product_unit_price_4" : productUnitPriceFour,
+          "purchase_order_product_name_5" : productNameFive,
+          "purchase_order_product_quantity_5"  : productQuantityFive,
+          "purchase_order_product_packaging_size_5" : productPackagingFive,
+          "purchase_order_product_unit_price_5" : productUnitPriceFive
+        }
+      );
+
+      if(response.statusCode == 200){
+        insertPurchaseImportHistory(purchaseOrderNumber, username, context);
+      }
+
+  } catch (e){
+    showDialog(
+        context: context, 
+        builder: (_){
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+          );
+        }
+      );
+  }
+
+}
+
+Future <void> insertPurchaseImportHistory (purchaseOrderNumber, username, context) async{
+
+  try{
+    String apiInsertPurchaseHistory = "${ApiEndpoints.baseUrl}purchase/insertpurchaseimporthistory.php";
+
+    final response = await http.post(
+        Uri.parse(apiInsertPurchaseHistory),
+        body: {
+          "purchase_order_number" : purchaseOrderNumber,
+          "insert_by" : username,
+        }
+      );
+
+      if(response.statusCode == 200){
+        showDialog(
+          context: context, 
+          builder: (_){
+            return AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Your purchase order has been inserted/updated to systems'),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    Get.to(const PurchasingIndexLarge());
+                  }, 
+                  child: const Text('Oke')
+                ),
+              ],
+            );
+          }
+        );
       }
 
   } catch (e){

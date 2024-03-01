@@ -1401,8 +1401,9 @@ class _ViewPurchasingLocalDetailLargeState extends State<ViewPurchasingLocalDeta
                                                             ],
                                                           ),
                                                           SizedBox(height: 25.h,),
-                                                          const Divider(),
+                                                          Divider(thickness: 2.0,),
                                                           SizedBox(height: 25.h,),
+                                                          Text('Product 2'),
                                                           //Product 2 #1
                                                           Row(
                                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -3498,12 +3499,118 @@ class _ViewPurchasingLocalDetailLargeState extends State<ViewPurchasingLocalDeta
                                                     ),
                                                     child: const Text('Export to PDF')
                                                   ),
+                                                  if(statusPO == 'On Delivery')
+                                                    ElevatedButton(
+                                                      onPressed: (){
+                                                        if(permissionAccess == 'Full access'){
+                                                          if(statusPO == 'On Delivery'){
+                                                            delivertoCustomer(PONumber, username, context);
+                                                          } else {
+                                                            showDialog(
+                                                              context: context, 
+                                                              builder: (_){
+                                                                return AlertDialog(
+                                                                  title: const Text('Error'),
+                                                                  content: const Text('This PO cannot be set delivery to customer !!'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: (){
+                                                                        Get.back();
+                                                                      }, 
+                                                                      child: const Text('Oke')
+                                                                    )
+                                                                  ],
+                                                                );
+                                                              }
+                                                            );
+                                                          }
+                                                        } else {
+                                                          showDialog(
+                                                            context: context, 
+                                                            builder: (_){
+                                                              return const AlertDialog(
+                                                                title: Text('Error'),
+                                                                content: Text('You have no access to this feature. Please contact your administrator'),
+                                                              );
+                                                            }
+                                                          );
+                                                        }
+                                                      }, 
+                                                      style: ElevatedButton.styleFrom(
+                                                        elevation: 0,
+                                                        alignment: Alignment.center,
+                                                        minimumSize: Size(60.w, 55.h),
+                                                        foregroundColor: const Color(0xFF1F9F61),
+                                                        backgroundColor: Colors.transparent,
+                                                        side: const BorderSide(
+                                                          color: Color(0xFF1F9F61), // Choose your desired border color
+                                                          width: 1.0, // Choose the border width
+                                                        ),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text('Delivered to Customer')
+                                                      )
+                                                    ),
+                                                  if(statusPO == 'On Delivery')
+                                                    ElevatedButton(
+                                                      onPressed: (){
+                                                        if(permissionAccess == 'Full access'){
+                                                          if(statusPO == 'On Delivery'){
+                                                            delivertoWarehouse(PONumber, username, context);
+                                                          } else {
+                                                            showDialog(
+                                                              context: context, 
+                                                              builder: (_){
+                                                                return AlertDialog(
+                                                                  title: const Text('Error'),
+                                                                  content: const Text('This PO cannot be set delivery to warehouse !!'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: (){
+                                                                        Get.back();
+                                                                      }, 
+                                                                      child: const Text('Oke')
+                                                                    )
+                                                                  ],
+                                                                );
+                                                              }
+                                                            );
+                                                          }
+                                                        } else {
+                                                          showDialog(
+                                                            context: context, 
+                                                            builder: (_){
+                                                              return const AlertDialog(
+                                                                title: Text('Error'),
+                                                                content: Text('You have no access to this feature. Please contact your administrator'),
+                                                              );
+                                                            }
+                                                          );
+                                                        }
+                                                      }, 
+                                                      style: ElevatedButton.styleFrom(
+                                                        elevation: 0,
+                                                        alignment: Alignment.center,
+                                                        minimumSize: Size(60.w, 55.h),
+                                                        foregroundColor: const Color(0xFF1F9F61),
+                                                        backgroundColor: Colors.transparent,
+                                                        side: const BorderSide(
+                                                          color: Color(0xFF1F9F61), // Choose your desired border color
+                                                          width: 1.0, // Choose the border width
+                                                        ),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text('Delivered to Warehouse')
+                                                      )
+                                                    ),
                                                   if(statusPO == 'Approved')
                                                     ElevatedButton(
                                                       onPressed: (){
                                                         if(permissionAccess == 'Full access'){
                                                           if(statusPO == 'Approved'){
-                                                            approvePurchase(PONumber, username, context);
+                                                            onDeliveryPurchase(PONumber, username, context);
                                                           } else {
                                                             showDialog(
                                                               context: context, 

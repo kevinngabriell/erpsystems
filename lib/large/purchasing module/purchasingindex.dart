@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, non_constant_identifier_names
 
 import 'package:erpsystems/large/login.dart';
+import 'package:erpsystems/large/purchasing%20module/cifcalculator.dart';
 import 'package:erpsystems/large/purchasing%20module/newpurchasingimport.dart';
 import 'package:erpsystems/large/purchasing%20module/newpurchasinglocal.dart';
+import 'package:erpsystems/large/purchasing%20module/viewpurchasingimportall.dart';
 import 'package:erpsystems/large/purchasing%20module/viewpurchasinglocalall.dart';
 import 'package:erpsystems/large/purchasing%20module/viewpurchasinglocaldetail.dart';
 import 'package:erpsystems/large/sales%20module/salesindex.dart';
@@ -38,11 +40,14 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
   String TopItem = '';
   String nominalPurchase = '0';
   late Future<List<Map<String, dynamic>>> TOPPOLocalList;
+  late Future<List<Map<String, dynamic>>> TOPPOImportList;
+  String statusPO = '';
 
   @override
   void initState() {
     super.initState();
     TOPPOLocalList = topPurchaseLocal();
+    TOPPOImportList =  topPurchaseImport();
   }
 
   String formatCurrency(double value) {
@@ -423,6 +428,10 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                           value: 'NEW-PO-003',
                                           child: Text('Purchase Local', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                         ),
+                                        DropdownMenuItem(
+                                          value: 'NEW-PO-004',
+                                          child: Text('Calculator CIF', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                        ),
                                       ], 
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
@@ -434,6 +443,8 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                           Get.to(const NewPurchasingImportLarge());
                                         } else if (value == 'NEW-PO-003'){
                                           Get.to(const NewPurchasingLocalLarge());
+                                        } else if (value == 'NEW-PO-004'){
+                                          Get.to(CIFCalculatorLarge());
                                         }
                                       }
                                     ),
@@ -464,6 +475,14 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                 DropdownMenuItem(
                                                   value: '001',
                                                   child: Text('This week', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                ),
+                                                DropdownMenuItem(
+                                                  value: '002',
+                                                  child: Text('This month', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
+                                                ),
+                                                DropdownMenuItem(
+                                                  value: '003',
+                                                  child: Text('This year', style: TextStyle(color: Color.fromRGBO(111, 118, 126, 1)),)
                                                 )
                                               ], 
                                               decoration: InputDecoration(
@@ -477,7 +496,13 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                 )
                                               ),
                                               onChanged: (value){
-                                            
+                                                if(value == '001'){
+
+                                                } else if (value == '002'){
+
+                                                } else if (value == '003'){
+
+                                                }
                                               }
                                             ),
                                           )
@@ -920,12 +945,20 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                 );
                                               } else if (snapshot.hasData) {
                                                 List<Map<String, dynamic>> data = snapshot.data!;
+                                                
 
                                                 return ListView.builder(
                                                   itemCount: data.length,
                                                   itemBuilder: (BuildContext context, int index){
                                                     Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
                                                     // Color cardbackgroundColor = data[index]['PO_Status_Name']
+                                                    if(data[index]['PO_Status_Name'] == 'Delivered to customer' || data[index]['PO_Status_Name'] == 'Delivered to warehouse' ){
+                                                      statusPO = 'Delivered';
+                                                    } else {
+                                                      statusPO = data[index]['PO_Status_Name'];
+                                                    }
+                                                    DateTime dateTime = DateTime.parse(data[index]['PODate']);
+                                                    String formattedDate = DateFormat('dd MMMM yyyy').format(dateTime);
                                                     return Container(
                                                       width: MediaQuery.of(context).size.width,
                                                       color: backgroundColor,
@@ -939,7 +972,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                               children: [
                                                                 Text(data[index]['ProductName1'] + ' | ' + data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
                                                                 SizedBox(height: 3.h,),
-                                                                Text('Purchase date ' + data[index]['PODate'], style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                                Text('Purchase date ' + formattedDate, style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
                                                               ],
                                                             ),
                                                             ElevatedButton(
@@ -955,7 +988,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                                 backgroundColor: const Color(0xFF2A85FF),
                                                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                                               ),
-                                                              child: Text(data[index]['PO_Status_Name'], style: TextStyle(fontSize: 4.sp), textAlign: TextAlign.center,)
+                                                              child: Text(statusPO, style: TextStyle(fontSize: 4.sp), textAlign: TextAlign.center,)
                                                             )
                                                           ],
                                                         ),
@@ -994,7 +1027,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                             Text('Purchase Order (Import)', style: TextStyle(fontSize: 5.sp, fontWeight: FontWeight.w600)),
                                             GestureDetector(
                                               onTap: () {
-                                                Get.to(const ViewPurchasingLocalAllLarge());
+                                                Get.to(const ViewPurchasingImportAllLarge());
                                               },
                                               child: Text('See All', style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400, color: const Color(0xFF2A85FF)))
                                             ),
@@ -1006,7 +1039,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                         width: MediaQuery.of(context).size.width,
                                         height: (MediaQuery.of(context).size.height - 433.h),
                                         child: FutureBuilder<List<Map<String, dynamic>>>(
-                                          future: TOPPOLocalList,
+                                          future: TOPPOImportList,
                                             builder: (context, snapshot) {
                                               if (snapshot.connectionState == ConnectionState.waiting) {
                                                 return const Center(child: CircularProgressIndicator());
@@ -1015,7 +1048,7 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                   itemCount: 4,
                                                   itemBuilder: (BuildContext context, int index) {
                                                     Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
-                                                
+                                                    
                                                     return Container(
                                                       width: MediaQuery.of(context).size.width,
                                                       color: backgroundColor,
@@ -1059,6 +1092,15 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                   itemCount: data.length,
                                                   itemBuilder: (BuildContext context, int index){
                                                     Color backgroundColor = index.isOdd ? const Color(0xFFF8F8F8) : const Color(0xFFF7F6FA);
+
+                                                    if(data[index]['PO_Status_Name'] == 'Delivered to customer' || data[index]['PO_Status_Name'] == 'Delivered to warehouse' ){
+                                                      statusPO = 'Delivered';
+                                                    } else {
+                                                      statusPO = data[index]['PO_Status_Name'];
+                                                    }
+                                                    DateTime dateTime = DateTime.parse(data[index]['PODate']);
+                                                    String formattedDate = DateFormat('dd MMMM yyyy').format(dateTime);
+
                                                     return Container(
                                                       width: MediaQuery.of(context).size.width,
                                                       color: backgroundColor,
@@ -1070,9 +1112,9 @@ class _PurchasingIndexLargeState extends State<PurchasingIndexLarge> {
                                                             Column(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Text(' | ' + data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
+                                                                Text(data[index]['ProductName1'] + ' | ' + data[index]['PONumber'], style: TextStyle(fontSize: 4.sp, fontWeight: FontWeight.w600,)),
                                                                 SizedBox(height: 3.h,),
-                                                                Text('Purchase date ' + data[index]['PODate'], style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
+                                                                Text('Purchase date ' + formattedDate, style: TextStyle(fontSize: 3.sp, fontWeight: FontWeight.w400,)),
                                                               ],
                                                             ),
                                                             ElevatedButton(
